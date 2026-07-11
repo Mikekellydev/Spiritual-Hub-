@@ -159,7 +159,13 @@
 
                 <!-- Hidden adaptive block that emerges only when 'Custom...' is checked -->
                 <div id="custom-season-box" class="hidden animate-fadeIn">
-                    <input id="soul-custom-season" type="text" class="w-full bg-[#fdfbf7] border border-amber-300 p-2.5 rounded-xl text-sm focus:outline-none placeholder:text-stone-400" placeholder="Type specific season or prayer focus details...">
+                    <input id="soul-custom-season" type="text" class="w-full bg-[#fdfbf7] border border-amber-300 p-2.5 rounded-xl text-sm focus:outline-none placeholder:text-stone-400" placeholder="Type specific season or focus details...">
+                </div>
+
+                <!-- Dedicated Prayer Needs Block -->
+                <div class="space-y-1.5">
+                    <label class="text-[11px] font-bold text-[#8c7863] uppercase tracking-wider block">Active Prayer Needs</label>
+                    <textarea id="soul-prayer-needs" class="w-full bg-[#fdfbf7] border border-[#ebd9c5] text-sm rounded-xl p-2.5 focus:outline-none h-16 placeholder:text-stone-400 leading-relaxed" placeholder="What specific prayer burdens or requests are they bearing right now?"></textarea>
                 </div>
             </div>
             <div class="flex gap-2 pt-1">
@@ -398,10 +404,14 @@
                 container.innerHTML += `
                     <div class="bg-white border border-[#ebd9c5] rounded-xl p-4 space-y-3 shadow-sm">
                         <div>
-                            <h3 class="font-serif font-bold text-base text-[#1c1b1a]">${soul.name}</h3>
-                            <p class="text-[11px] text-amber-800 font-medium italic">Current Track: ${soul.season}</p>
+                            <div class="flex justify-between items-start">
+                                <h3 class="font-serif font-bold text-base text-[#1c1b1a]">${soul.name}</h3>
+                                <span class="text-[10px] bg-amber-50 text-amber-800 font-semibold px-2 py-0.5 rounded-md border border-amber-200">${soul.season}</span>
+                            </div>
+                            <p class="text-xs text-[#54504d] mt-1.5 font-medium"><span class="text-[#8c7863] font-bold text-[10px] uppercase tracking-wider block">Prayer Burden:</span> ${soul.prayerNeeds || 'No specific burdens noted yet.'}</p>
                         </div>
                         <div class="bg-[#fdfbf7] p-2.5 rounded-lg border border-[#f5efe6] text-xs text-[#54504d] italic">
+                            <span class="text-[9px] font-bold text-[#3d6346] uppercase block not-italic tracking-wider mb-0.5">Latest Check-In:</span>
                             "${soul.latestNote || 'No fellowship notes registered yet.'}"
                         </div>
                         <button onclick="openCareNoteModal(${index})" class="w-full bg-[#f5efe6] border border-[#ebd9c5] text-[#54504d] font-bold py-1.5 rounded-lg text-xs transition">
@@ -449,6 +459,7 @@
         function saveNewSoul() {
             const name = document.getElementById('soul-name').value;
             const selectEl = document.getElementById('soul-season-select');
+            const prayerNeeds = document.getElementById('soul-prayer-needs').value.trim();
             
             let finalSeason = selectEl.value;
             if (finalSeason === 'CUSTOM') {
@@ -456,13 +467,13 @@
             }
 
             if(name) {
-                soulRoster.push({ name, season: finalSeason, latestNote: "" });
+                soulRoster.push({ name, season: finalSeason, prayerNeeds, latestNote: "" });
                 
                 // Reset inputs & dropdown state
                 document.getElementById('soul-name').value = '';
+                document.getElementById('soul-prayer-needs').value = '';
                 selectEl.selectedIndex = 0;
                 document.getElementById('soul-custom-season').value = '';
-                document.getElementById('custom-season-box').classLevel = 'hidden';
                 document.getElementById('custom-season-box').classList.add('hidden');
                 
                 toggleModal('soul-modal');
@@ -520,6 +531,7 @@
 
         document.getElementById('care-new-note').addEventListener('keydown', function(e) { e.stopPropagation(); });
         document.getElementById('field-journal').addEventListener('keydown', function(e) { e.stopPropagation(); });
+        document.getElementById('soul-prayer-needs').addEventListener('keydown', function(e) { e.stopPropagation(); });
 
         function openCareNoteModal(index) {
             document.getElementById('care-target-index').value = index;
