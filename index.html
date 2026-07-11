@@ -3,20 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spiritual Growth Hub</title>
+    <title>Whitney Spiritual Disciplines Hub</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-[#fdfbf7] text-[#2c2a29] font-sans min-h-screen antialiased">
 
     <!-- Privacy Banner -->
     <div class="sticky top-0 z-40 bg-[#fdfbf7]/90 backdrop-blur-md border-b border-[#ebd9c5] max-w-md mx-auto px-5 py-3 flex items-center justify-between">
-        <span class="text-xs font-bold tracking-[0.15em] text-[#8c7863] uppercase">Spiritual Growth Hub</span>
+        <span class="text-xs font-bold tracking-[0.15em] text-[#8c7863] uppercase">Spiritual Disciplines Hub</span>
         <span class="bg-[#e9f2eb] text-[#3d6346] text-[10px] font-mono px-2 py-0.5 rounded-full font-bold">🔒 Local Vault Only</span>
     </div>
 
     <div class="max-w-md mx-auto p-5 space-y-5 pb-24">
         
-        <!-- 📊 THEMATIC METRICS INDEX -->
+        <!-- 📊 WHITNEY DISCIPLINE INDEX -->
         <header class="bg-[#f5efe6] rounded-2xl p-5 border border-[#ebd9c5] space-y-4">
             <div class="flex justify-between items-start">
                 <div>
@@ -31,7 +31,7 @@
             <div class="grid grid-cols-2 gap-3 pt-2 border-t border-[#ebd9c5]/60">
                 <div class="bg-[#fdfbf7]/80 border border-[#ebd9c5] p-3 rounded-xl text-center">
                     <span class="block text-xl font-serif font-bold text-[#3d6346]" id="metric-streak">0%</span>
-                    <span class="text-[9px] font-bold text-[#8c7863] uppercase tracking-wider">7-Day Devotion</span>
+                    <span class="text-[9px] font-bold text-[#8c7863] uppercase tracking-wider">Intake & Prayer Score</span>
                 </div>
                 <div class="bg-[#fdfbf7]/80 border border-[#ebd9c5] p-3 rounded-xl text-center">
                     <span class="block text-xl font-serif font-bold text-[#74583d]" id="metric-care">0 Logs</span>
@@ -40,7 +40,7 @@
             </div>
         </header>
 
-        <!-- 🎯 THEMATIC DISCIPLINE & PRAYER JOURNAL -->
+        <!-- 🎯 DAILY DISCIPLINE WORKSPACE (DONALD WHITNEY MODEL) -->
         <main class="bg-white border border-[#ebd9c5] rounded-2xl p-5 space-y-4 shadow-sm">
             <div class="flex justify-between items-center border-b border-[#f5efe6] pb-2">
                 <div>
@@ -55,38 +55,58 @@
             <!-- Thematic Citation Box -->
             <div class="bg-[#fdfbf7] border border-[#ebd9c5] p-4 rounded-xl space-y-1.5">
                 <div class="flex justify-between items-center text-[10px] font-bold text-[#8c7863] uppercase tracking-wider">
-                    <span>Assigned Reading</span>
-                    <span class="text-amber-800 normal-case font-medium" id="theme-sub-badge">Theme Guided</span>
+                    <span>Assigned Text for Intake</span>
                 </div>
                 <span class="block text-base font-serif font-bold text-[#3d6346]" id="scripture-citation">Loading assignment...</span>
             </div>
 
-            <div class="space-y-3">
-                <label class="flex items-center gap-3 text-sm font-medium cursor-pointer py-1">
-                    <input type="checkbox" id="field-bible" class="w-4 h-4 rounded text-[#3d6346] border-[#ebd9c5]">
-                    <span>Mark Theme Scripture Read</span>
-                </label>
+            <!-- Whitney's Specific Input Matrix -->
+            <div class="space-y-3 pt-1">
+                <div class="grid grid-cols-2 gap-2">
+                    <label class="flex items-center gap-2 text-xs font-medium cursor-pointer bg-[#fdfbf7] border border-[#ebd9c5] p-2.5 rounded-xl">
+                        <input type="checkbox" id="field-bible-read" class="w-4 h-4 rounded text-[#3d6346] border-[#ebd9c5]">
+                        <div class="flex flex-col">
+                            <span class="font-bold">Bible Reading</span>
+                            <span class="text-[9px] text-[#8c7863]">Hear & read the Word</span>
+                        </div>
+                    </label>
 
-                <div class="flex items-center justify-between py-1 border-b border-[#f5efe6] pb-3">
-                    <span class="text-sm font-medium">Contemplative Prayer Time</span>
-                    <select id="field-prayer" class="bg-[#fdfbf7] border border-[#ebd9c5] text-xs rounded-lg p-1.5 focus:outline-none">
+                    <label class="flex items-center gap-2 text-xs font-medium cursor-pointer bg-[#fdfbf7] border border-[#ebd9c5] p-2.5 rounded-xl">
+                        <input type="checkbox" id="field-bible-meditate" class="w-4 h-4 rounded text-[#3d6346] border-[#ebd9c5]">
+                        <div class="flex flex-col">
+                            <span class="font-bold">Meditation</span>
+                            <span class="text-[9px] text-[#8c7863]">Deep pondering</span>
+                        </div>
+                    </label>
+                </div>
+
+                <div class="flex items-center justify-between py-2 border-y border-[#f5efe6]">
+                    <div class="flex flex-col">
+                        <span class="text-xs font-bold">Purposeful Prayer Time</span>
+                        <span class="text-[10px] text-[#8c7863]">Intercession & communion</span>
+                    </div>
+                    <select id="field-prayer" class="bg-[#fdfbf7] border border-[#ebd9c5] text-xs rounded-lg p-1.5 focus:outline-none font-medium">
                         <option value="0">0 mins</option>
                         <option value="15">15 mins</option>
                         <option value="30">30 mins</option>
-                        <option value="60">60 mins</option>
+                        <option value="45">45 mins</option>
+                        <option value="60">60+ mins</option>
                     </select>
                 </div>
 
-                <!-- 📝 PRAYER CANVAS JOURNAL -->
+                <!-- 📝 THE SPIRITUAL JOURNAL CANVAS -->
                 <div class="space-y-1">
-                    <label class="text-[11px] font-bold text-[#8c7863] uppercase tracking-wider">Internal Prayer Canvas & Reflections</label>
-                    <textarea id="field-journal" class="w-full bg-[#fdfbf7] border border-[#ebd9c5] text-sm rounded-xl p-3 focus:outline-none h-24 placeholder:text-stone-300" placeholder="Intercessions, heart tracking, reflections on the theme..."></textarea>
+                    <div class="flex justify-between items-center">
+                        <label class="text-[11px] font-bold text-[#8c7863] uppercase tracking-wider">The Spiritual Journal</label>
+                        <span class="text-[10px] text-stone-400 italic">Whitney Model</span>
+                    </div>
+                    <textarea id="field-journal" class="w-full bg-[#fdfbf7] border border-[#ebd9c5] text-sm rounded-xl p-3 focus:outline-none h-24 placeholder:text-stone-300 leading-relaxed" placeholder="Write meditations on the text, express prayers, or review your internal spiritual condition..."></textarea>
                 </div>
             </div>
 
             <div class="flex gap-2 pt-1">
-                <button onclick="commitActiveEntry()" class="flex-1 bg-[#3d6346] text-white font-bold py-2.5 rounded-xl text-xs">
-                    Save Internal Log
+                <button onclick="commitActiveEntry()" class="flex-1 bg-[#3d6346] text-white font-bold py-2.5 rounded-xl text-xs tracking-wider">
+                    Save Daily Disciplines
                 </button>
                 <button onclick="resetWorkspaceToToday()" class="bg-[#f5efe6] text-[#54504d] font-bold px-3 py-2.5 rounded-xl text-xs">
                     Clear
@@ -94,11 +114,14 @@
             </div>
         </main>
 
-        <!-- 👥 RELATIONAL CARE JOURNAL LINK LAYER -->
+        <!-- 👥 RELATIONAL CARE & FELLOWSHIP ROSTER -->
         <section class="space-y-3">
             <div class="flex items-center justify-between pl-1">
-                <h2 class="text-xs font-bold uppercase text-[#8c7863] tracking-widest">Relational Care Logs</h2>
-                <button onclick="toggleModal('soul-modal')" class="text-xs font-bold text-[#3d6346] hover:underline">+ Add Person</button>
+                <div class="flex flex-col">
+                    <h2 class="text-xs font-bold uppercase text-[#8c7863] tracking-widest">Relational Fellowship Logs</h2>
+                    <span class="text-[10px] text-stone-400">Applying personal disciplines to community</span>
+                </div>
+                <button onclick="toggleModal('soul-modal')" class="text-xs font-bold text-[#3d6346] hover:underline bg-[#e9f2eb] px-2.5 py-1 rounded-lg border border-[#ebd9c5]">+ Add Person</button>
             </div>
 
             <div id="souls-list" class="space-y-2"></div>
@@ -106,7 +129,7 @@
 
         <!-- ⏳ PAST ACTIONS DIRECTORY -->
         <section class="space-y-3">
-            <h3 class="text-xs font-bold uppercase text-[#8c7863] tracking-widest pl-1">Past Logs (Select to Edit)</h3>
+            <h3 class="text-xs font-bold uppercase text-[#8c7863] tracking-widest pl-1">Historical Journal Directory</h3>
             <div class="space-y-2 max-h-40 overflow-y-auto pr-1" id="history-container"></div>
         </section>
 
@@ -115,10 +138,10 @@
     <!-- 📥 SYSTEM MODAL DIALOGS -->
     <div id="soul-modal" class="hidden fixed inset-0 z-50 bg-[#2c2a29]/40 backdrop-blur-sm flex items-end justify-center p-4">
         <div class="bg-white border border-[#ebd9c5] w-full max-w-md rounded-2xl p-5 space-y-4">
-            <h3 class="font-serif font-bold text-lg text-[#1c1b1a]">Track New Person</h3>
+            <h3 class="font-serif font-bold text-lg text-[#1c1b1a]">Track Person on Care Roster</h3>
             <div class="space-y-2">
                 <input id="soul-name" type="text" class="w-full bg-[#fdfbf7] border border-[#ebd9c5] p-2.5 rounded-xl text-sm focus:outline-none" placeholder="Name or Family Name">
-                <input id="soul-season" type="text" class="w-full bg-[#fdfbf7] border border-[#ebd9c5] p-2.5 rounded-xl text-sm focus:outline-none" placeholder="Current Season or Situation">
+                <input id="soul-season" type="text" class="w-full bg-[#fdfbf7] border border-[#ebd9c5] p-2.5 rounded-xl text-sm focus:outline-none" placeholder="Current Season / Prayer Needs">
             </div>
             <div class="flex gap-2">
                 <button onclick="saveNewSoul()" class="flex-1 bg-[#3d6346] text-white text-xs font-bold p-2.5 rounded-xl">Add to Care Roster</button>
@@ -129,9 +152,9 @@
 
     <div id="care-note-modal" class="hidden fixed inset-0 z-50 bg-[#2c2a29]/40 backdrop-blur-sm flex items-end justify-center p-4">
         <div class="bg-white border border-[#ebd9c5] w-full max-w-md rounded-2xl p-5 space-y-4">
-            <h3 class="font-serif font-bold text-lg text-[#1c1b1a]" id="care-modal-title">Log Relational Note</h3>
+            <h3 class="font-serif font-bold text-lg text-[#1c1b1a]" id="care-modal-title">Log Spiritual Check-In Note</h3>
             <input type="hidden" id="care-target-index">
-            <textarea id="care-new-note" class="w-full bg-[#fdfbf7] border border-[#ebd9c5] text-sm rounded-xl p-3 h-24 focus:outline-none" placeholder="What updates occurred during this phone call or field visit?"></textarea>
+            <textarea id="care-new-note" class="w-full bg-[#fdfbf7] border border-[#ebd9c5] text-sm rounded-xl p-3 h-24 focus:outline-none" placeholder="What updates occurred during this contact? How did you pray over them?"></textarea>
             <div class="flex gap-2">
                 <button onclick="commitCareNote()" class="flex-1 bg-[#3d6346] text-white text-xs font-bold p-2.5 rounded-xl">Write Care Log</button>
                 <button onclick="toggleModal('care-note-modal')" class="bg-slate-100 text-slate-600 text-xs font-bold p-2.5 rounded-xl">Cancel</button>
@@ -139,10 +162,10 @@
         </div>
     </div>
 
-    <!-- 🧠 SYSTEM MOTOR ENGINE (INTERACTIONS & PERSISTENCE) -->
+    <!-- 🧠 SYSTEM MOTOR ENGINE -->
     <script>
         let localDatabase = [];
-        let soulRoster = []; //
+        let soulRoster = []; // 👈 Fresh Slate: Harrisons removed!
 
         // 📔 THEMATIC BIBLE PLAN DATABASE (Mapped by Month Index 0-11)
         const thematicBiblePlan = {
@@ -172,7 +195,6 @@
             const day = dateObj.getDate();
             const activeTheme = thematicBiblePlan[month] || { theme: "General Devotion", passages: ["Psalm 119:105"] };
             
-            // Cycle through passages sequentially based on day of the month
             const passageIdx = (day - 1) % activeTheme.passages.length;
             return {
                 theme: activeTheme.theme,
@@ -184,10 +206,8 @@
             const targetObj = new Date(selectedTargetDate + "T00:00:00");
             const reading = getThematicReadingDetails(targetObj);
             
-            // Update UI items with thematic targets
             document.getElementById('header-theme-title').innerText = reading.theme;
             document.getElementById('scripture-citation').innerText = reading.citation;
-            document.getElementById('theme-sub-badge').innerText = `Focus: ${reading.theme}`;
 
             updateMetricsWindow();
             renderHistoryList();
@@ -217,9 +237,10 @@
                     if (match.status === 'cancelled') {
                         dotColor = "bg-rose-200 text-rose-900";
                     } else {
-                        if (match.bible) earnedPoints += 1;
+                        // Bible Intake Point (requires both reading and meditation to fully hit Whitney's high target)
+                        if (match.read && match.meditate) earnedPoints += 1;
                         if (parseInt(match.prayer) > 0) earnedPoints += 1;
-                        dotColor = (match.bible && parseInt(match.prayer) > 0) ? "bg-[#3d6346] text-white" : "bg-amber-100 text-amber-900";
+                        dotColor = (match.read && match.meditate && parseInt(match.prayer) > 0) ? "bg-[#3d6346] text-white" : "bg-amber-100 text-amber-900";
                     }
                 }
                 daysRow.innerHTML += `
@@ -240,18 +261,27 @@
         function renderSoulRoster() {
             const container = document.getElementById('souls-list');
             container.innerHTML = '';
+            
+            if(soulRoster.length === 0) {
+                container.innerHTML = `
+                    <div class="bg-dashed border-2 border-dashed border-[#ebd9c5] rounded-xl p-6 text-center text-xs text-[#8c7863] italic">
+                        No one on your fellowship roster yet. Click "+ Add Person" to intentionally trace your relational check-ins.
+                    </div>`;
+                return;
+            }
+
             soulRoster.forEach((soul, index) => {
                 container.innerHTML += `
                     <div class="bg-white border border-[#ebd9c5] rounded-xl p-4 space-y-3 shadow-sm">
                         <div>
                             <h3 class="font-serif font-bold text-base text-[#1c1b1a]">${soul.name}</h3>
-                            <p class="text-[11px] text-amber-800 font-medium italic">Current Season: ${soul.season}</p>
+                            <p class="text-[11px] text-amber-800 font-medium italic">Current Track: ${soul.season}</p>
                         </div>
                         <div class="bg-[#fdfbf7] p-2.5 rounded-lg border border-[#f5efe6] text-xs text-[#54504d] italic">
-                            "${soul.latestNote || 'No care entries registered yet.'}"
+                            "${soul.latestNote || 'No fellowship notes registered yet.'}"
                         </div>
                         <button onclick="openCareNoteModal(${index})" class="w-full bg-[#f5efe6] border border-[#ebd9c5] text-[#54504d] font-bold py-1.5 rounded-lg text-xs transition">
-                            📝 Log Spiritual Care Check-In
+                            📝 Log Intentional Care Check-In
                         </button>
                     </div>`;
             });
@@ -263,14 +293,14 @@
             let sortedLogs = [...localDatabase].sort((a,b) => b.date.localeCompare(a.date));
             
             if(sortedLogs.length === 0) {
-                container.innerHTML = `<p class="text-xs italic text-[#8c7863] text-center py-2">No local records found.</p>`;
+                container.innerHTML = `<p class="text-xs italic text-[#8c7863] text-center py-2">No historical records found.</p>`;
                 return;
             }
 
             sortedLogs.forEach(entry => {
                 let textSummary = entry.status === 'cancelled' 
                     ? `<span class="text-rose-700 font-mono">🚫 Cancelled</span>`
-                    : `📖 ${entry.bible ? 'Read' : 'Skip'} | 🙏 ${entry.prayer}m`;
+                    : `📖 Intake: ${entry.read ? 'R' : '-'}${entry.meditate ? 'M' : '-'} | 🙏 ${entry.prayer}m`;
 
                 container.innerHTML += `
                     <div onclick="selectEntryToEdit('${entry.date}')" class="bg-white border border-[#ebd9c5] p-2.5 rounded-xl flex justify-between items-center text-xs cursor-pointer shadow-sm">
@@ -284,7 +314,8 @@
             selectedTargetDate = dateString;
             let match = localDatabase.find(r => r.date === dateString);
             if(match) {
-                document.getElementById('field-bible').checked = match.bible;
+                document.getElementById('field-bible-read').checked = match.read;
+                document.getElementById('field-bible-meditate').checked = match.meditate;
                 document.getElementById('field-prayer').value = match.prayer;
                 document.getElementById('field-journal').value = match.journal || '';
             }
@@ -292,14 +323,16 @@
         }
 
         function commitActiveEntry() {
-            let bibleVal = document.getElementById('field-bible').checked;
+            let readVal = document.getElementById('field-bible-read').checked;
+            let medVal = document.getElementById('field-bible-meditate').checked;
             let prayerVal = document.getElementById('field-prayer').value;
             let journalVal = document.getElementById('field-journal').value;
             
             localDatabase = localDatabase.filter(r => r.date !== selectedTargetDate);
             localDatabase.push({
                 date: selectedTargetDate,
-                bible: bibleVal,
+                read: readVal,
+                meditate: medVal,
                 prayer: prayerVal,
                 journal: journalVal,
                 status: "active"
@@ -310,13 +343,14 @@
 
         function cancelCurrentDay() {
             localDatabase = localDatabase.filter(r => r.date !== selectedTargetDate);
-            localDatabase.push({ date: selectedTargetDate, bible: false, prayer: "0", journal: "", status: "cancelled" });
+            localDatabase.push({ date: selectedTargetDate, read: false, meditate: false, prayer: "0", journal: "", status: "cancelled" });
             resetWorkspaceToToday();
         }
 
         function resetWorkspaceToToday() {
             selectedTargetDate = getFormattedDate(new Date());
-            document.getElementById('field-bible').checked = false;
+            document.getElementById('field-bible-read').checked = false;
+            document.getElementById('field-bible-meditate').checked = false;
             document.getElementById('field-prayer').value = "0";
             document.getElementById('field-journal').value = "";
             renderDashboard();
@@ -336,13 +370,12 @@
             }
         }
 
-        // Prevent inputs from stealing backspace keys
         document.getElementById('care-new-note').addEventListener('keydown', function(e) { e.stopPropagation(); });
         document.getElementById('field-journal').addEventListener('keydown', function(e) { e.stopPropagation(); });
 
         function openCareNoteModal(index) {
             document.getElementById('care-target-index').value = index;
-            document.getElementById('care-modal-title').innerText = `Log Notes: ${soulRoster[index].name}`;
+            document.getElementById('care-modal-title').innerText = `Fellowship: ${soulRoster[index].name}`;
             document.getElementById('care-new-note').value = '';
             toggleModal('care-note-modal');
         }
