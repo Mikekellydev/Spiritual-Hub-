@@ -40,19 +40,19 @@
         <div id="hub-view-editor" class="space-y-4 hub-view-panel">
             <div class="bg-white border border-stone-200/80 shadow-sm rounded-2xl p-5 space-y-4">
                 
-                <!-- Metadata Row -->
-                <div class="grid grid-cols-3 gap-2">
+                <!-- Metadata Row (Fully Mobile-Responsive Grid Fix) -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     <div class="space-y-1">
                         <label class="text-[10px] font-bold text-stone-500 uppercase tracking-wider block">Service Date</label>
-                        <input id="note-date" type="date" class="w-full bg-stone-50 border border-stone-200 p-2 rounded-xl text-xs font-medium focus:ring-1 focus:ring-emerald-600 focus:outline-none">
+                        <input id="note-date" type="date" class="w-full bg-stone-50 border border-stone-200 p-2.5 rounded-xl text-xs font-medium focus:ring-1 focus:ring-emerald-600 focus:outline-none">
                     </div>
                     <div class="space-y-1">
                         <label class="text-[10px] font-bold text-stone-500 uppercase tracking-wider block">Speaker / Teacher</label>
-                        <input id="note-speaker" type="text" class="w-full bg-stone-50 border border-stone-200 p-2 rounded-xl text-xs font-medium focus:ring-1 focus:ring-emerald-600 focus:outline-none placeholder:text-stone-300" placeholder="e.g., [[Pastor John]]">
+                        <input id="note-speaker" type="text" class="w-full bg-stone-50 border border-stone-200 p-2.5 rounded-xl text-xs font-medium focus:ring-1 focus:ring-emerald-600 focus:outline-none placeholder:text-stone-300" placeholder="e.g., [[Pastor John]]">
                     </div>
                     <div class="space-y-1">
                         <label class="text-[10px] font-bold text-stone-500 uppercase tracking-wider block">Translation</label>
-                        <select id="preferred-translation" onchange="autoUpdateLinksOnTranslationChange()" class="w-full bg-stone-50 border border-stone-200 p-2 rounded-xl text-xs font-semibold focus:outline-none text-stone-700">
+                        <select id="preferred-translation" onchange="autoUpdateLinksOnTranslationChange()" class="w-full bg-stone-50 border border-stone-200 p-2.5 rounded-xl text-xs font-semibold focus:outline-none text-stone-700">
                             <option value="59" selected>ESV</option>
                             <option value="111">NIV</option>
                             <option value="2692">NASB</option>
@@ -166,7 +166,6 @@
 
     <!-- ENGINE RUNNER SCRIPT -->
     <script>
-        // Use the unified vault DB storage identifier 
         let sermonVault = JSON.parse(localStorage.getItem('scribe_sermon_vault')) || [];
         let photoAttachmentsBuffer = [];
 
@@ -182,7 +181,7 @@
             'joel': 'JOL', 'amos': 'AMO', 'obad': 'OBA', 'jonah': 'JON', 'mic': 'MIC', 'micah': 'MIC',
             'nah': 'NAM', 'nahum': 'NAM', 'hab': 'HAB', 'habakkuk': 'HAB', 'zeph': 'ZEP', 'zephaniah': 'ZEP',
             'hag': 'HAG', 'haggai': 'HAG', 'zech': 'ZEC', 'zechariah': 'ZEC', 'mal': 'MAL', 'malachi': 'MAL',
-            'matt': 'MAT', 'matthew': 'MAT', 'mark': 'MRK', 'luke', 'LUK', 'john': 'JHN', 'acts': 'ACT',
+            'matt': 'MAT', 'matthew': 'MAT', 'mark': 'MRK', 'luke': 'LUK', 'john': 'JHN', 'acts': 'ACT',
             'rom': 'ROM', 'romans': 'ROM', '1cor': '1CO', '2cor': '2CO', 'gal': 'GAL', 'galatians': 'GAL',
             'eph': 'EPH', 'ephesians': 'EPH', 'phil': 'PHP', 'philippians': 'PHP', 'col': 'COL', 'colossians': 'COL',
             '1thess': '1TH', '2thess': '2TH', '1tim': '1TI', '2tim': '2TI', 'titus': 'TIT', 'phile': 'PHM',
@@ -312,7 +311,6 @@
             const dateInput = document.getElementById('note-date').value;
             const editor = document.getElementById('note-editor');
 
-            // Force visual checkbox state flags permanently onto DOM attributes prior to string extraction
             editor.querySelectorAll('input[type="checkbox"]').forEach(box => {
                 if (box.checked) box.setAttribute('checked', 'true');
                 else box.removeAttribute('checked');
@@ -331,7 +329,6 @@
                 photos: [...photoAttachmentsBuffer]
             };
 
-            // If updating an item, overwrite it, otherwise add to front
             const index = sermonVault.findIndex(item => item.date === payload.date && item.title === payload.title);
             if (index > -1) sermonVault[index] = payload;
             else sermonVault.unshift(payload);
@@ -439,7 +436,6 @@
             
             let wikiMap = {};
 
-            // Parse text content looking for wiki brackets
             sermonVault.forEach(note => {
                 const regex = /\[\[(.*?)\]\]/g;
                 let match;
