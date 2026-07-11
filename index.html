@@ -3,299 +3,501 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scribe: Knowledge Graph Vault</title>
+    <title>Scribe: Spiritual Growth Hub</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        .editor-canvas:empty:before { content: attr(data-placeholder); color: #a8a29e; font-style: italic; }
-        .backlink-chip { color: #047857; font-weight: 600; background-color: #ecfdf5; border: 1px solid #a7f3d0; padding: 1px 6px; border-radius: 4px; }
-        ::-webkit-scrollbar { width: 5px; height: 5px; }
-        ::-webkit-scrollbar-track { background: #fafaf9; }
-        ::-webkit-scrollbar-thumb { background: #e7e5e4; border-radius: 4px; }
+        #note-editor:empty:before {
+            content: "Start typing notes... References like Eph 4:1-3 will turn into hyperlinks, and tags like [[Faith]] or [[Pastor Mark]] will form a connected knowledge graph.";
+            color: #a8a29e;
+            font-style: italic;
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.2s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
-<body class="bg-[#fcfbf9] text-stone-800 font-sans min-h-screen">
+<body class="bg-[#fcfbf9] text-stone-800 font-sans antialiased min-h-screen">
 
-    <!-- App Top Bar Workspace Router -->
-    <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-stone-200 px-6 py-3 flex justify-between items-center max-w-5xl mx-auto">
-        <div class="flex items-center gap-2">
-            <span class="font-serif font-bold text-lg text-emerald-900 tracking-tight">Scribe // Graph Vault</span>
-        </div>
-        <nav class="flex items-center gap-1 bg-stone-100 p-1 rounded-xl text-xs font-semibold">
-            <button onclick="switchView('daily')" id="nav-daily" class="bg-white text-stone-800 px-3 py-1.5 rounded-lg shadow-sm">📅 Daily Workspace</button>
-            <button onclick="switchView('graph')" id="nav-graph" class="text-stone-500 hover:text-stone-800 px-3 py-1.5 rounded-lg">🌿 Knowledge Index</button>
-            <button onclick="switchView('tasks')" id="nav-tasks" class="text-stone-500 hover:text-stone-800 px-3 py-1.5 rounded-lg">✅ Action Items</button>
-        </nav>
-    </header>
-
-    <div class="max-w-5xl mx-auto px-6 py-6 grid grid-cols-1 md:grid-cols-12 gap-6 pb-24">
+    <!-- MAIN APP CANVAS CONTAINER -->
+    <div class="space-y-6 max-w-xl mx-auto px-4 pt-6 pb-32">
         
-        <!-- ==================== VIEW 1: DAILY WORKSPACE ==================== -->
-        <main id="view-daily" class="md:col-span-8 space-y-4 view-panel">
-            <!-- Header Metadata Matrix -->
-            <div class="bg-white border border-stone-200/80 rounded-2xl p-5 shadow-sm space-y-4">
-                <div class="flex justify-between items-center border-b border-stone-100 pb-3">
-                    <input id="note-date" type="date" onchange="loadOrCreateDailyNote()" class="font-serif font-bold text-lg text-stone-900 bg-transparent border-none focus:outline-none cursor-pointer">
-                    <select id="preferred-translation" class="bg-stone-50 border border-stone-200 p-1.5 rounded-xl text-xs font-semibold focus:outline-none text-stone-600">
-                        <option value="59" selected>ESV</option>
-                        <option value="111">NIV</option>
-                        <option value="114">NKJV</option>
-                    </select>
-                </div>
+        <!-- App Title Header Banner -->
+        <div class="flex justify-between items-center border-b border-stone-200 pb-3">
+            <div>
+                <h2 class="text-lg font-serif font-bold text-stone-900">Sermon Journal & Graph Vault</h2>
+                <p class="text-xs text-stone-500">Record, link, and compile your notes</p>
+            </div>
+            <button onclick="clearCurrentEditor()" class="text-xs font-semibold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 rounded-lg transition">
+                ＋ New Entry
+            </button>
+        </div>
+
+        <!-- ==================== TAB VIEW 1: ACTIVE EDITOR WORKSPACE ==================== -->
+        <div id="hub-view-editor" class="space-y-4 hub-view-panel">
+            <div class="bg-white border border-stone-200/80 shadow-sm rounded-2xl p-5 space-y-4">
                 
-                <div class="grid grid-cols-2 gap-3 text-xs">
-                    <input id="note-title" type="text" placeholder="Sermon / Study Title..." class="bg-stone-50 border border-stone-200/60 p-2.5 rounded-xl font-medium focus:outline-none focus:border-stone-400">
-                    <input id="note-speaker" type="text" placeholder="Speaker (e.g. [[Pastor Mark]])" class="bg-stone-50 border border-stone-200/60 p-2.5 rounded-xl font-medium focus:outline-none focus:border-stone-400">
+                <!-- Metadata Row -->
+                <div class="grid grid-cols-3 gap-2">
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-bold text-stone-500 uppercase tracking-wider block">Service Date</label>
+                        <input id="note-date" type="date" class="w-full bg-stone-50 border border-stone-200 p-2 rounded-xl text-xs font-medium focus:ring-1 focus:ring-emerald-600 focus:outline-none">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-bold text-stone-500 uppercase tracking-wider block">Speaker / Teacher</label>
+                        <input id="note-speaker" type="text" class="w-full bg-stone-50 border border-stone-200 p-2 rounded-xl text-xs font-medium focus:ring-1 focus:ring-emerald-600 focus:outline-none placeholder:text-stone-300" placeholder="e.g., [[Pastor John]]">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-bold text-stone-500 uppercase tracking-wider block">Translation</label>
+                        <select id="preferred-translation" onchange="autoUpdateLinksOnTranslationChange()" class="w-full bg-stone-50 border border-stone-200 p-2 rounded-xl text-xs font-semibold focus:outline-none text-stone-700">
+                            <option value="59" selected>ESV</option>
+                            <option value="111">NIV</option>
+                            <option value="2692">NASB</option>
+                            <option value="114">NKJV</option>
+                        </select>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Editor Node Context -->
-            <div class="bg-white border border-stone-200/80 rounded-2xl shadow-sm overflow-hidden">
-                <!-- Logseq Style Inline Control Ribbon -->
-                <div class="bg-stone-50 border-b border-stone-200 px-4 py-2 flex items-center justify-between flex-wrap gap-2 text-xs font-semibold text-stone-600">
+                <!-- Title & Anchor Text inputs -->
+                <div class="space-y-3">
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-bold text-stone-500 uppercase tracking-wider block">Sermon Series / Title</label>
+                        <input id="note-title" type="text" class="w-full bg-stone-50 border border-stone-200 p-2.5 rounded-xl text-sm font-serif font-bold focus:ring-1 focus:ring-emerald-600 focus:outline-none placeholder:text-stone-300" placeholder="Message Title...">
+                    </div>
+
+                    <div class="space-y-1">
+                        <div class="flex justify-between items-center">
+                            <label class="text-[10px] font-bold text-stone-500 uppercase tracking-wider block">Key Scripture Passage</label>
+                            <span id="anchor-link-preview" class="text-[10px]"></span>
+                        </div>
+                        <input id="note-anchor" type="text" oninput="parseAnchorScripture()" class="w-full bg-stone-50 border border-stone-200 p-2.5 rounded-xl text-xs font-medium text-emerald-800 focus:ring-1 focus:ring-emerald-600 focus:outline-none placeholder:text-stone-300" placeholder="e.g., Rom 12:1-2">
+                    </div>
+                </div>
+
+                <!-- 🛠️ FORMAT BAR -->
+                <div class="bg-stone-100 border border-stone-200 rounded-xl p-1.5 flex items-center justify-between gap-1 flex-wrap">
                     <div class="flex items-center gap-1">
-                        <button onclick="format('bold')" class="w-7 h-7 bg-white border rounded hover:bg-stone-100">B</button>
-                        <button onclick="format('italic')" class="w-7 h-7 bg-white border rounded hover:bg-stone-100">I</button>
-                        <button onclick="format('insertUnorderedList')" class="px-2 h-7 bg-white border rounded hover:bg-stone-100">• List</button>
-                        <button onclick="insertTodoTemplate()" class="px-2 h-7 bg-white border border-emerald-200 text-emerald-800 rounded bg-emerald-50/50 hover:bg-emerald-50">☑ Task</button>
+                        <button onclick="format('bold')" class="w-7 h-7 text-xs font-bold bg-white rounded-md border border-stone-200 shadow-sm hover:bg-stone-50">B</button>
+                        <button onclick="format('italic')" class="w-7 h-7 text-xs italic bg-white rounded-md border border-stone-200 shadow-sm hover:bg-stone-50">I</button>
+                        <div class="h-4 w-px bg-stone-300 mx-1"></div>
+                        <button onclick="format('insertUnorderedList')" class="px-2 h-7 text-xs bg-white rounded-md border border-stone-200 shadow-sm hover:bg-stone-50">• List</button>
+                        <button onclick="insertInlineTodoCheckbox()" class="px-2 h-7 text-xs bg-emerald-50 text-emerald-800 rounded-md border border-emerald-200 font-semibold shadow-sm hover:bg-emerald-100">☑ Action Item</button>
                     </div>
-                    <div class="flex items-center gap-2">
-                        <button onclick="compileGraphWikiLinks()" class="bg-emerald-700 text-white px-3 py-1.5 rounded-lg font-bold shadow-sm hover:bg-emerald-800 transition">⚡ Compile Page</button>
-                    </div>
+                    
+                    <label class="cursor-pointer bg-emerald-700 text-white text-[10px] font-bold px-2.5 py-1.5 rounded-md flex items-center gap-1 hover:bg-emerald-800 shadow-sm transition">
+                        📷 Attach Photo
+                        <input type="file" accept="image/*" capture="environment" onchange="handleImageAttachment(event)" class="hidden">
+                    </label>
                 </div>
 
-                <!-- Rich Canvas Area -->
-                <div id="note-editor" contenteditable="true" class="editor-canvas p-5 min-h-[350px] focus:outline-none text-sm leading-relaxed max-h-[500px] overflow-y-auto" data-placeholder="Start typing your entry... Write [[Page Name]] to generate wiki backlinks, and standard bible links (e.g. Rom 8:28) will be instantly wired."></div>
+                <!-- 📝 NOTE ENGINE CANVAS -->
+                <div class="space-y-1">
+                    <label class="text-[10px] font-bold text-stone-500 uppercase tracking-wider block">Notes & Reflections</label>
+                    <div id="note-editor" contenteditable="true" class="w-full bg-stone-50 border border-stone-200 text-sm rounded-xl p-4 focus:ring-1 focus:ring-emerald-600 focus:outline-none min-h-[180px] max-h-[350px] overflow-y-auto leading-relaxed outline-none focus:bg-white transition"></div>
+                </div>
+
+                <!-- Image Previews Container -->
+                <div id="attachments-preview-grid" class="grid grid-cols-4 gap-2 hidden"></div>
+
+                <!-- Actions panel -->
+                <div class="flex gap-2 pt-1">
+                    <button onclick="saveActiveSermonNote()" class="flex-1 bg-emerald-700 text-white font-bold py-2.5 rounded-xl text-xs tracking-wider shadow-sm hover:bg-emerald-800 transition">
+                        Save & Compile Graph
+                    </button>
+                    <button onclick="autoHyperlinkCanvasText()" class="bg-emerald-50 border border-emerald-200 text-emerald-800 font-bold px-3 py-2.5 rounded-xl text-xs flex items-center gap-1 hover:bg-emerald-100 transition">
+                        🔗 Link Scriptures
+                    </button>
+                </div>
             </div>
-            
-            <!-- Contextual Implicit Section Footer: Backlinks Discovery Panel -->
-            <div id="contextual-backlinks-panel" class="bg-stone-50 border border-stone-200/80 rounded-2xl p-4 hidden">
-                <h4 class="text-[10px] font-bold text-stone-400 tracking-wider uppercase mb-2">Linked References to this node</h4>
+
+            <!-- Contextual Implicit Backlinks Discovery Panel -->
+            <div id="contextual-backlinks-panel" class="bg-stone-100 border border-stone-200 rounded-2xl p-4 hidden animate-fade-in">
+                <h4 class="text-[10px] font-bold text-stone-400 tracking-wider uppercase mb-2">Linked References To This Note</h4>
                 <div id="backlinks-connections-list" class="space-y-2 text-xs"></div>
             </div>
-        </main>
 
-        <!-- Sidebar Navigation Tree -->
-        <aside id="sidebar-panel" class="md:col-span-4 space-y-4">
-            <div class="bg-white border border-stone-200/80 rounded-2xl p-4 shadow-sm space-y-3">
-                <h3 class="text-[11px] font-bold text-stone-400 tracking-widest uppercase">Vault Timeline Logs</h3>
-                <div id="vault-timeline-index" class="space-y-1 max-h-64 overflow-y-auto pr-1 text-xs font-medium text-stone-600"></div>
+            <!-- ⏳ PAST MESSAGES HISTORY DIRECTORY -->
+            <div class="space-y-3">
+                <h3 class="text-xs font-bold uppercase text-stone-400 tracking-widest pl-1">Sermon Archive</h3>
+                <div class="grid gap-3" id="history-vault-container"></div>
             </div>
-        </aside>
+        </div>
 
-        <!-- ==================== VIEW 2: KNOWLEDGE INDEX ==================== -->
-        <main id="view-graph" class="md:col-span-12 space-y-4 view-panel hidden">
-            <div class="bg-white border border-stone-200/80 rounded-2xl p-6 shadow-sm">
-                <h2 class="font-serif font-bold text-xl text-stone-900 mb-1">Conceptual Wiki Index</h2>
-                <p class="text-xs text-stone-500 mb-4">Every backlinked entity, pastor, or theological topic created dynamically inside your notes.</p>
-                
-                <div id="wiki-index-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3"></div>
+        <!-- ==================== TAB VIEW 2: CONCEPTUAL WIKI INDEX ==================== -->
+        <div id="hub-view-graph" class="space-y-4 hub-view-panel hidden animate-fade-in">
+            <div class="bg-white border border-stone-200/80 rounded-2xl p-5 shadow-sm">
+                <h3 class="font-serif font-bold text-base text-stone-900 mb-1">Knowledge Index Graph</h3>
+                <p class="text-xs text-stone-500 mb-4">Every backlinked concept page initiated dynamically inside your entries using double brackets <code class="bg-stone-100 px-1 py-0.5 rounded text-emerald-800">[[Concept]]</code>.</p>
+                <div id="wiki-index-grid" class="grid grid-cols-2 gap-2.5"></div>
             </div>
-        </main>
+        </div>
 
-        <!-- ==================== VIEW 3: ACTION ITEMS ==================== -->
-        <main id="view-tasks" class="md:col-span-12 space-y-4 view-panel hidden">
-            <div class="bg-white border border-stone-200/80 rounded-2xl p-6 shadow-sm">
-                <h2 class="font-serif font-bold text-xl text-stone-900 mb-1">Spiritual Application Engine</h2>
-                <p class="text-xs text-stone-500 mb-4">All application checklist action items parsed straight from your sermon archives.</p>
-                
+        <!-- ==================== TAB VIEW 3: APPLICATION ACTION ITEMS ==================== -->
+        <div id="hub-view-tasks" class="space-y-4 hub-view-panel hidden animate-fade-in">
+            <div class="bg-white border border-stone-200/80 rounded-2xl p-5 shadow-sm">
+                <h3 class="font-serif font-bold text-base text-stone-900 mb-1">Spiritual Application Engine</h3>
+                <p class="text-xs text-stone-500 mb-4">Aggregated view of all inline actions and checkboxes across every note in your catalog.</p>
                 <div id="aggregated-task-list" class="space-y-2"></div>
             </div>
-        </main>
+        </div>
 
     </div>
 
-    <!-- GRAPH SYSTEM DATA CONTROLLER -->
+    <!-- 📱 APP CONTROL LAYER FOOTER TABS STRIP -->
+    <footer class="fixed bottom-0 left-0 right-0 border-t border-stone-200 bg-white/90 backdrop-blur-md py-3 px-6 z-50 shadow-lg">
+        <div class="max-w-md mx-auto flex justify-around items-center text-center">
+            <button onclick="switchHubView('editor')" id="tab-editor" class="flex flex-col items-center gap-1 text-emerald-800 font-bold transition">
+                <span class="text-lg">📝</span>
+                <span class="text-[10px] tracking-wide">Journal</span>
+            </button>
+            <button onclick="switchHubView('graph')" id="tab-graph" class="flex flex-col items-center gap-1 text-stone-400 font-medium hover:text-stone-700 transition">
+                <span class="text-lg">🌿</span>
+                <span class="text-[10px] tracking-wide">Knowledge Index</span>
+            </button>
+            <button onclick="switchHubView('tasks')" id="tab-tasks" class="flex flex-col items-center gap-1 text-stone-400 font-medium hover:text-stone-700 transition">
+                <span class="text-lg">✅</span>
+                <span class="text-[10px] tracking-wide">Action Items</span>
+            </button>
+        </div>
+    </footer>
+
+    <!-- ENGINE RUNNER SCRIPT -->
     <script>
-        // Structural Model: Notes stored flat by internal structural Date Keys or Entity Titles
-        let vaultDb = JSON.parse(localStorage.getItem('scribe_graph_vault')) || {};
-        
-        const bookUrlMapping = { 'rom': 'ROM', 'romans': 'ROM', 'john': 'JHN', 'gen': 'GEN', 'genesis': 'GEN', 'ps': 'PSA', 'psalm': 'PSA', 'eph': 'EPH', 'ephesians': 'EPH', 'acts': 'ACT' }; // Base mapping slice
+        // Use the unified vault DB storage identifier 
+        let sermonVault = JSON.parse(localStorage.getItem('scribe_sermon_vault')) || [];
+        let photoAttachmentsBuffer = [];
+
+        const bookUrlMapping = {
+            'gen': 'GEN', 'genesis': 'GEN', 'ex': 'EXO', 'exodus': 'EXO', 'lev': 'LEV', 'leviticus': 'LEV',
+            'num': 'NUM', 'numbers': 'NUM', 'deut': 'DEU', 'deuteronomy': 'DEU', 'josh': 'JSH', 'joshua': 'JSH',
+            'judg': 'JDG', 'judges': 'JDG', 'ruth': 'RUT', '1sam': '1SA', '2sam': '2SA', '1kings': '1KI',
+            '2kings': '2KI', '1chron': '1CH', '2chron': '2CH', 'ezra': 'EZR', 'neh': 'NEH', 'nehemiah': 'NEH',
+            'est': 'EST', 'esther': 'EST', 'job': 'JOB', 'ps': 'PSA', 'psalm': 'PSA', 'psalms': 'PSA',
+            'prov': 'PRO', 'proverbs': 'PRO', 'eccl': 'ECC', 'ecclesiastes': 'ECC', 'song': 'SNG',
+            'isa': 'ISA', 'isaiah': 'ISA', 'jer': 'JER', 'jeremiah': 'JER', 'lam': 'LAM', 'lamentations': 'LAM',
+            'ezek': 'EZK', 'ezekiel': 'EZK', 'dan': 'DAN', 'daniel': 'DAN', 'hos': 'HOS', 'hosea': 'HOS',
+            'joel': 'JOL', 'amos': 'AMO', 'obad': 'OBA', 'jonah': 'JON', 'mic': 'MIC', 'micah': 'MIC',
+            'nah': 'NAM', 'nahum': 'NAM', 'hab': 'HAB', 'habakkuk': 'HAB', 'zeph': 'ZEP', 'zephaniah': 'ZEP',
+            'hag': 'HAG', 'haggai': 'HAG', 'zech': 'ZEC', 'zechariah': 'ZEC', 'mal': 'MAL', 'malachi': 'MAL',
+            'matt': 'MAT', 'matthew': 'MAT', 'mark': 'MRK', 'luke', 'LUK', 'john': 'JHN', 'acts': 'ACT',
+            'rom': 'ROM', 'romans': 'ROM', '1cor': '1CO', '2cor': '2CO', 'gal': 'GAL', 'galatians': 'GAL',
+            'eph': 'EPH', 'ephesians': 'EPH', 'phil': 'PHP', 'philippians': 'PHP', 'col': 'COL', 'colossians': 'COL',
+            '1thess': '1TH', '2thess': '2TH', '1tim': '1TI', '2tim': '2TI', 'titus': 'TIT', 'phile': 'PHM',
+            'heb': 'HEB', 'hebrews': 'HEB', 'james': 'JAS', '1pet': '1PE', '2pet': '2PE', '1john': '1JN',
+            '2john': '2JN', '3john': '3JN', 'jude': 'JUD', 'rev': 'REV', 'revelation': 'REV'
+        };
 
         window.onload = function() {
             document.getElementById('note-date').value = new Date().toISOString().split('T')[0];
-            loadOrCreateDailyNote();
-            renderTimelineSidebar();
+            renderNotesArchiveList();
         };
 
-        function switchView(target) {
-            document.querySelectorAll('.view-panel').forEach(p => p.classList.add('hidden'));
-            document.getElementById(`view-${target}`).classList.remove('hidden');
-            
-            // Sidebar display toggle matching standard dashboard parameters
-            const aside = document.getElementById('sidebar-panel');
-            if (target === 'daily') aside.classList.remove('hidden');
-            else aside.classList.add('hidden');
+        // Tab Navigation Module
+        function switchHubView(target) {
+            document.querySelectorAll('.hub-view-panel').forEach(p => p.classList.add('hidden'));
+            document.getElementById(`hub-view-${target}`).classList.remove('hidden');
 
-            document.querySelectorAll('nav button').forEach(b => b.className = "text-stone-500 hover:text-stone-800 px-3 py-1.5 rounded-lg");
-            document.getElementById(`nav-${target}`).className = "bg-white text-stone-800 px-3 py-1.5 rounded-lg shadow-sm";
+            document.querySelectorAll('footer button').forEach(b => {
+                b.className = "flex flex-col items-center gap-1 text-stone-400 font-medium hover:text-stone-700 transition";
+            });
+            document.getElementById(`tab-${target}`).className = "flex flex-col items-center gap-1 text-emerald-800 font-bold transition";
 
-            if(target === 'graph') renderWikiIndexView();
-            if(target === 'tasks') renderActionItemsView();
-        }
-
-        function loadOrCreateDailyNote() {
-            const dateKey = document.getElementById('note-date').value;
-            const existingNode = vaultDb[dateKey];
-
-            if(existingNode) {
-                document.getElementById('note-title').value = existingNode.title || '';
-                document.getElementById('note-speaker').value = existingNode.speaker || '';
-                document.getElementById('note-editor').innerHTML = existingNode.content || '';
-                document.getElementById('preferred-translation').value = existingNode.translation || '59';
-            } else {
-                document.getElementById('note-title').value = '';
-                document.getElementById('note-speaker').value = '';
-                document.getElementById('note-editor').innerHTML = '';
-            }
-            renderContextualBacklinks(dateKey);
+            if (target === 'graph') buildAndRenderWikiGraph();
+            if (target === 'tasks') aggregateAndRenderAllTasks();
         }
 
         function format(cmd) { document.execCommand(cmd, false, null); document.getElementById('note-editor').focus(); }
-        function insertTodoTemplate() { document.execCommand('insertHTML', false, '<div><input type="checkbox" class="task-checkbox mr-2 align-middle"> </div>'); }
-
-        // Core Graph Compilation Parser Loop
-        function compileGraphWikiLinks() {
-            const dateKey = document.getElementById('note-date').value;
-            const editor = document.getElementById('note-editor');
-            
-            // Step 1: Scan and clean raw checklist nodes to preserve state values inside DOM architecture
-            editor.querySelectorAll('input[type="checkbox"]').forEach(box => {
-                if(box.checked) box.setAttribute('checked', 'true');
-                else box.removeAttribute('checked');
-            });
-
-            let content = editor.innerHTML;
-
-            // Step 2: Bi-directional Reference Link Scanner Pattern: [[Page Name]]
-            const wikiRegex = /\[\[(.*?)\]\]/g;
-            let match;
-            
-            // Build temporary tracking list of links discovered in this run
-            while ((match = wikiRegex.exec(content)) !== null) {
-                const entityName = match[1].trim();
-                if(entityName && !vaultDb[entityName]) {
-                    // Initialize empty explicit wiki target backlink node dynamically
-                    vaultDb[entityName] = { title: entityName, content: `<p class="italic text-stone-400">Implicitly referenced note stub.</p>`, backlinks: [] };
-                }
-            }
-
-            // Save central payload
-            vaultDb[dateKey] = {
-                id: dateKey,
-                type: 'daily',
-                date: dateKey,
-                title: document.getElementById('note-title').value.trim() || `Daily Log ${dateKey}`,
-                speaker: document.getElementById('note-speaker').value.trim(),
-                content: content,
-                translation: document.getElementById('preferred-translation').value
-            };
-
-            localStorage.setItem('scribe_graph_vault', JSON.stringify(vaultDb));
-            
-            // Step 3: Run standard scripture live hyperlinking transformations
-            autoHyperlinkScriptures(editor);
-            
-            // Refresh systems
-            renderTimelineSidebar();
-            alert("Node compiled into structural local graph vault.");
+        
+        function insertInlineTodoCheckbox() {
+            document.execCommand('insertHTML', false, '<div><input type="checkbox" onchange="syncEditorDOMCheckboxes(this)" class="task-checkbox mr-2 w-3.5 h-3.5 accent-emerald-700 align-middle"> </div>');
         }
 
-        function autoHyperlinkScriptures(container) {
+        function syncEditorDOMCheckboxes(el) {
+            if (el.checked) el.setAttribute('checked', 'true');
+            else el.removeAttribute('checked');
+        }
+
+        // Bible Verse Linking Engine
+        function generateBibleUrl(rawCitation) {
+            const cleanStr = rawCitation.trim().replace(/\s+/g, ' ');
+            const regex = /^([1-3]\s)?[A-Za-z]+/g;
+            const match = cleanStr.match(regex);
+            if (!match) return null;
+
+            const bookNameRaw = match[0].toLowerCase().replace(/\s/g, '');
+            const targetBookCode = bookUrlMapping[bookNameRaw];
+            if (!targetBookCode) return null;
+
+            const translationId = document.getElementById('preferred-translation').value || "59";
+            const remnant = cleanStr.substring(match[0].length).trim();
+            const numericalParts = remnant.split(':');
+            if (numericalParts.length === 0) return null;
+
+            const chapter = parseInt(numericalParts[0]);
+            let finalSelection = `${targetBookCode}.${chapter}`;
+
+            if (numericalParts[1]) {
+                const rangeParts = numericalParts[1].split('-');
+                const startVerse = parseInt(rangeParts[0]);
+                finalSelection += `.${startVerse}`;
+                if (rangeParts[1]) {
+                    const endVerse = parseInt(rangeParts[1]);
+                    finalSelection += `-${endVerse}`;
+                }
+            }
+            return `https://www.bible.com/bible/${translationId}/${finalSelection}`;
+        }
+
+        function parseAnchorScripture() {
+            const inputVal = document.getElementById('note-anchor').value;
+            const previewSpan = document.getElementById('anchor-link-preview');
+            const targetUrl = generateBibleUrl(inputVal);
+
+            if (targetUrl) {
+                previewSpan.innerHTML = `<a href="${targetUrl}" target="_blank" class="text-emerald-700 font-bold underline animate-fade-in">Valid Link ↗</a>`;
+            } else {
+                previewSpan.innerHTML = inputVal ? `<span class="text-amber-600 font-medium animate-fade-in">Parsing...</span>` : '';
+            }
+        }
+
+        function autoHyperlinkCanvasText() {
+            const editor = document.getElementById('note-editor');
             const pattern = /\b(?:[1-3]\s)?[A-Za-z]+\s\d+:\d+(?:-\d+)?/g;
             const trans = document.getElementById('preferred-translation').value;
             
-            // Simple string transformation utility mapping to safe endpoints
-            container.innerHTML = container.innerHTML.replace(pattern, (matched) => {
+            editor.innerHTML = editor.innerHTML.replace(pattern, (matched) => {
                 const parts = matched.split(' ');
                 const book = bookUrlMapping[parts[0].toLowerCase()];
-                if(!book) return matched;
+                if (!book) return matched;
                 const ref = parts[1].replace(':', '.');
                 return `<a href="https://www.bible.com/bible/${trans}/${book}.${ref}" target="_blank" class="text-emerald-700 font-semibold underline hover:text-emerald-900">${matched}</a>`;
             });
         }
 
-        function renderContextualBacklinks(activeKey) {
+        function autoUpdateLinksOnTranslationChange() {
+            parseAnchorScripture();
+            if (document.getElementById('note-editor').innerText.trim() !== "") {
+                autoHyperlinkCanvasText();
+            }
+        }
+
+        // Camera / Image Upload handler
+        function handleImageAttachment(event) {
+            const files = event.target.files;
+            const grid = document.getElementById('attachments-preview-grid');
+            
+            for (let file of files) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const base64Data = e.target.result;
+                    photoAttachmentsBuffer.push(base64Data);
+                    
+                    grid.classList.remove('hidden');
+                    grid.innerHTML += `
+                        <div class="relative aspect-square rounded-xl overflow-hidden border border-stone-200 group animate-fade-in">
+                            <img src="${base64Data}" class="w-full h-full object-cover">
+                            <button onclick="this.parentElement.remove()" class="absolute top-1 right-1 bg-black/60 text-white text-[10px] h-4 w-4 rounded-full flex items-center justify-center">×</button>
+                        </div>`;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Save Payload Loop
+        function saveActiveSermonNote() {
+            const titleInput = document.getElementById('note-title').value.trim();
+            const dateInput = document.getElementById('note-date').value;
+            const editor = document.getElementById('note-editor');
+
+            // Force visual checkbox state flags permanently onto DOM attributes prior to string extraction
+            editor.querySelectorAll('input[type="checkbox"]').forEach(box => {
+                if (box.checked) box.setAttribute('checked', 'true');
+                else box.removeAttribute('checked');
+            });
+
+            if (!titleInput) { alert("Please supply a sermon title or series header."); return; }
+
+            const payload = {
+                id: Date.now().toString(),
+                date: dateInput,
+                speaker: document.getElementById('note-speaker').value.trim(),
+                title: titleInput,
+                anchorScripture: document.getElementById('note-anchor').value.trim(),
+                translation: document.getElementById('preferred-translation').value,
+                content: editor.innerHTML,
+                photos: [...photoAttachmentsBuffer]
+            };
+
+            // If updating an item, overwrite it, otherwise add to front
+            const index = sermonVault.findIndex(item => item.date === payload.date && item.title === payload.title);
+            if (index > -1) sermonVault[index] = payload;
+            else sermonVault.unshift(payload);
+
+            localStorage.setItem('scribe_sermon_vault', JSON.stringify(sermonVault));
+            
+            clearCurrentEditor();
+            renderNotesArchiveList();
+            alert("Entry saved and graph nodes compiled successfully.");
+        }
+
+        function clearCurrentEditor() {
+            document.getElementById('note-title').value = '';
+            document.getElementById('note-speaker').value = '';
+            document.getElementById('note-anchor').value = '';
+            document.getElementById('note-editor').innerHTML = '';
+            document.getElementById('anchor-link-preview').innerHTML = '';
+            document.getElementById('attachments-preview-grid').innerHTML = '';
+            document.getElementById('attachments-preview-grid').classList.add('hidden');
+            document.getElementById('contextual-backlinks-panel').classList.add('hidden');
+            document.getElementById('note-date').value = new Date().toISOString().split('T')[0];
+            photoAttachmentsBuffer = [];
+        }
+
+        function loadArchiveItemIntoWorkspace(id) {
+            const match = sermonVault.find(item => item.id === id);
+            if (!match) return;
+
+            document.getElementById('note-date').value = match.date;
+            document.getElementById('note-speaker').value = match.speaker || '';
+            document.getElementById('note-title').value = match.title;
+            document.getElementById('note-anchor').value = match.anchorScripture || '';
+            document.getElementById('preferred-translation').value = match.translation || '59';
+            document.getElementById('note-editor').innerHTML = match.content || '';
+            
+            const grid = document.getElementById('attachments-preview-grid');
+            grid.innerHTML = '';
+            photoAttachmentsBuffer = match.photos || [];
+
+            if (photoAttachmentsBuffer.length > 0) {
+                grid.classList.remove('hidden');
+                photoAttachmentsBuffer.forEach(img => {
+                    grid.innerHTML += `
+                        <div class="relative aspect-square rounded-xl overflow-hidden border border-stone-200">
+                            <img src="${img}" class="w-full h-full object-cover">
+                        </div>`;
+                });
+            } else {
+                grid.classList.add('hidden');
+            }
+
+            parseAnchorScripture();
+            renderContextualBacklinks(match.title);
+            switchHubView('editor');
+        }
+
+        function renderNotesArchiveList() {
+            const container = document.getElementById('history-vault-container');
+            container.innerHTML = '';
+
+            if (sermonVault.length === 0) {
+                container.innerHTML = `<p class="text-xs italic text-stone-400 py-4 text-center">No compiled entries in this vault directory yet.</p>`;
+                return;
+            }
+
+            sermonVault.forEach(note => {
+                const hasPhotos = note.photos && note.photos.length > 0;
+                container.innerHTML += `
+                    <div onclick="loadArchiveItemIntoWorkspace('${note.id}')" class="bg-white border border-stone-200 p-4 rounded-xl shadow-sm hover:border-emerald-700/50 cursor-pointer transition flex justify-between items-start">
+                        <div class="space-y-1 max-w-[80%]">
+                            <span class="text-[10px] font-mono text-stone-400 font-bold block">${note.date} ${note.speaker ? '• ' + note.speaker : ''}</span>
+                            <h4 class="font-serif font-bold text-stone-900 text-sm">${note.title}</h4>
+                            ${note.anchorScripture ? `<span class="inline-block text-[10px] bg-stone-100 text-stone-600 px-2 py-0.5 rounded-md font-medium">${note.anchorScripture}</span>` : ''}
+                        </div>
+                        ${hasPhotos ? `<span class="text-base">📷</span>` : ''}
+                    </div>`;
+            });
+        }
+
+        // Backlinks Discovery Scan
+        function renderContextualBacklinks(noteTitle) {
             const panel = document.getElementById('contextual-backlinks-panel');
             const list = document.getElementById('backlinks-connections-list');
             list.innerHTML = '';
             
-            let connections = [];
-            Object.keys(vaultDb).forEach(key => {
-                if(key !== activeKey && vaultDb[key].content && vaultDb[key].content.includes(`[[${activeKey}]]`)) {
-                    connections.push(vaultDb[key]);
-                }
-            });
+            let connections = sermonVault.filter(note => note.title !== noteTitle && note.content && note.content.includes(`[[${noteTitle}]]`));
 
-            if(connections.length > 0) {
+            if (connections.length > 0) {
                 panel.classList.remove('hidden');
                 connections.forEach(conn => {
-                    list.innerHTML += `<div class="p-2 bg-white border border-stone-200 rounded-lg"><span class="font-bold text-stone-700">${conn.title || conn.date}</span>: <span class="text-stone-500">Mentions this entry.</span></div>`;
+                    list.innerHTML += `
+                        <div onclick="loadArchiveItemIntoWorkspace('${conn.id}')" class="p-2 bg-white border border-stone-200 rounded-lg cursor-pointer hover:border-emerald-600/40">
+                            <span class="font-bold text-stone-700">${conn.title}</span> <span class="text-stone-400">(${conn.date})</span>
+                        </div>`;
                 });
             } else {
                 panel.classList.add('hidden');
             }
         }
 
-        function renderTimelineSidebar() {
-            const container = document.getElementById('vault-timeline-index');
-            container.innerHTML = '';
-            
-            Object.keys(vaultDb).sort().reverse().forEach(key => {
-                const entry = vaultDb[key];
-                if(entry.type === 'daily' || entry.date) {
-                    container.innerHTML += `
-                        <div onclick="document.getElementById('note-date').value='${entry.date}'; loadOrCreateDailyNote();" class="p-2 rounded-lg hover:bg-stone-100 cursor-pointer border border-transparent hover:border-stone-200 flex justify-between items-center">
-                            <span>📅 ${entry.date}</span>
-                            <span class="text-[10px] text-stone-400 max-w-[150px] truncate">${entry.title}</span>
-                        </div>`;
-                }
-            });
-        }
-
-        function renderWikiIndexView() {
+        // 🌿 Knowledge Graph Parser
+        function buildAndRenderWikiGraph() {
             const grid = document.getElementById('wiki-index-grid');
             grid.innerHTML = '';
+            
+            let wikiMap = {};
 
-            Object.keys(vaultDb).forEach(key => {
-                const node = vaultDb[key];
-                if(node.type !== 'daily' && !node.date) {
-                    grid.innerHTML += `
-                        <div class="bg-white border border-stone-200 p-4 rounded-xl shadow-sm hover:border-emerald-600/40 transition">
-                            <span class="text-xs font-bold text-emerald-800 block mb-1"># ${node.title}</span>
-                            <p class="text-[11px] text-stone-400">Graph Reference Node</p>
-                        </div>`;
+            // Parse text content looking for wiki brackets
+            sermonVault.forEach(note => {
+                const regex = /\[\[(.*?)\]\]/g;
+                let match;
+                while ((match = regex.exec(note.content)) !== null) {
+                    const concept = match[1].trim();
+                    if (!wikiMap[concept]) wikiMap[concept] = [];
+                    wikiMap[concept].push(note);
                 }
+                if (note.speaker && note.speaker.startsWith('[[')) {
+                    const cleanSpeaker = note.speaker.replace('[[', '').replace(']]', '').trim();
+                    if (!wikiMap[cleanSpeaker]) wikiMap[cleanSpeaker] = [];
+                    wikiMap[cleanSpeaker].push(note);
+                }
+            });
+
+            const concepts = Object.keys(wikiMap);
+            if (concepts.length === 0) {
+                grid.innerHTML = `<p class="col-span-2 text-xs italic text-stone-400 py-6 text-center">Use double brackets like [[Grace]] in your editor canvas to generate conceptual connections.</p>`;
+                return;
+            }
+
+            concepts.forEach(concept => {
+                grid.innerHTML += `
+                    <div class="bg-stone-50 border border-stone-200 p-3 rounded-xl shadow-sm">
+                        <span class="text-xs font-bold text-emerald-800 block"># ${concept}</span>
+                        <span class="text-[10px] text-stone-400 font-medium">${wikiMap[concept].length} connected message(s)</span>
+                    </div>`;
             });
         }
 
-        function renderActionItemsView() {
+        // ✅ Action Items Aggregator
+        function aggregateAndRenderAllTasks() {
             const container = document.getElementById('aggregated-task-list');
             container.innerHTML = '';
+            let totalTasksFound = false;
 
-            let hasTasks = false;
-            Object.keys(vaultDb).forEach(key => {
-                const node = vaultDb[key];
-                if(node.content && node.content.includes('type="checkbox"')) {
-                    const tempDiv = document.createElement('div');
-                    tempDiv.innerHTML = node.content;
-                    
-                    tempDiv.querySelectorAll('input[type="checkbox"]').forEach(box => {
-                        hasTasks = true;
-                        const taskText = box.parentElement.innerText || "Unlabeled spiritual practice item";
+            sermonVault.forEach(note => {
+                if (note.content && note.content.includes('type="checkbox"')) {
+                    const wrapper = document.createElement('div');
+                    wrapper.innerHTML = note.content;
+
+                    wrapper.querySelectorAll('input[type="checkbox"]').forEach(box => {
+                        totalTasksFound = true;
+                        const taskLabel = box.parentElement.innerText.trim() || "Unlabeled spiritual reflection item";
                         const isChecked = box.hasAttribute('checked') || box.checked;
-                        
+
                         container.innerHTML += `
-                            <div class="flex items-center gap-3 bg-white border border-stone-200 p-3 rounded-xl shadow-sm">
-                                <input type="checkbox" ${isChecked ? 'checked' : ''} disabled class="w-4 h-4 accent-emerald-700">
-                                <span class="text-xs font-medium ${isChecked ? 'line-through text-stone-400' : 'text-stone-700'}">${taskText}</span>
-                                <span class="text-[9px] bg-stone-100 px-2 py-0.5 text-stone-400 ml-auto font-mono rounded">${node.date || node.title}</span>
+                            <div class="flex items-center gap-2.5 bg-stone-50 border border-stone-200/80 p-3 rounded-xl">
+                                <input type="checkbox" ${isChecked ? 'checked' : ''} disabled class="w-3.5 h-3.5 accent-emerald-700">
+                                <span class="text-xs font-medium ${isChecked ? 'line-through text-stone-400' : 'text-stone-700'}">${taskLabel}</span>
+                                <span onclick="loadArchiveItemIntoWorkspace('${note.id}')" class="text-[9px] bg-white border border-stone-200 px-2 py-0.5 text-stone-400 ml-auto rounded-md cursor-pointer hover:bg-stone-100">${note.title}</span>
                             </div>`;
                     });
                 }
             });
 
-            if(!hasTasks) {
-                container.innerHTML = `<p class="text-xs italic text-stone-400 text-center py-6 bg-white border rounded-xl">No inline checklist items parsed out of your sermon journal yet.</p>`;
+            if (!totalTasksFound) {
+                container.innerHTML = `<p class="text-xs italic text-stone-400 py-6 text-center">No action items found. Insert "☑ Action Item" points to map goals over your study records.</p>`;
             }
         }
     </script>
