@@ -140,11 +140,29 @@
     <div id="soul-modal" class="hidden fixed inset-0 z-50 bg-[#2c2a29]/40 backdrop-blur-sm flex items-end justify-center p-4">
         <div class="bg-white border border-[#ebd9c5] w-full max-w-md rounded-2xl p-5 space-y-4">
             <h3 class="font-serif font-bold text-lg text-[#1c1b1a]">Track Person on Care Roster</h3>
-            <div class="space-y-2">
-                <input id="soul-name" type="text" class="w-full bg-[#fdfbf7] border border-[#ebd9c5] p-2.5 rounded-xl text-sm focus:outline-none" placeholder="Name or Family Name">
-                <input id="soul-season" type="text" class="w-full bg-[#fdfbf7] border border-[#ebd9c5] p-2.5 rounded-xl text-sm focus:outline-none" placeholder="Current Season / Prayer Needs">
+            <div class="space-y-3">
+                <input id="soul-name" type="text" class="w-full bg-[#fdfbf7] border border-[#ebd9c5] p-2.5 rounded-xl text-sm focus:outline-none font-medium" placeholder="Name or Family Name">
+                
+                <div class="space-y-1.5">
+                    <label class="text-[11px] font-bold text-[#8c7863] uppercase tracking-wider block">Spiritual Season / Focus</label>
+                    <select id="soul-season-select" onchange="handleSeasonDropdownChange()" class="w-full bg-[#fdfbf7] border border-[#ebd9c5] p-2.5 rounded-xl text-sm focus:outline-none font-medium text-[#2c2a29]">
+                        <option value="New Believer / Foundations">🌱 New Believer / Foundations</option>
+                        <option value="Spiritual Desert / Dryness">🏜️ Spiritual Desert / Dryness</option>
+                        <option value="Grief, Loss & Suffering">🕊️ Grief, Loss & Suffering</option>
+                        <option value="Deep Theological Study">📚 Deep Theological Study</option>
+                        <option value="Family & Marriage Focus">🏡 Family & Marriage Focus</option>
+                        <option value="Leadership & Ministry Transition">⚓ Leadership & Ministry Transition</option>
+                        <option value="General Prayer Needs">🙏 General Prayer Needs</option>
+                        <option value="CUSTOM">✨ Custom...</option>
+                    </select>
+                </div>
+
+                <!-- Hidden adaptive block that emerges only when 'Custom...' is checked -->
+                <div id="custom-season-box" class="hidden animate-fadeIn">
+                    <input id="soul-custom-season" type="text" class="w-full bg-[#fdfbf7] border border-amber-300 p-2.5 rounded-xl text-sm focus:outline-none placeholder:text-stone-400" placeholder="Type specific season or prayer focus details...">
+                </div>
             </div>
-            <div class="flex gap-2">
+            <div class="flex gap-2 pt-1">
                 <button onclick="saveNewSoul()" class="flex-1 bg-[#3d6346] text-white text-xs font-bold p-2.5 rounded-xl">Add to Care Roster</button>
                 <button onclick="toggleModal('soul-modal')" class="bg-slate-100 text-slate-600 text-xs font-bold p-2.5 rounded-xl">Cancel</button>
             </div>
@@ -166,7 +184,7 @@
     <!-- 🧠 SYSTEM MOTOR ENGINE -->
     <script>
         let localDatabase = [];
-        let soulRoster = []; // Clean Slate: No preloaded templates.
+        let soulRoster = [];
 
         // 📔 THEMATIC BIBLE PLAN DATABASE (Mapped by Month Index 0-11 to YouVersion Architecture)
         const thematicBiblePlan = {
@@ -306,11 +324,9 @@
             
             document.getElementById('header-theme-title').innerText = reading.theme;
             
-            // Explicitly set to YouVersion version code 111 (NIV)
             const versionId = "111";
             const bibleUrl = `https://www.bible.com/bible/${versionId}/${reading.query}`;
 
-            // Inject the responsive anchor point
             document.getElementById('scripture-citation').innerHTML = `
                 <a href="${bibleUrl}" target="_blank" class="hover:underline text-[#3d6346] inline-flex items-center gap-1.5 font-semibold">
                     ${reading.text} <span class="text-xs font-normal text-stone-400 font-sans">(NIV)</span>
@@ -418,6 +434,42 @@
             });
         }
 
+        function handleSeasonDropdownChange() {
+            const selectEl = document.getElementById('soul-season-select');
+            const customBox = document.getElementById('custom-season-box');
+            
+            if (selectEl.value === 'CUSTOM') {
+                customBox.classList.remove('hidden');
+            } else {
+                customBox.classList.add('hidden');
+                document.getElementById('soul-custom-season').value = '';
+            }
+        }
+
+        function saveNewSoul() {
+            const name = document.getElementById('soul-name').value;
+            const selectEl = document.getElementById('soul-season-select');
+            
+            let finalSeason = selectEl.value;
+            if (finalSeason === 'CUSTOM') {
+                finalSeason = document.getElementById('soul-custom-season').value.trim() || "Custom Focus";
+            }
+
+            if(name) {
+                soulRoster.push({ name, season: finalSeason, latestNote: "" });
+                
+                // Reset inputs & dropdown state
+                document.getElementById('soul-name').value = '';
+                selectEl.selectedIndex = 0;
+                document.getElementById('soul-custom-season').value = '';
+                document.getElementById('custom-season-box').classLevel = 'hidden';
+                document.getElementById('custom-season-box').classList.add('hidden');
+                
+                toggleModal('soul-modal');
+                renderDashboard();
+            }
+        }
+
         function selectEntryToEdit(dateString) {
             selectedTargetDate = dateString;
             let match = localDatabase.find(r => r.date === dateString);
@@ -465,18 +517,6 @@
         }
 
         function toggleModal(id) { document.getElementById(id).classList.toggle('hidden'); }
-
-        function saveNewSoul() {
-            const name = document.getElementById('soul-name').value;
-            const season = document.getElementById('soul-season').value;
-            if(name) {
-                soulRoster.push({ name, season, latestNote: "" });
-                document.getElementById('soul-name').value = '';
-                document.getElementById('soul-season').value = '';
-                toggleModal('soul-modal');
-                renderDashboard();
-            }
-        }
 
         document.getElementById('care-new-note').addEventListener('keydown', function(e) { e.stopPropagation(); });
         document.getElementById('field-journal').addEventListener('keydown', function(e) { e.stopPropagation(); });
