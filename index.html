@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spiritual Growth Hub</title>
+    <title>Whitney Spiritual Disciplines Hub (NIV)</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-[#fdfbf7] text-[#2c2a29] font-sans min-h-screen antialiased">
 
     <!-- Privacy Banner -->
     <div class="sticky top-0 z-40 bg-[#fdfbf7]/90 backdrop-blur-md border-b border-[#ebd9c5] max-w-md mx-auto px-5 py-3 flex items-center justify-between">
-        <span class="text-xs font-bold tracking-[0.15em] text-[#8c7863] uppercase">Spiritual Growth Hub</span>
+        <span class="text-xs font-bold tracking-[0.15em] text-[#8c7863] uppercase">Spiritual Disciplines Hub</span>
         <span class="bg-[#e9f2eb] text-[#3d6346] text-[10px] font-mono px-2 py-0.5 rounded-full font-bold">🔒 Local Vault Only</span>
     </div>
 
@@ -52,12 +52,13 @@
                 </button>
             </div>
 
-            <!-- Thematic Citation Box -->
+            <!-- Thematic Citation Box with Live NIV Integration -->
             <div class="bg-[#fdfbf7] border border-[#ebd9c5] p-4 rounded-xl space-y-1.5">
                 <div class="flex justify-between items-center text-[10px] font-bold text-[#8c7863] uppercase tracking-wider">
                     <span>Assigned Text for Intake</span>
+                    <span class="text-[9px] font-bold text-[#3d6346] tracking-normal capitalize">Click to open text</span>
                 </div>
-                <span class="block text-base font-serif font-bold text-[#3d6346]" id="scripture-citation">Loading assignment...</span>
+                <div class="block text-base font-serif font-bold text-[#3d6346]" id="scripture-citation">Loading assignment...</div>
             </div>
 
             <!-- Whitney's Specific Input Matrix -->
@@ -165,22 +166,118 @@
     <!-- 🧠 SYSTEM MOTOR ENGINE -->
     <script>
         let localDatabase = [];
-        let soulRoster = []; // 👈 Fresh Slate: Harrisons removed!
+        let soulRoster = []; // Clean Slate: No preloaded templates.
 
-        // 📔 THEMATIC BIBLE PLAN DATABASE (Mapped by Month Index 0-11)
+        // 📔 THEMATIC BIBLE PLAN DATABASE (Mapped by Month Index 0-11 to YouVersion Architecture)
         const thematicBiblePlan = {
-            0: { theme: "Identity & New Beginnings", passages: ["Genesis 12:1-4", "Ephesians 1:3-14", "2 Corinthians 5:17-21", "Galatians 4:4-7"] },
-            1: { theme: "The Heart of Worship", passages: ["Psalm 95:1-7", "John 4:21-26", "Romans 12:1-2", "Psalm 103:1-12"] },
-            2: { theme: "Surrender & Wilderness", passages: ["Matthew 4:1-11", "Isaiah 43:16-21", "Philippians 3:7-14", "Psalm 40:1-5"] },
-            3: { theme: "Resurrection & Hope", passages: ["John 11:25-27", "1 Peter 1:3-9", "1 Corinthians 15:50-58", "Romans 8:31-39"] },
-            4: { theme: "The Holy Spirit & Power", passages: ["Acts 2:1-4", "Galatians 5:16-26", "John 14:15-27", "Ephesians 3:14-21"] },
-            5: { theme: "Wisdom for Living", passages: ["Proverbs 3:1-12", "James 1:2-8", "James 3:13-18", "Ecclesiastes 3:1-11"] },
-            6: { theme: "Relational Care & Community", passages: ["Romans 12:9-21", "1 John 4:7-21", "Colossians 3:12-17", "Galatians 6:1-10"] },
-            7: { theme: "Stewardship & Generosity", passages: ["2 Corinthians 9:6-15", "Matthew 6:19-24", "1 Timothy 6:17-19", "Malachi 3:10-12"] },
-            8: { theme: "Faith Through Trials", passages: ["Hebrews 11:1-6", "Isaiah 40:27-31", "2 Corinthians 4:16-18", "Psalm 23:1-6"] },
-            9: { theme: "Justice & Mercy", passages: ["Micah 6:6-8", "Matthew 25:34-40", "Isaiah 58:6-12", "James 2:14-18"] },
-            10: { theme: "Gratitude & Praise", passages: ["1 Thessalonians 5:16-18", "Psalm 100:1-5", "Colossians 2:6-7", "Psalm 34:1-8"] },
-            11: { theme: "The Incarnation & Peace", passages: ["Isaiah 9:2-7", "Luke 2:1-14", "John 1:1-14", "Philippians 4:4-9"] }
+            0: { 
+                theme: "Identity & New Beginnings", 
+                passages: [
+                    { text: "Genesis 12:1-4", query: "GEN.12.1-4" },
+                    { text: "Ephesians 1:3-14", query: "EPH.1.3-14" },
+                    { text: "2 Corinthians 5:17-21", query: "2CO.5.17-21" },
+                    { text: "Galatians 4:4-7", query: "GAL.4.4-7" }
+                ] 
+            },
+            1: { 
+                theme: "The Heart of Worship", 
+                passages: [
+                    { text: "Psalm 95:1-7", query: "PSA.95.1-7" },
+                    { text: "John 4:21-26", query: "JHN.4.21-26" },
+                    { text: "Romans 12:1-2", query: "ROM.12.1-2" },
+                    { text: "Psalm 103:1-12", query: "PSA.103.1-12" }
+                ] 
+            },
+            2: { 
+                theme: "Surrender & Wilderness", 
+                passages: [
+                    { text: "Matthew 4:1-11", query: "MAT.4.1-11" },
+                    { text: "Isaiah 43:16-21", query: "ISA.43.16-21" },
+                    { text: "Philippians 3:7-14", query: "PHP.3.7-14" },
+                    { text: "Psalm 40:1-5", query: "PSA.40.1-5" }
+                ] 
+            },
+            3: { 
+                theme: "Resurrection & Hope", 
+                passages: [
+                    { text: "John 11:25-27", query: "JHN.11.25-27" },
+                    { text: "1 Peter 1:3-9", query: "1PE.1.3-9" },
+                    { text: "1 Corinthians 15:50-58", query: "1CO.15.50-58" },
+                    { text: "Romans 8:31-39", query: "ROM.8.31-39" }
+                ] 
+            },
+            4: { 
+                theme: "The Holy Spirit & Power", 
+                passages: [
+                    { text: "Acts 2:1-4", query: "ACT.2.1-4" },
+                    { text: "Galatians 5:16-26", query: "GAL.5.16-26" },
+                    { text: "John 14:15-27", query: "JHN.14.15-27" },
+                    { text: "Ephesians 3:14-21", query: "EPH.3.14-21" }
+                ] 
+            },
+            5: { 
+                theme: "Wisdom for Living", 
+                passages: [
+                    { text: "Proverbs 3:1-12", query: "PRO.3.1-12" },
+                    { text: "James 1:2-8", query: "JAS.1.2-8" },
+                    { text: "James 3:13-18", query: "JAS.3.13-18" },
+                    { text: "Ecclesiastes 3:1-11", query: "ECC.3.1-11" }
+                ] 
+            },
+            6: { 
+                theme: "Relational Care & Community", 
+                passages: [
+                    { text: "Romans 12:9-21", query: "ROM.12.9-21" },
+                    { text: "1 John 4:7-21", query: "1JN.4.7-21" },
+                    { text: "Colossians 3:12-17", query: "COL.3.12-17" },
+                    { text: "Galatians 6:1-10", query: "GAL.6.1-10" }
+                ] 
+            },
+            7: { 
+                theme: "Stewardship & Generosity", 
+                passages: [
+                    { text: "2 Corinthians 9:6-15", query: "2CO.9.6-15" },
+                    { text: "Matthew 6:19-24", query: "MAT.6.19-24" },
+                    { text: "1 Timothy 6:17-19", query: "1TI.6.17-19" },
+                    { text: "Malachi 3:10-12", query: "MAL.3.10-12" }
+                ] 
+            },
+            8: { 
+                theme: "Faith Through Trials", 
+                passages: [
+                    { text: "Hebrews 11:1-6", query: "HEB.11.1-6" },
+                    { text: "Isaiah 40:27-31", query: "ISA.40.27-31" },
+                    { text: "2 Corinthians 4:16-18", query: "2CO.4.16-18" },
+                    { text: "Psalm 23:1-6", query: "PSA.23.1-6" }
+                ] 
+            },
+            9: { 
+                theme: "Justice & Mercy", 
+                passages: [
+                    { text: "Micah 6:6-8", query: "MIC.6.6-8" },
+                    { text: "Matthew 25:34-40", query: "MAT.25.34-40" },
+                    { text: "Isaiah 58:6-12", query: "ISA.58.6-12" },
+                    { text: "James 2:14-18", query: "JAS.2.14-18" }
+                ] 
+            },
+            10: { 
+                theme: "Gratitude & Praise", 
+                passages: [
+                    { text: "1 Thessalonians 5:16-18", query: "1TH.5.16-18" },
+                    { text: "Psalm 100:1-5", query: "PSA.100.1-5" },
+                    { text: "Colossians 2:6-7", query: "COL.2.6-7" },
+                    { text: "Psalm 34:1-8", query: "PSA.34.1-8" }
+                ] 
+            },
+            11: { 
+                theme: "The Incarnation & Peace", 
+                passages: [
+                    { text: "Isaiah 9:2-7", query: "ISA.9.2-7" },
+                    { text: "Luke 2:1-14", query: "LUK.2.1-14" },
+                    { text: "John 1:1-14", query: "JHN.1.1-14" },
+                    { text: "Philippians 4:4-9", query: "PHP.4.4-9" }
+                ] 
+            }
         };
 
         const getFormattedDate = (d) => d.toISOString().split('T')[0];
@@ -193,12 +290,13 @@
         function getThematicReadingDetails(dateObj) {
             const month = dateObj.getMonth();
             const day = dateObj.getDate();
-            const activeTheme = thematicBiblePlan[month] || { theme: "General Devotion", passages: ["Psalm 119:105"] };
+            const activeTheme = thematicBiblePlan[month] || { theme: "General Devotion", passages: [{ text: "Psalm 119:105", query: "PSA.119.105" }] };
             
             const passageIdx = (day - 1) % activeTheme.passages.length;
             return {
                 theme: activeTheme.theme,
-                citation: activeTheme.passages[passageIdx]
+                text: activeTheme.passages[passageIdx].text,
+                query: activeTheme.passages[passageIdx].query
             };
         }
 
@@ -207,7 +305,18 @@
             const reading = getThematicReadingDetails(targetObj);
             
             document.getElementById('header-theme-title').innerText = reading.theme;
-            document.getElementById('scripture-citation').innerText = reading.citation;
+            
+            // Explicitly set to YouVersion version code 111 (NIV)
+            const versionId = "111";
+            const bibleUrl = `https://www.bible.com/bible/${versionId}/${reading.query}`;
+
+            // Inject the responsive anchor point
+            document.getElementById('scripture-citation').innerHTML = `
+                <a href="${bibleUrl}" target="_blank" class="hover:underline text-[#3d6346] inline-flex items-center gap-1.5 font-semibold">
+                    ${reading.text} <span class="text-xs font-normal text-stone-400 font-sans">(NIV)</span>
+                    <span class="text-[10px] bg-[#e9f2eb] px-1.5 py-0.5 rounded text-[#3d6346] font-sans font-medium">Open ↗</span>
+                </a>
+            `;
 
             updateMetricsWindow();
             renderHistoryList();
@@ -237,7 +346,6 @@
                     if (match.status === 'cancelled') {
                         dotColor = "bg-rose-200 text-rose-900";
                     } else {
-                        // Bible Intake Point (requires both reading and meditation to fully hit Whitney's high target)
                         if (match.read && match.meditate) earnedPoints += 1;
                         if (parseInt(match.prayer) > 0) earnedPoints += 1;
                         dotColor = (match.read && match.meditate && parseInt(match.prayer) > 0) ? "bg-[#3d6346] text-white" : "bg-amber-100 text-amber-900";
