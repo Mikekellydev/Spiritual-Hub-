@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pastoral Field Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#fdfbf7] text-[#2c2a29] font-sans min-h-screen antialiased selection:bg-[#e6dfd3]">
+
+    <!-- Privacy Banner -->
+    <div class="sticky top-0 z-40 bg-[#fdfbf7]/90 backdrop-blur-md border-b border-[#ebd9c5] max-w-md mx-auto px-5 py-3 flex items-center justify-between">
+        <span class="text-xs font-bold tracking-[0.15em] text-[#8c7863] uppercase">Pastoral Field Hub</span>
+        <span class="bg-[#e9f2eb] text-[#3d6346] text-[10px] font-mono px-2 py-0.5 rounded-full font-bold">🔒 Local Vault Only</span>
+    </div>
+
+    <div class="max-w-md mx-auto p-5 space-y-6 pb-24">
+
+        <!-- 📊 METRICS & CONSISTENCY CORE -->
+        <header class="bg-[#f5efe6] rounded-2xl p-5 border border-[#ebd9c5] space-y-3">
+            <div>
+                <h1 class="text-xl font-serif font-bold text-[#1c1b1a]">Spiritual Rhythms</h1>
+                <p class="text-xs text-[#8c7863]">Metrics computed from your past 7 days of local logs.</p>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-3 pt-1">
+                <div class="bg-[#fdfbf7] border border-[#ebd9c5] p-3 rounded-xl text-center">
+                    <span class="block text-2xl font-serif font-bold text-[#3d6346]" id="metric-streak">85%</span>
+                    <span class="text-[10px] font-bold text-[#8c7863] uppercase tracking-wider">Word & Prayer</span>
+                </div>
+                <div class="bg-[#fdfbf7] border border-[#ebd9c5] p-3 rounded-xl text-center">
+                    <span class="block text-2xl font-serif font-bold text-[#74583d]" id="metric-care">3 Souls</span>
+                    <span class="text-[10px] font-bold text-[#8c7863] uppercase tracking-wider">Shepherded This Week</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- 📖 DAILY DEVOTION LOOP -->
+        <section class="space-y-3">
+            <h2 class="text-xs font-bold uppercase text-[#8c7863] tracking-widest pl-1">Daily Discipline Anchor</h2>
+            <div class="bg-white border border-[#ebd9c5] rounded-2xl p-4 space-y-4 shadow-sm">
+                <div class="flex items-center justify-between">
+                    <label class="flex items-center gap-3 text-sm font-medium cursor-pointer">
+                        <input type="checkbox" id="check-bible" class="w-4 h-4 rounded text-[#3d6346] focus:ring-[#3d6346] border-[#ebd9c5]">
+                        <span>Scripture Tracking Completed</span>
+                    </label>
+                    <span class="text-xs text-[#8c7863] font-mono">Acts 14-16</span>
+                </div>
+
+                <div class="flex items-center justify-between border-t border-[#f5efe6] pt-3">
+                    <span class="text-sm font-medium">Contemplative Prayer Time</span>
+                    <select id="prayer-time" class="bg-[#fdfbf7] border border-[#ebd9c5] text-xs rounded-lg p-1.5 focus:outline-none focus:border-[#8c7863]">
+                        <option value="0">0 min</option>
+                        <option value="15">15 min</option>
+                        <option value="30">30 min</option>
+                        <option value="60">1 hour</option>
+                    </select>
+                </div>
+
+                <button onclick="saveDailyRitual()" class="w-full bg-[#3d6346] text-white font-medium py-2 rounded-xl text-xs hover:bg-[#325239] transition">
+                    Commit Daily Discipline
+                </button>
+            </div>
+        </section>
+
+        <!-- 👥 RELATIONAL CARE REGISTRY -->
+        <section class="space-y-3">
+            <div class="flex items-center justify-between pl-1">
+                <h2 class="text-xs font-bold uppercase text-[#8c7863] tracking-widest">Relational Care</h2>
+                <button onclick="toggleModal('add-soul-modal')" class="text-xs font-bold text-[#3d6346] hover:underline">+ Add Person</button>
+            </div>
+
+            <div id="souls-list" class="space-y-2">
+                <!-- Example Person Entry -->
+                <div class="bg-white border border-[#ebd9c5] rounded-xl p-4 space-y-3 shadow-sm">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="font-serif font-bold text-base text-[#1c1b1a]">The Harrison Family</h3>
+                            <p class="text-xs text-orange-700 bg-orange-50 border border-orange-100 px-2 py-0.5 rounded inline-block mt-1 font-medium">
+                                Season: Dealing with grief / loss
+                            </p>
+                        </div>
+                        <span class="text-[10px] text-[#8c7863] font-mono">Last Touch: 3d ago</span>
+                    </div>
+
+                    <!-- Past Care Notes Sub-Loop -->
+                    <div class="bg-[#fdfbf7] p-2.5 rounded-lg border border-[#f5efe6] text-xs text-[#54504d] italic">
+                        "Dropped off dinner. Prayed over them in the living room. Check in again next week."
+                    </div>
+
+                    <button onclick="openLogModal('Harrison Family')" class="w-full bg-[#f5efe6] border border-[#ebd9c5] text-[#54504d] font-bold py-1.5 rounded-lg text-xs hover:bg-[#ebd9c5] transition">
+                        📝 Log New Visit or Call
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 📥 SYSTEM MODAL: ADD SOUL -->
+        <div id="add-soul-modal" class="hidden fixed inset-0 z-50 bg-[#2c2a29]/40 backdrop-blur-sm flex items-end justify-center p-4">
+            <div class="bg-white border border-[#ebd9c5] w-full max-w-md rounded-2xl p-5 space-y-4 shadow-xl">
+                <h3 class="font-serif font-bold text-lg text-[#1c1b1a]">Add Person to Care List</h3>
+                <div class="space-y-2">
+                    <input id="soul-name" type="text" class="w-full bg-[#fdfbf7] border border-[#ebd9c5] p-2.5 rounded-xl text-sm focus:outline-none" placeholder="Name or Family Name">
+                    <input id="soul-season" type="text" class="w-full bg-[#fdfbf7] border border-[#ebd9c5] p-2.5 rounded-xl text-sm focus:outline-none" placeholder="Current Season (e.g., Job transitions)">
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="saveNewSoul()" class="flex-1 bg-[#3d6346] text-white text-xs font-bold p-2.5 rounded-xl">Save to Device</button>
+                    <button onclick="toggleModal('add-soul-modal')" class="bg-slate-100 text-slate-600 text-xs font-bold p-2.5 rounded-xl">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Temporary Runtime UI Triggers until IndexedDB engine links up
+        function toggleModal(id) {
+            document.getElementById(id).classList.toggle('hidden');
+        }
+
+        function saveDailyRitual() {
+            const bibleChecked = document.getElementById('check-bible').checked;
+            const prayerMins = document.getElementById('prayer-time').value;
+            alert(`Saved locally:\nBible Completed: ${bibleChecked}\nPrayer Duration: ${prayerMins} minutes`);
+            // This is where your JavaScript logic commits straight to IndexedDB
+        }
+
+        function saveNewSoul() {
+            const name = document.getElementById('soul-name').value;
+            const season = document.getElementById('soul-season').value;
+            if(name) {
+                alert(`Added ${name} directly to device database storage.`);
+                toggleModal('add-soul-modal');
+            }
+        }
+
+        function openLogModal(name) {
+            alert(`Opening local care journal entry for: ${name}`);
+        }
+    </script>
+</body>
+</html>
