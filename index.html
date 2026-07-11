@@ -8,6 +8,7 @@
 </head>
 <body class="bg-[#fdfbf7] text-[#2c2a29] font-sans min-h-screen antialiased">
 
+    <!-- Privacy Banner -->
     <div class="sticky top-0 z-40 bg-[#fdfbf7]/90 backdrop-blur-md border-b border-[#ebd9c5] max-w-md mx-auto px-5 py-3 flex items-center justify-between">
         <span class="text-xs font-bold tracking-[0.15em] text-[#8c7863] uppercase">Spiritual Growth Hub</span>
         <span class="bg-[#e9f2eb] text-[#3d6346] text-[10px] font-mono px-2 py-0.5 rounded-full font-bold">🔒 Local Vault Only</span>
@@ -15,19 +16,35 @@
 
     <div class="max-w-md mx-auto p-5 space-y-6 pb-12">
         
-        <header class="bg-[#f5efe6] rounded-2xl p-5 border border-[#ebd9c5] space-y-3">
+        <!-- 📊 ACTIVE ROLLING WINDOW TRACKER -->
+        <header class="bg-[#f5efe6] rounded-2xl p-5 border border-[#ebd9c5] space-y-4">
             <div class="flex justify-between items-start">
                 <div>
                     <h1 class="text-lg font-serif font-bold text-[#1c1b1a]">Active Rhythms</h1>
                     <p class="text-[11px] text-[#8c7863]">True rolling 7-day calculation average.</p>
                 </div>
-                <span class="bg-[#3d6346] text-white text-[11px] font-bold px-2 py-1 rounded-lg" id="rolling-pct">0%</span>
+                <span class="bg-[#ebd9c5] text-[#54504d] text-[11px] font-bold px-2 py-1 rounded-lg" id="rolling-pct">0%</span>
             </div>
             
-            <div class="grid grid-cols-7 gap-1.5 pt-2 text-center text-[10px] font-bold text-[#8c7863]" id="days-row">
+            <!-- Minimal day bubble indicators -->
+            <div class="grid grid-cols-7 gap-1.5 pt-1 text-center text-[10px] font-bold text-[#8c7863]" id="days-row">
+                <!-- Populated dynamically via JavaScript -->
+            </div>
+
+            <!-- Summary Blocks (Restored) -->
+            <div class="grid grid-cols-2 gap-3 pt-2 border-t border-[#ebd9c5]/60">
+                <div class="bg-[#fdfbf7]/80 border border-[#ebd9c5] p-3 rounded-xl text-center">
+                    <span class="block text-xl font-serif font-bold text-[#3d6346]" id="metric-streak">0%</span>
+                    <span class="text-[9px] font-bold text-[#8c7863] uppercase tracking-wider">Word & Prayer</span>
                 </div>
+                <div class="bg-[#fdfbf7]/80 border border-[#ebd9c5] p-3 rounded-xl text-center">
+                    <span class="block text-xl font-serif font-bold text-[#74583d]" id="metric-care">0 Days</span>
+                    <span class="text-[9px] font-bold text-[#8c7863] uppercase tracking-wider">Active Timeline</span>
+                </div>
+            </div>
         </header>
 
+        <!-- 🎯 ACTIVE WORKSPACE PANEL -->
         <main class="bg-white border border-[#ebd9c5] rounded-2xl p-5 space-y-4 shadow-sm">
             <div class="flex justify-between items-center border-b border-[#f5efe6] pb-3">
                 <div>
@@ -39,6 +56,7 @@
                 </button>
             </div>
 
+            <!-- Inputs -->
             <div class="space-y-3">
                 <label class="flex items-center gap-3 text-sm font-medium cursor-pointer py-1">
                     <input type="checkbox" id="field-bible" class="w-4 h-4 rounded text-[#3d6346] focus:ring-[#3d6346] border-[#ebd9c5]">
@@ -56,6 +74,7 @@
                 </div>
             </div>
 
+            <!-- Action Triggers -->
             <div class="flex gap-2 pt-2">
                 <button onclick="commitActiveEntry()" class="flex-1 bg-[#3d6346] text-white font-bold py-2.5 rounded-xl text-xs hover:bg-[#325239] transition">
                     Save Internal Log
@@ -66,21 +85,20 @@
             </div>
         </main>
 
+        <!-- ⏳ HISTORICAL LOG DIRECTORY (EDIT SOURCE) -->
         <section class="space-y-3">
             <h3 class="text-xs font-bold uppercase text-[#8c7863] tracking-widest pl-1">Past Logs (Select to Edit)</h3>
             <div class="space-y-2 max-h-48 overflow-y-auto pr-1" id="history-container">
-                </div>
+                <!-- Rendered dynamically -->
+            </div>
         </section>
 
     </div>
 
+    <!-- 🧠 CORE FRONTEND LOGIC LAYER -->
     <script>
-        // Simulated Local Storage Database Array (Persists items over days)
-        let localDatabase = [
-            { date: "2026-07-08", bible: true, prayer: "30", status: "active" },
-            { date: "2026-07-09", bible: false, prayer: "15", status: "active" },
-            { date: "2026-07-10", bible: false, prayer: "0", status: "cancelled" }
-        ];
+        // CLEARED OUT: Started database completely empty for clean history records
+        let localDatabase = [];
 
         // Format Utilities
         const getFormattedDate = (d) => d.toISOString().split('T')[0];
@@ -137,8 +155,26 @@
                     </div>`;
             }
 
-            let computedScore = Math.round((earnedPoints / totalPossiblePoints) * 100);
+            // Calculate score summary percentages
+            let computedScore = totalPossiblePoints > 0 ? Math.round((earnedPoints / totalPossiblePoints) * 100) : 0;
+            
+            // Update UI elements dynamically
             document.getElementById('rolling-pct').innerText = `${computedScore}%`;
+            document.getElementById('metric-streak').innerText = `${computedScore}%`;
+            
+            // Count active logs total
+            let validLogsCount = localDatabase.filter(r => r.status === 'active').length;
+            document.getElementById('metric-care').innerText = `${validLogsCount} ${validLogsCount === 1 ? 'Day' : 'Days'}`;
+            
+            // Give color weight to the master score indicator card
+            const scoreBadge = document.getElementById('rolling-pct');
+            if(computedScore > 70) {
+                scoreBadge.className = "bg-[#3d6346] text-white text-[11px] font-bold px-2 py-1 rounded-lg";
+            } else if(computedScore > 0) {
+                scoreBadge.className = "bg-amber-600 text-white text-[11px] font-bold px-2 py-1 rounded-lg";
+            } else {
+                scoreBadge.className = "bg-[#ebd9c5] text-[#54504d] text-[11px] font-bold px-2 py-1 rounded-lg";
+            }
         }
 
         // Render past days available for inline editing selection
@@ -150,7 +186,7 @@
             let sortedLogs = [...localDatabase].sort((a,b) => b.date.localeCompare(a.date));
             
             if(sortedLogs.length === 0) {
-                container.innerHTML = `<p class="text-xs italic text-[#8c7863] text-center py-4">No local entries logged on this browser session yet.</p>`;
+                container.innerHTML = `<p class="text-xs italic text-[#8c7863] text-center py-4">No local entries logged on this session yet.</p>`;
                 return;
             }
 
@@ -192,7 +228,6 @@
                 status: "active"
             });
 
-            renderDashboard();
             resetWorkspaceToToday();
         }
 
@@ -204,7 +239,6 @@
                 prayer: "0",
                 status: "cancelled"
             });
-            renderDashboard();
             resetWorkspaceToToday();
         }
 
