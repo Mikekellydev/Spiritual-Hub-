@@ -22,17 +22,14 @@
 </head>
 <body class="bg-[#fcfbf9] text-stone-800 font-sans antialiased min-h-screen">
 
-    <!-- MAIN APP CANVAS CONTAINER -->
     <div class="space-y-6 max-w-xl mx-auto px-4 pt-6 pb-32">
         
-        <!-- 📅 LIVE BOLD DATE CAPTION -->
         <div class="text-center sm:text-left">
             <span id="live-banner-date" class="text-xs font-black uppercase tracking-widest text-emerald-800 bg-emerald-50 px-3 py-1 rounded-md inline-block">
                 Saturday, July 11, 2026
             </span>
         </div>
         
-        <!-- App Title Header Banner -->
         <div class="flex justify-between items-start border-b border-stone-200 pb-3">
             <div>
                 <h1 class="text-xl font-serif font-bold text-stone-900">Spiritual Growth Hub</h1>
@@ -48,7 +45,6 @@
             </div>
         </div>
 
-        <!-- 📊 MODULE 1: 7-DAY ROLLING TRACKER & SUMMARY CARDS -->
         <div class="bg-white border border-stone-200/80 shadow-sm rounded-2xl p-4 space-y-4">
             <div class="flex justify-between items-center">
                 <h3 class="text-xs font-bold uppercase text-stone-400 tracking-wider">7-Day Habits Consistency</h3>
@@ -94,7 +90,7 @@
                     </div>
                 </div>
                 <div class="bg-stone-50 border border-stone-200 p-3 rounded-xl">
-                    <span class="text-[10px] font-bold text-stone-400 uppercase tracking-wide block">Monthly Target</span>
+                    <span class="text-[10px] font-bold text-stone-400 uppercase tracking-wide block">Rolling 7-Day Target</span>
                     <div class="flex items-baseline gap-1 mt-0.5">
                         <span id="target-percentage-value" class="text-lg font-bold text-emerald-800">0%</span>
                         <span class="text-xs text-stone-500 font-medium">completed</span>
@@ -103,7 +99,6 @@
             </div>
         </div>
 
-        <!-- 📖 MODULE 2: UNIFIED THEMATIC BIBLE STUDY MATRIX -->
         <div class="bg-white border border-stone-200/80 shadow-sm rounded-2xl p-4 space-y-3">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-stone-100 pb-2">
                 <div>
@@ -113,17 +108,14 @@
                 <div class="flex items-center gap-1.5">
                     <label for="week-selector" class="text-[10px] font-bold uppercase text-stone-400">Week:</label>
                     <select id="week-selector" onchange="changeActiveWeek(this.value)" class="bg-stone-50 border border-stone-200 rounded-md p-1 text-xs font-semibold text-stone-700 outline-none focus:border-emerald-600">
-                        <!-- Options generated dynamically -->
-                    </select>
+                        </select>
                 </div>
             </div>
             
             <div id="weekly-matrix-container" class="grid grid-cols-1 gap-2">
-                <!-- Javascript dynamically populates individual daily verses here -->
-            </div>
+                </div>
         </div>
 
-        <!-- 🤝 MODULE 3: RELATIONAL CARE SECTION -->
         <div class="bg-white border border-stone-200/80 rounded-2xl p-4 shadow-sm space-y-4">
             <div>
                 <h3 class="text-xs font-bold uppercase text-stone-400 tracking-wider">Relational Care & Prayer Log</h3>
@@ -139,15 +131,14 @@
                     <div class="space-y-1">
                         <label class="text-[10px] font-bold text-stone-500 uppercase tracking-wider block">Current Life Season</label>
                         <select id="care-season" class="w-full bg-stone-50 border border-stone-200 p-2.5 rounded-xl text-xs font-semibold focus:outline-none text-stone-700">
-    <option value="Joy & Abundance">🍂 Season of Joy & Abundance</option>
-    <option value="Trial & Testing">⛈️ Season of Trial & Testing</option>
-    <option value="Waiting & Transition">⏳ Season of Waiting / Transition</option>
-    <option value="Grief & Loss">🕯️ Season of Grief & Loss</option>
-    <option value="Sickness & Health">🏥 Season of Sickness & Health</option>
-    <option value="Hard Choice">⚖️ Facing a Hard Choice</option>
-    <option value="Sadness & Heaviness">🌧️ Season of Sadness & Heaviness</option>
-</select>
-
+                            <option value="Joy & Abundance">🍂 Season of Joy & Abundance</option>
+                            <option value="Trial & Testing">⛈️ Season of Trial & Testing</option>
+                            <option value="Waiting & Transition">⏳ Season of Waiting / Transition</option>
+                            <option value="Grief & Loss">🕯️ Season of Grief & Loss</option>
+                            <option value="Sickness & Health">🏥 Season of Sickness & Health</option>
+                            <option value="Hard Choice">⚖️ Facing a Hard Choice</option>
+                            <option value="Sadness & Heaviness">🌧️ Season of Sadness & Heaviness</option>
+                        </select>
                     </div>
                 </div>
                 
@@ -167,7 +158,6 @@
             </div>
         </div>
 
-        <!-- ⏳ COMPILED SERMON ARCHIVE VIEW LIST -->
         <div class="space-y-3">
             <h3 class="text-xs font-bold uppercase text-stone-400 tracking-widest pl-1">Sermon Archive Index</h3>
             <div class="grid gap-3" id="history-vault-container"></div>
@@ -175,25 +165,21 @@
 
     </div>
 
-    <!-- ==================== 🗂️ BACKSTAGE SERMON DRAWER LAYER ==================== -->
     <div id="sermon-drawer-backdrop" onclick="toggleSermonDrawer(false)" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 hidden opacity-0 transition-opacity duration-300"></div>
     
     <div id="sermon-drawer" class="fixed bottom-0 left-0 right-0 max-w-xl mx-auto bg-white border-t border-stone-200 shadow-2xl rounded-t-3xl z-50 transform translate-y-full transition-transform duration-300 flex flex-col h-[85vh]">
         
-        <!-- Close Target -->
         <div onclick="toggleSermonDrawer(false)" class="w-full pt-4 pb-3 flex flex-col items-center justify-center cursor-pointer border-b border-stone-100 bg-stone-50 rounded-t-3xl hover:bg-stone-100 active:bg-stone-200 transition">
             <div class="w-12 h-1.5 bg-stone-300 rounded-full mb-1.5"></div>
             <span class="text-[10px] font-bold uppercase text-stone-500 tracking-widest">✕ Tap to Close Drawer</span>
         </div>
 
-        <!-- Scrollable Workspace Inner Content Frame -->
         <div class="p-5 space-y-4 overflow-y-auto flex-1 pb-16">
             <div class="flex justify-between items-center">
                 <h3 class="font-serif font-bold text-base text-stone-900">Sermon Journal Vault Canvas</h3>
                 <button onclick="clearCurrentEditor()" class="text-[10px] font-bold text-emerald-800 bg-emerald-50 px-2 py-1 rounded">Clear Working Pad</button>
             </div>
 
-            <!-- Metadata Row -->
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div class="space-y-1">
                     <label class="text-[10px] font-bold text-stone-500 uppercase tracking-wider block">Service Date</label>
@@ -214,7 +200,6 @@
                 </div>
             </div>
 
-            <!-- Title & Anchors -->
             <div class="space-y-3">
                 <div class="space-y-1">
                     <label class="text-[10px] font-bold text-stone-500 uppercase tracking-wider block">Sermon Series / Title</label>
@@ -230,7 +215,6 @@
                 </div>
             </div>
 
-            <!-- Format Utilities -->
             <div class="bg-stone-100 border border-stone-200 rounded-xl p-1.5 flex items-center justify-between gap-1 flex-wrap">
                 <div class="flex items-center gap-1">
                     <button onclick="format('bold')" class="w-7 h-7 text-xs font-bold bg-white rounded-md border border-stone-200 shadow-sm hover:bg-stone-50">B</button>
@@ -246,7 +230,6 @@
                 </label>
             </div>
 
-            <!-- Notes Editor Area -->
             <div class="space-y-1">
                 <label class="text-[10px] font-bold text-stone-500 uppercase tracking-wider block">Notes & Reflections</label>
                 <div id="note-editor" contenteditable="true" class="w-full bg-stone-50 border border-stone-200 text-sm rounded-xl p-4 focus:ring-1 focus:ring-emerald-600 focus:outline-none min-h-[140px] max-h-[220px] overflow-y-auto leading-relaxed outline-none focus:bg-white transition"></div>
@@ -265,14 +248,12 @@
         </div>
     </div>
 
-    <!-- 📱 PERSISTENT CONTROL HUB FOOTER STRIP -->
     <footer class="fixed bottom-0 left-0 right-0 border-t border-stone-200 bg-white/90 backdrop-blur-md py-3.5 px-6 z-30 shadow-lg flex justify-center">
         <button onclick="toggleSermonDrawer(true)" class="bg-emerald-800 hover:bg-emerald-900 text-white font-bold px-6 py-2 rounded-xl text-xs tracking-widest flex items-center gap-2 transition shadow-md">
             ✍️ OPEN SERMON REFLECTION JOURNAL DRAWER
         </button>
     </footer>
 
-    <!-- RUNTIME LOGIC ENGINE -->
     <script>
         let sermonVault = JSON.parse(localStorage.getItem('scribe_sermon_vault')) || [];
         let careVault = JSON.parse(localStorage.getItem('scribe_care_vault')) || [];
@@ -383,7 +364,7 @@
                 { day: "Sun", text: "Sound Mind Promise", passage: "2 Timothy 1:6-9" }
             ]},
             12: { theme: "Spiritual Warfare", readings: [
-                { day: "Mon", text: "Be Strong in the Lord", passage: "Ephesians 6:10-13" },
+                { day: "Mon", text: "Be Strong in the Lord", passage: "Camp 6:10-13" },
                 { day: "Tue", text: "Armor of Light", passage: "Romans 13:11-14" },
                 { day: "Wed", text: "Resist the Enemy", passage: "James 4:7-10" },
                 { day: "Thu", text: "The Lord Overcomes", passage: "Zechariah 4:4-7" },
@@ -919,6 +900,7 @@
             }
         }
 
+        // Target clean conversion URLs for Scripture linkages
         function generateBibleUrlExplicit(rawCitation, transId) {
             const cleanStr = rawCitation.trim().replace(/\s+/g, ' ');
             const regex = /^([1-3]\s)?[A-Za-z]+/g;
