@@ -3,349 +3,476 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spiritual Growth Hub</title>
+    <title>Sermon Dashboard & Reading Plan</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
     <style>
-        /* Custom scrollbar adjustments for a clean layout */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #f1f5f9;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 3px;
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
         
-        /* 🖨️ HIGH-FIDELITY PRINT & PDF LAYOUT STYLES */
+        .font-serif { font-family: 'Cinzel', Georgia, serif; }
+        .font-sans { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; }
+        
+        /* Custom Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        /* Print/PDF Layout Optimization Engine */
         @media print {
-            .print\:hidden, 
-            button, 
-            footer, 
-            select,
-            #sermon-drawer,
-            #sermon-drawer-backdrop,
-            .action-btn,
-            input[type="checkbox"]::after {
+            .print\:hidden, button, footer, select, #sermon-drawer, #sermon-drawer-backdrop {
                 display: none !important;
             }
-            
-            .max-w-xl {
-                max-width: 100% !important;
-                width: 100% !important;
+            body {
+                background: #ffffff !important;
+                color: #000000 !important;
                 padding: 0 !important;
-                margin: 0 !important;
             }
-
-            .bg-white {
-                page-break-inside: avoid;
-                break-inside: avoid;
+            .max-w-xl { 
+                max-width: 100% !important; 
+                width: 100% !important; 
+            }
+            .bg-white { 
+                page-break-inside: avoid; 
+                break-inside: avoid; 
                 border: 1px solid #e2e8f0 !important;
                 box-shadow: none !important;
-                margin-bottom: 1.5rem;
             }
-
-            body {
-                background: white !important;
-                color: black !important;
-                font-size: 14px;
-            }
-            
-            /* Keep checked state visuals clean in printed layouts */
-            input[type="checkbox"] {
-                border: 1px solid #000 !important;
-                background-color: transparent !important;
+            textarea {
+                border: none !important;
+                resize: none !important;
+                padding: 0 !important;
+                background: transparent !important;
             }
         }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 antialiased min-h-screen pb-12">
+<body class="bg-slate-50 font-sans text-slate-800 min-h-screen antialiased flex flex-col pb-12">
 
-    <div class="max-w-xl mx-auto px-4 pt-6">
-        
-        <div class="w-full text-center mb-4">
-            <span id="live-banner-date" class="inline-block bg-emerald-100 text-emerald-800 font-bold text-xs uppercase tracking-wider px-3 py-1 rounded-full">
-                </span>
-        </div>
-
-        <header class="flex items-center justify-between border-b border-slate-200 pb-4 mb-6">
-            <div>
-                <h1 class="text-2xl font-black text-slate-900 tracking-tight">Spiritual Growth Hub</h1>
-                <p class="text-xs text-slate-500 font-medium">Your Guide to Spiritual Growth</p>
+    <!-- Top Navigation Banner -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-40 print:hidden">
+        <div class="max-w-xl mx-auto px-4 h-14 flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+                <div class="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></div>
+                <span class="font-serif font-bold text-sm tracking-wider text-slate-900">DEI VERBUM</span>
             </div>
-            
-            <div class="flex items-center gap-2">
-                <button onclick="window.print()" class="flex items-center gap-1 text-xs font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 rounded-lg transition print:hidden">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 1.252c.11.604-.336 1.148-.951 1.148H7.062c-.615 0-1.06-.544-.951-1.148L6.34 18m11.32 0h-11.32M18 10.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0ZM6 6h12v4.5H6V6Z" />
-                    </svg>
+            <div class="flex items-center space-x-2">
+                <button onclick="window.print()" class="bg-emerald-50 text-emerald-700 hover:bg-emerald-100 text-xs font-bold px-3 py-1.5 rounded-lg transition-all">
                     Export PDF
                 </button>
-                
-                <button onclick="resetAppData()" class="text-[10px] font-bold text-red-700 bg-red-50 hover:bg-red-100 px-2 py-1 rounded transition print:hidden">
-                    ⚠️ Reset App Data
+                <button onclick="resetAllData()" class="text-xs font-medium text-rose-600 hover:bg-rose-50 px-2.5 py-1.5 rounded-md transition-all">
+                    Reset App Data
                 </button>
             </div>
-        </header>
+        </div>
+    </header>
 
-        <main class="space-y-6">
-            
-            <section class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
-                <div class="flex items-center justify-between mb-4">
-                    <h2 class="text-sm font-bold text-slate-900 uppercase tracking-wider">7-Day Habits Consistency</h2>
-                    <span class="text-xs bg-slate-100 text-slate-600 font-bold px-2 py-0.5 rounded-full">Weekly Routine</span>
-                </div>
-                <div id="habit-tracker-container" class="grid grid-cols-7 gap-2">
-                    </div>
-            </section>
-
-            <section class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
-                <div class="mb-4">
-                    <h2 class="text-sm font-bold text-slate-900 uppercase tracking-wider">Theme: Discipleship Cost</h2>
-                    <div class="mt-2 flex items-center gap-2 print:hidden">
-                        <label for="week-selector" class="text-xs text-slate-500 font-semibold">WEEK:</label>
-                        <select id="week-selector" onchange="handleWeekChange()" class="w-full text-xs bg-slate-50 border border-slate-200 rounded-lg px-2 py-1.5 font-medium text-slate-700 outline-none focus:border-slate-300">
-                            </select>
-                    </div>
-                </div>
-                <div id="thematic-matrix-list" class="space-y-2">
-                    </div>
-            </section>
-
-            <section class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
-                <div class="flex items-center justify-between mb-3">
-                    <h2 class="text-sm font-bold text-slate-900 uppercase tracking-wider">Relational Prayer Engine</h2>
-                </div>
-                <div id="relational-care-list" class="space-y-3">
-                    </div>
-            </section>
-
-            <section class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
-                <h2 class="text-sm font-bold text-slate-900 uppercase tracking-wider mb-3">Sermon & Journal Vault</h2>
-                <div id="notes-archive-target" class="space-y-2">
-                    </div>
-            </section>
-
-        </main>
+    <!-- Main Content Stream Container -->
+    <main class="flex-1 max-w-xl w-full mx-auto px-4 py-6 space-y-6">
         
-        <div class="mt-6 print:hidden">
-            <button onclick="toggleSermonDrawer()" class="w-full bg-emerald-950 text-white font-bold py-3 px-4 rounded-xl shadow-md hover:bg-emerald-900 transition flex items-center justify-center gap-2 text-sm tracking-wide">
-                ✍️ Open Sermon Reflection Journal Drawer
-            </button>
-        </div>
+        <!-- Live Calendar Status Card -->
+        <section class="bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-950 text-white rounded-2xl p-5 shadow-sm relative overflow-hidden">
+            <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-emerald-500/10 rounded-full blur-xl"></div>
+            <p class="text-xs font-semibold tracking-widest text-emerald-400 uppercase font-sans mb-1">Today's Journey</p>
+            <h1 id="live-banner-date" class="font-serif text-xl font-bold tracking-wide">Loading Date...</h1>
+            <div class="mt-4 pt-4 border-t border-white/10 flex items-center justify-between text-xs text-slate-300">
+                <span id="reading-progress-text">Plan Progress: 0%</span>
+                <span id="sermon-count-text">0 Sermons Logged</span>
+            </div>
+        </section>
 
-    </div>
+        <!-- Scripture Reading Module Matrix -->
+        <section class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/60">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <h2 class="font-serif text-base font-bold text-slate-900 tracking-wide">Scripture Journey</h2>
+                    <p class="text-xs text-slate-500">52-Week Chronological Plan</p>
+                </div>
+                <select id="week-selector" onchange="changeWeek(this.value)" class="text-xs font-medium bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 print:hidden">
+                    <!-- Javascript populates weeks dynamically -->
+                </select>
+            </div>
 
-    <div id="sermon-drawer-backdrop" onclick="toggleSermonDrawer()" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-40 hidden opacity-0 transition-opacity duration-300 print:hidden"></div>
-    <div id="sermon-drawer" class="fixed bottom-0 left-0 right-0 max-w-xl mx-auto bg-white rounded-t-3xl shadow-xl z-50 transform translate-y-full transition-transform duration-300 ease-out border-t border-slate-200 print:hidden max-h-[85vh] overflow-y-auto">
-        <div class="p-6">
-            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
-                <h3 class="text-md font-bold text-slate-900">Sermon Journal Input Pad</h3>
-                <button onclick="toggleSermonDrawer()" class="text-xs text-emerald-700 bg-emerald-50 hover:bg-emerald-100 font-bold px-3 py-1 rounded-md">
-                    Minimize ✕
-                </button>
+            <!-- Reading Assignments List -->
+            <div id="reading-list" class="space-y-2.5">
+                <!-- Javascript dynamic Injection Injection Point -->
+            </div>
+        </section>
+
+        <!-- Spiritual Discipline & Habit Tracker -->
+        <section class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/60">
+            <div class="mb-4">
+                <h2 class="font-serif text-base font-bold text-slate-900 tracking-wide">Weekly Disciplines</h2>
+                <p class="text-xs text-slate-500">Consistency turns habits into transformations</p>
             </div>
             
-            <form id="sermon-entry-form" onsubmit="saveSermonNote(event)" class="space-y-4">
-                <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Date</label>
-                    <input type="date" id="note-date" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm outline-none focus:border-slate-300 font-medium">
+            <div class="space-y-3.5">
+                <!-- Habit 1: Prayer -->
+                <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+                            🙏 Intercessory Prayer
+                        </span>
+                    </div>
+                    <div class="grid grid-cols-7 gap-1.5 text-center">
+                        ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day, idx) => `
+                            <label class="flex flex-col items-center gap-1 cursor-pointer">
+                                <span class="text-[10px] font-medium text-slate-400 uppercase">${day}</span>
+                                <input type="checkbox" id="habit-prayer-${idx}" onchange="toggleHabit('prayer', ${idx})" class="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500/20 border-slate-300">
+                            </label>
+                        `).join('')
+                    </div>
                 </div>
-                <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Speaker / Preacher</label>
-                    <input type="text" id="note-speaker" placeholder="Pastor or Speaker Name..." required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm outline-none focus:border-slate-300 font-medium">
+
+                <!-- Habit 2: Memorization -->
+                <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+                            📜 Scripture Memory
+                        </span>
+                    </div>
+                    <div class="grid grid-cols-7 gap-1.5 text-center">
+                        ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day, idx) => `
+                            <label class="flex flex-col items-center gap-1 cursor-pointer">
+                                <span class="text-[10px] font-medium text-slate-400 uppercase">${day}</span>
+                                <input type="checkbox" id="habit-memory-${idx}" onchange="toggleHabit('memory', ${idx})" class="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500/20 border-slate-300">
+                            </label>
+                        `).join('')
+                    </div>
                 </div>
-                <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Sermon Title or Core Topic</label>
-                    <input type="text" id="note-topic" placeholder="The Title of Today's Message..." required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm outline-none focus:border-slate-300 font-bold text-slate-900">
+            </div>
+        </section>
+
+        <!-- Sermon Processing Lab Layout -->
+        <section class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/60">
+            <div class="mb-4">
+                <h2 class="font-serif text-base font-bold text-slate-900 tracking-wide">Exegetical Journal</h2>
+                <p class="text-xs text-slate-500">Record, transform, and map sermon applications</p>
+            </div>
+
+            <form id="sermon-form" onsubmit="saveSermon(event)" class="space-y-4">
+                <input type="hidden" id="sermon-id">
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-1">Speaker / Preacher</label>
+                        <input type="text" id="sermon-speaker" required class="w-full text-xs bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-500/20">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-1">Scripture Reference</label>
+                        <input type="text" id="sermon-passage" required placeholder="e.g., Romans 8:1-4" class="w-full text-xs bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-500/20">
+                    </div>
                 </div>
+
                 <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Expository Notes & Revelations</label>
-                    <textarea id="note-content" rows="4" placeholder="Write down structural notes, key verses, and personal reflections here..." required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm outline-none focus:border-slate-300 font-medium leading-relaxed"></textarea>
+                    <label class="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-1">Sermon Title</label>
+                    <input type="text" id="sermon-title" required class="w-full text-xs bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-500/20">
                 </div>
-                <button type="submit" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-2.5 rounded-xl text-xs transition uppercase tracking-wider">
-                    💾 Commit Entry to Local Storage Vault
-                </button>
+
+                <div>
+                    <label class="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-1">Structural & Exegetical Notes</label>
+                    <textarea id="sermon-notes" rows="4" placeholder="Outline structure, historical context, and core truths..." class="w-full text-xs bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-1">Personal Transformation / Practical Application</label>
+                    <textarea id="sermon-application" rows="3" placeholder="How does this truth change your tomorrow?" class="w-full text-xs bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"></textarea>
+                </div>
+
+                <div class="flex space-x-2 justify-end">
+                    <button type="button" id="cancel-edit-btn" onclick="clearSermonForm()" class="hidden text-xs font-semibold text-slate-500 hover:bg-slate-100 px-4 py-2 rounded-lg transition-all">Cancel</button>
+                    <button type="submit" id="submit-sermon-btn" class="bg-slate-900 text-white hover:bg-slate-800 text-xs font-bold px-4 py-2 rounded-lg transition-all">Save Entry</button>
+                </div>
             </form>
-        </div>
-    </div>
 
+            <!-- Dynamic Sermon Log Archive Feed -->
+            <div id="sermon-archive" class="mt-6 pt-6 border-t border-slate-100 space-y-4">
+                <!-- Javascript Injector -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Global App State Database Script Core -->
     <script>
-        // 🚀 REAL DATA PROCESSING ENGINE
-        window.onload = function() {
-            // 📅 DYNAMICALLY SET THE LIVE BANNER TO TODAY'S SYSTEM CLOCK
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            document.getElementById('live-banner-date').innerText = new Date().toLocaleDateString('en-US', options);
-
-            // Initialize input field date settings defaults
-            document.getElementById('note-date').value = new Date().toISOString().split('T')[0];
-            
-            // Execute data processing routines
-            calculateCurrentCalendarWeek();
-            populateWeekSelectorDropdown();
-            renderHabitsTrackerDisplay();
-            renderNotesArchiveList();
-            renderRelationalCareList();
-            renderThematicMatrix();
+        // Core 52-Week Chronological Scripture Mapping Engine Data Store
+        const readingPlan = {
+            1: ["Genesis 1-2", "Genesis 3-5", "Genesis 6-9", "Genesis 10-11"],
+            2: ["Job 1-2", "Job 3-7", "Job 8-11", "Job 12-15"],
+            3: ["Job 16-19", "Job 20-23", "Job 24-28", "Job 29-31"],
+            4: ["Job 32-34", "Job 35-37", "Job 38-39", "Job 40-42"],
+            5: ["Genesis 12-14", "Genesis 15-17", "Genesis 18-20", "Genesis 21-23"],
+            6: ["Genesis 24-25", "Genesis 26-28", "Genesis 29-31", "Genesis 32-35"],
+            7: ["Genesis 36-38", "Genesis 39-40", "Genesis 41-43", "Genesis 44-45"],
+            8: ["Genesis 46-47", "Genesis 48-50", "Exodus 1-3", "Exodus 4-6"],
+            9: ["Exodus 7-9", "Exodus 10-12", "Exodus 13-15", "Exodus 16-18"],
+            10: ["Exodus 19-21", "Exodus 22-24", "Exodus 25-27", "Exodus 28-31"],
+            11: ["Exodus 32-34", "Exodus 35-40", "Leviticus 1-4", "Leviticus 5-7"],
+            12: ["Leviticus 8-10", "Leviticus 11-13", "Leviticus 14-15", "Leviticus 16-18"],
+            13: ["Leviticus 19-21", "Leviticus 22-23", "Leviticus 24-25", "Leviticus 26-27"],
+            14: ["Numbers 1-3", "Numbers 4-6", "Numbers 7-9", "Numbers 10-12"],
+            15: ["Numbers 13-15", "Numbers 16-18", "Numbers 19-21", "Numbers 22-25"],
+            16: ["Numbers 26-27", "Numbers 28-30", "Numbers 31-32", "Numbers 33-36"],
+            17: ["Deuteronomy 1-2", "Deuteronomy 3-4", "Deuteronomy 5-7", "Deuteronomy 8-10"],
+            18: ["Deuteronomy 11-13", "Deuteronomy 14-16", "Deuteronomy 17-20", "Deuteronomy 21-23"],
+            19: ["Deuteronomy 24-27", "Deuteronomy 28-29", "Deuteronomy 30-31", "Deuteronomy 32-34"],
+            20: ["Joshua 1-4", "Joshua 5-8", "Joshua 9-12", "Joshua 13-17"],
+            21: ["Joshua 18-21", "Joshua 22-24", "Judges 1-2", "Judges 3-5"],
+            22: ["Judges 6-7", "Judges 8-10", "Judges 11-12", "Judges 13-16"],
+            23: ["Judges 17-18", "Judges 19-21", "Ruth 1-4", "1 Samuel 1-3"],
+            24: ["1 Samuel 4-8", "1 Samuel 9-12", "1 Samuel 13-14", "1 Samuel 15-17"],
+            25: ["1 Samuel 18-20", "1 Samuel 21-24", "1 Samuel 25-27", "1 Samuel 28-31"],
+            26: ["2 Samuel 1-4", "2 Samuel 5-8", "2 Samuel 9-12", "2 Samuel 13-15"],
+            27: ["2 Samuel 16-18", "2 Samuel 19-21", "2 Samuel 22-24", "1 Kings 1-2"],
+            28: ["1 Kings 3-5", "1 Kings 6-7", "1 Kings 8-9", "1 Kings 10-11"],
+            29: ["Ecclesiastes 1-3", "Ecclesiastes 4-8", "Ecclesiastes 9-12", "Song of Solomon 1-8"],
+            30: ["1 Kings 12-14", "1 Kings 15-17", "1 Kings 18-20", "1 Kings 21-22"],
+            31: ["2 Kings 1-3", "2 Kings 4-5", "2 Kings 6-8", "2 Kings 9-11"],
+            32: ["2 Kings 12-14", "2 Kings 15-17", "Jonah 1-4", "Amos 1-5"],
+            33: ["Amos 6-9", "2 Kings 18-19", "2 Kings 20-21", "Isaiah 1-4"],
+            34: ["Isaiah 5-9", "Isaiah 10-14", "Isaiah 15-20", "Isaiah 21-26"],
+            35: ["Isaiah 27-31", "Isaiah 32-35", "Isaiah 36-38", "Isaiah 39-44"],
+            36: ["Isaiah 45-48", "Isaiah 49-54", "Isaiah 55-59", "Isaiah 60-66"],
+            37: ["2 Kings 22-23", "2 Kings 24-25", "Jeremiah 1-3", "Jeremiah 4-6"],
+            38: ["Jeremiah 7-9", "Jeremiah 10-13", "Jeremiah 14-17", "Jeremiah 18-22"],
+            39: ["Jeremiah 23-25", "Jeremiah 26-29", "Jeremiah 30-31", "Jeremiah 32-34"],
+            40: ["Jeremiah 35-38", "Jeremiah 39-43", "Jeremiah 44-48", "Jeremiah 49-52"],
+            41: ["Lamentations 1-5", "Ezekiel 1-4", "Ezekiel 5-9", "Ezekiel 10-13"],
+            42: ["Ezekiel 14-17", "Ezekiel 18-21", "Ezekiel 22-24", "Ezekiel 25-28"],
+            43: ["Ezekiel 29-32", "Ezekiel 33-36", "Ezekiel 37-40", "Ezekiel 41-44"],
+            44: ["Ezekiel 45-48", "Daniel 1-3", "Daniel 4-6", "Daniel 7-9"],
+            45: ["Daniel 10-12", "Ezra 1-3", "Ezra 4-6", "Haggai 1-2"],
+            46: ["Zechariah 1-7", "Zechariah 8-14", "Esther 1-5", "Esther 6-10"],
+            47: ["Ezra 7-10", "Nehemiah 1-5", "Nehemiah 6-7", "Nehemiah 8-10"],
+            48: ["Nehemiah 11-13", "Malachi 1-4", "Matthew 1-4", "Matthew 5-7"],
+            49: ["Matthew 8-11", "Matthew 12-15", "Matthew 16-19", "Matthew 20-23"],
+            50: ["Matthew 24-25", "Matthew 26", "Matthew 27-28", "Mark 1-3"],
+            51: ["Mark 4-5", "Mark 6-8", "Mark 9-10", "Mark 11-13"],
+            52: ["Mark 14", "Mark 15-16", "Luke 1-2", "Luke 3-4"]
         };
 
-        // DRAWER VISIBILITY MANAGEMENT CONTROL LOOP
-        function toggleSermonDrawer() {
-            const drawer = document.getElementById('sermon-drawer');
-            const backdrop = document.getElementById('sermon-drawer-backdrop');
-            
-            if (drawer.classList.contains('translate-y-full')) {
-                backdrop.classList.remove('hidden');
-                setTimeout(() => backdrop.classList.remove('opacity-0'), 10);
-                drawer.classList.remove('translate-y-full');
-            } else {
-                backdrop.classList.add('opacity-0');
-                drawer.classList.add('translate-y-full');
-                setTimeout(() => backdrop.classList.add('hidden'), 300);
+        let appState = {
+            currentWeek: 1,
+            completedReadings: {},
+            habits: { prayer: Array(7).fill(false), memory: Array(7).fill(false) },
+            sermons: []
+        };
+
+        // Initialize Application System
+        window.onload = function() {
+            // Live Localized System Date Engine Execution Injection
+            const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('live-banner-date').innerText = new Date().toLocaleDateString('en-US', dateOptions);
+
+            // LocalStorage Memory Hydration
+            if (localStorage.getItem('dei_verbum_state')) {
+                appState = JSON.parse(localStorage.getItem('dei_verbum_state'));
+                // Backwards compatibility safeguard for arrays
+                if (!appState.habits || Array.isArray(appState.habits)) {
+                    appState.habits = { prayer: Array(7).fill(false), memory: Array(7).fill(false) };
+                }
             }
+            buildWeekSelector();
+            renderWeek();
+            renderHabits();
+            renderSermons();
+            updateGlobalMetrics();
+        };
+
+        function saveState() {
+            localStorage.setItem('dei_verbum_state', JSON.stringify(appState));
+            updateGlobalMetrics();
         }
 
-        function calculateCurrentCalendarWeek() {
-            populateWeekSelectorDropdown();
-        }
-
-        function populateWeekSelectorDropdown() {
+        function buildWeekSelector() {
             const selector = document.getElementById('week-selector');
-            if(!selector) return;
-            selector.innerHTML = `<option value="28" selected>Wk 28 - Discipleship Cost</option>`;
+            selector.innerHTML = '';
+            for (let i = 1; i <= 52; i++) {
+                const opt = document.createElement('option');
+                opt.value = i;
+                opt.innerText = `Week ${i}`;
+                if (i === appState.currentWeek) opt.selected = true;
+                selector.appendChild(opt);
+            }
         }
 
-        // RENDER HABITS AND HIGHLIGHT TODAY
-        function renderHabitsTrackerDisplay() {
-            const container = document.getElementById('habit-tracker-container');
-            if(!container) return;
-            
-            const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-            const state = JSON.parse(localStorage.getItem("scribe_habit_state") || "{}");
-            
-            // Get today's 3-letter abbreviation (e.g., "Sun")
-            const todayIndex = new Date().getDay(); // 0 is Sunday, 1 is Monday...
-            const daysMap = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-            const todayAbbr = daysMap[todayIndex];
+        function changeWeek(weekNum) {
+            appState.currentWeek = parseInt(weekNum);
+            saveState();
+            renderWeek();
+        }
 
-            container.innerHTML = days.map((day) => {
-                const checked = state[day] ? 'checked' : '';
-                // If this box matches today, apply special border and background colors
-                const isToday = (day === todayAbbr) 
-                    ? 'bg-emerald-50/80 border-emerald-300 ring-2 ring-emerald-600/10' 
-                    : 'bg-slate-50 border-slate-100';
-                const todayTextClass = (day === todayAbbr) ? 'text-emerald-700 font-extrabold' : 'text-slate-400 font-bold';
+        // Generate scripture links reliably using standard abbreviations
+        function getYouVersionUrl(passage) {
+            const clean = passage.replace(/ /g, '').replace(/:/g, '.');
+            return `https://www.bible.com/bible/111/${clean}.EHV`;
+        }
 
-                return `
-                    <div class="flex flex-col items-center p-2 rounded-xl border transition-all ${isToday}">
-                        <span class="text-[10px] uppercase mb-1 ${todayTextClass}">${day}</span>
-                        <input type="checkbox" ${checked} onclick="toggleHabit('${day}')" class="w-5 h-5 accent-emerald-600 rounded border-slate-300">
+        function renderWeek() {
+            const listContainer = document.getElementById('reading-list');
+            listContainer.innerHTML = '';
+            const assignments = readingPlan[appState.currentWeek] || [];
+
+            assignments.forEach((passage) => {
+                const isChecked = appState.completedReadings[passage] || false;
+                const encodedPassage = encodeURIComponent(passage);
+                
+                const item = document.createElement('div');
+                item.className = `flex items-center justify-between p-3 rounded-xl border transition-all ${isChecked ? 'bg-slate-50/80 border-slate-200' : 'bg-white border-slate-200/70 shadow-sm'}`;
+                item.innerHTML = `
+                    <div class="flex items-center space-x-3">
+                        <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="toggleReading('${passage}')" class="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500/20 border-slate-300 cursor-pointer">
+                        <span class="text-xs font-semibold ${isChecked ? 'line-through text-slate-400' : 'text-slate-700'}">${passage}</span>
                     </div>
+                    <a href="${getYouVersionUrl(passage)}" target="_blank" class="print:hidden text-[11px] font-bold text-emerald-700 hover:text-emerald-800 bg-emerald-50 hover:bg-emerald-100/70 px-2.5 py-1 rounded-md transition-all flex items-center space-x-1">
+                        <span>Read</span>
+                        <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"></path></svg>
+                    </a>
                 `;
-            }).join('');
+                listContainer.appendChild(item);
+            });
         }
 
-        function toggleHabit(day) {
-            const state = JSON.parse(localStorage.getItem("scribe_habit_state") || "{}");
-            state[day] = !state[day];
-            localStorage.setItem("scribe_habit_state", JSON.stringify(state));
-            renderHabitsTrackerDisplay();
+        function toggleReading(passage) {
+            appState.completedReadings[passage] = !appState.completedReadings[passage];
+            saveState();
+            renderWeek();
         }
 
-        function renderThematicMatrix() {
-            const list = document.getElementById('thematic-matrix-list');
-            if(!list) return;
-            const progress = JSON.parse(localStorage.getItem("scribe_matrix_progress") || "{}");
-            const checked = progress['discipleship_cost_1'] ? 'checked' : '';
+        function renderHabits() {
+            ['prayer', 'memory'].forEach(type => {
+                for (let i = 0; i < 7; i++) {
+                    const el = document.getElementById(`habit-${type}-${i}`);
+                    if (el) {
+                        el.checked = appState.habits[type][i] || false;
+                    }
+                }
+            });
+        }
+
+        function toggleHabit(type, index) {
+            appState.habits[type][index] = !appState.habits[type][index];
+            saveState();
+        }
+
+        function updateGlobalMetrics() {
+            let totalPossible = 0;
+            Object.keys(readingPlan).forEach(w => totalPossible += readingPlan[w].length);
+            let totalDone = Object.values(appState.completedReadings).filter(Boolean).length;
+            let percent = totalPossible > 0 ? Math.round((totalDone / totalPossible) * 100) : 0;
             
-            list.innerHTML = `
-                <div class="flex items-center justify-between p-3 bg-slate-50 rounded-xl border border-slate-100">
-                    <div class="flex flex-col">
-                        <span class="text-[10px] font-bold text-slate-400 uppercase">MON • Take Up Cross</span>
-                        <span class="text-xs font-bold text-slate-800">Matthew 16:24-26 ↗</span>
-                    </div>
-                    <input type="checkbox" ${checked} onclick="toggleMatrix('discipleship_cost_1')" class="w-5 h-5 accent-emerald-600 rounded">
-                </div>
-            `;
+            document.getElementById('reading-progress-text').innerText = `Plan Progress: ${percent}%`;
+            document.getElementById('sermon-count-text').innerText = `${appState.sermons.length} Sermons Logged`;
         }
 
-        function toggleMatrix(id) {
-            const progress = JSON.parse(localStorage.getItem("scribe_matrix_progress") || "{}");
-            progress[id] = !progress[id];
-            localStorage.setItem("scribe_matrix_progress", JSON.stringify(progress));
-            renderThematicMatrix();
-        }
-
-        function renderRelationalCareList() {
-            const list = document.getElementById('relational-care-list');
-            if(!list) return;
-            const prayers = JSON.parse(localStorage.getItem("scribe_care_vault") || "[]");
-            
-            if(prayers.length === 0) {
-                list.innerHTML = `<p class="text-xs text-slate-400 text-center py-2 italic">No active requests logged in cache.</p>`;
-                return;
-            }
-
-            list.innerHTML = prayers.map(p => `
-                <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
-                    <div class="flex items-center justify-between mb-1">
-                        <span class="text-xs font-bold text-slate-900">${p.name}</span>
-                        <span class="text-[10px] font-bold uppercase bg-emerald-50 text-emerald-700 px-1.5 py-0.5 rounded">${p.season}</span>
-                    </div>
-                    <p class="text-xs text-slate-600 leading-relaxed font-medium">${p.request}</p>
-                </div>
-            `).join('');
-        }
-
-        function renderNotesArchiveList() {
-            const target = document.getElementById('notes-archive-target');
-            if(!target) return;
-            const sermons = JSON.parse(localStorage.getItem("scribe_sermon_vault") || "[]");
-            
-            if(sermons.length === 0) {
-                target.innerHTML = `<p class="text-xs text-slate-400 text-center py-2 italic">No sermon logs found on this device memory.</p>`;
-                return;
-            }
-
-            target.innerHTML = sermons.map(s => `
-                <div class="p-4 bg-slate-50 rounded-xl border border-slate-100 space-y-1">
-                    <div class="flex items-center justify-between text-[10px] font-bold text-slate-400">
-                        <span>${s.date}</span>
-                        <span class="text-slate-600">${s.speaker}</span>
-                    </div>
-                    <h4 class="text-xs font-black text-slate-900">${s.topic}</h4>
-                    <p class="text-xs text-slate-600 leading-relaxed whitespace-pre-wrap pt-1">${s.content}</p>
-                </div>
-            `).join('');
-        }
-
-        function handleWeekChange() {}
-        
-        function saveSermonNote(e) {
+        // Sermon Processing Engine Logics
+        function saveSermon(e) {
             e.preventDefault();
-            const date = document.getElementById('note-date').value;
-            const speaker = document.getElementById('note-speaker').value;
-            const topic = document.getElementById('note-topic').value;
-            const content = document.getElementById('note-content').value;
+            const id = document.getElementById('sermon-id').value;
+            const speaker = document.getElementById('sermon-speaker').value.trim();
+            const passage = document.getElementById('sermon-passage').value.trim();
+            const title = document.getElementById('sermon-title').value.trim();
+            const notes = document.getElementById('sermon-notes').value.trim();
+            const application = document.getElementById('sermon-application').value.trim();
 
-            const sermons = JSON.parse(localStorage.getItem("scribe_sermon_vault") || "[]");
-            sermons.unshift({ id: Date.now().toString(), date, speaker, topic, content });
-            localStorage.setItem("scribe_sermon_vault", JSON.stringify(sermons));
+            if (id) {
+                // Update Existing Document
+                const index = appState.sermons.findIndex(s => s.id === id);
+                if (index !== -1) {
+                    appState.sermons[index] = { id, date: appState.sermons[index].date, speaker, passage, title, notes, application };
+                }
+            } else {
+                // Insert New Log Entry
+                const newEntry = {
+                    id: Date.now().toString(),
+                    date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }),
+                    speaker, passage, title, notes, application
+                };
+                appState.sermons.unshift(newEntry);
+            }
 
-            document.getElementById('sermon-entry-form').reset();
-            document.getElementById('note-date').value = new Date().toISOString().split('T')[0];
-            
-            renderNotesArchiveList();
-            toggleSermonDrawer();
+            saveState();
+            clearSermonForm();
+            renderSermons();
         }
 
-        function resetAppData() {
-            if(confirm("Are you sure you want to clear your local database cache? This will reset all your prayers and notes data permanently.")) {
-                localStorage.clear();
-                window.location.reload();
+        function renderSermons() {
+            const archive = document.getElementById('sermon-archive');
+            archive.innerHTML = '';
+
+            if (appState.sermons.length === 0) {
+                archive.innerHTML = `<p class="text-xs text-center text-slate-400 py-4 italic">No journal entry sessions stored yet.</p>`;
+                return;
+            }
+
+            appState.sermons.forEach(sermon => {
+                const item = document.createElement('div');
+                item.className = "bg-slate-50 rounded-xl p-4 border border-slate-100 relative group";
+                item.innerHTML = `
+                    <div class="flex items-start justify-between mb-2">
+                        <div>
+                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">${sermon.date} • ${sermon.speaker}</span>
+                            <!-- Repaired Missing Opening Bracket Syntax Bug Successfully Here -->
+                            <h4 class="font-serif text-sm font-bold text-slate-900 tracking-wide mt-0.5">${sermon.title}</h4>
+                            <p class="text-[11px] font-medium text-emerald-700 mt-0.5">${sermon.passage}</p>
+                        </div>
+                        <div class="flex space-x-1 opacity-0 group-hover:opacity-100 print:hidden transition-all">
+                            <button onclick="editSermon('${sermon.id}')" class="text-[11px] font-medium text-slate-600 hover:bg-white border border-transparent hover:border-slate-200 px-2 py-1 rounded-md">Edit</button>
+                            <button onclick="deleteSermon('${sermon.id}')" class="text-[11px] font-medium text-rose-600 hover:bg-rose-50 px-2 py-1 rounded-md">Delete</button>
+                        </div>
+                    </div>
+                    ${sermon.notes ? `<div class="mt-2 text-xs text-slate-600 whitespace-pre-wrap bg-white p-2.5 rounded-lg border border-slate-200/60"><strong class="text-[10px] uppercase text-slate-400 block mb-1">Notes</strong>${sermon.notes}</div>` : ''}
+                    ${sermon.application ? `<div class="mt-2 text-xs text-slate-600 whitespace-pre-wrap bg-emerald-50/50 p-2.5 rounded-lg border border-emerald-100"><strong class="text-[10px] uppercase text-emerald-600/80 block mb-1">Application Journey</strong>${sermon.application}</div>` : ''}
+                `;
+                archive.appendChild(item);
+            });
+        }
+
+        function editSermon(id) {
+            const entry = appState.sermons.find(s => s.id === id);
+            if (!entry) return;
+
+            document.getElementById('sermon-id').value = entry.id;
+            document.getElementById('sermon-speaker').value = entry.speaker;
+            document.getElementById('sermon-passage').value = entry.passage;
+            document.getElementById('sermon-title').value = entry.title;
+            document.getElementById('sermon-notes').value = entry.notes || '';
+            document.getElementById('sermon-application').value = entry.application || '';
+
+            document.getElementById('submit-sermon-btn').innerText = "Update Entry";
+            document.getElementById('cancel-edit-btn').classList.remove('hidden');
+            document.getElementById('sermon-form').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function clearSermonForm() {
+            document.getElementById('sermon-id').value = '';
+            document.getElementById('sermon-form').reset();
+            document.getElementById('submit-sermon-btn').innerText = "Save Entry";
+            document.getElementById('cancel-edit-btn').classList.add('hidden');
+        }
+
+        function deleteSermon(id) {
+            if (confirm("Delete this journal entry profile permanently?")) {
+                appState.sermons = appState.sermons.filter(s => s.id !== id);
+                saveState();
+                renderSermons();
+            }
+        }
+
+        function resetAllData() {
+            if (confirm("Are you sure you want to completely wipe all local storage metrics? This cannot be undone.")) {
+                localStorage.removeItem('dei_verbum_state');
+                appState = {
+                    currentWeek: 1,
+                    completedReadings: {},
+                    habits: { prayer: Array(7).fill(false), memory: Array(7).fill(false) },
+                    sermons: []
+                };
+                buildWeekSelector();
+                renderWeek();
+                renderHabits();
+                renderSermons();
+                updateGlobalMetrics();
+                clearSermonForm();
             }
         }
     </script>
