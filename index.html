@@ -774,6 +774,7 @@
             calculateCurrentCalendarWeek();
             populateWeekSelectorDropdown();
             renderHabitsTrackerDisplay();
+            highlightCurrentDayButton();
             renderNotesArchiveList();
             renderRelationalCareList();
             renderThematicMatrix();
@@ -875,6 +876,23 @@
             });
             document.getElementById('streak-counter-value').innerText = habitState.streak || 0;
             document.getElementById('target-percentage-value').innerText = `${habitState.target || 0}%`;
+            highlightCurrentDayButton();
+        }
+
+        function highlightCurrentDayButton() {
+            const daysMap = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+            const currentDayIndex = new Date().getDay(); 
+            const currentDayId = `habit-${daysMap[currentDayIndex]}`;
+            
+            daysMap.forEach(d => {
+                const el = document.getElementById(`habit-${d}`);
+                if (el) el.classList.remove('ring-4', 'ring-emerald-300', 'ring-offset-1');
+            });
+
+            const currentBtn = document.getElementById(currentDayId);
+            if (currentBtn) {
+                currentBtn.classList.add('ring-4', 'ring-emerald-300', 'ring-offset-1');
+            }
         }
 
         function resetAllAppData() {
