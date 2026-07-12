@@ -132,23 +132,25 @@
             </div>
         </div>
 
-        <div class="bg-white border border-stone-200/80 shadow-sm rounded-2xl p-4 space-y-3">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-stone-100 pb-2">
-                <div>
-                    <h3 class="text-xs font-bold uppercase text-stone-400 tracking-wider">Weekly Devotional Matrix</h3>
-                    <span id="current-theme-title" class="text-xs font-serif font-bold text-emerald-800">Theme Loading...</span>
-                </div>
-                <div class="flex items-center gap-1.5 print:hidden">
-                    <label for="week-selector" class="text-[10px] font-bold uppercase text-stone-400">Week:</label>
-                    <select id="week-selector" onchange="changeActiveWeek(this.value)" class="bg-stone-50 border border-stone-200 rounded-md p-1 text-xs font-semibold text-stone-700 outline-none focus:border-emerald-600">
-                        </select>
-                </div>
-            </div>
-            
-            <div id="weekly-matrix-container" class="grid grid-cols-1 gap-2">
-                </div>
+        <!-- 📖 MODULE 2: UNIFIED THEMATIC BIBLE STUDY MATRIX (52 WEEKS) -->
+<div class="bg-white border border-stone-200/80 shadow-sm rounded-2xl p-4 space-y-3">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-stone-100 pb-2">
+        <div>
+            <h3 class="text-xs font-bold uppercase text-stone-400 tracking-wider">Weekly Devotional Matrix</h3>
         </div>
-
+        <div class="flex items-center gap-1.5 print:hidden w-full sm:w-auto justify-end">
+            <label for="week-selector" class="text-[10px] font-bold uppercase text-stone-400 shrink-0">Active Theme:</label>
+            <select id="week-selector" onchange="changeActiveWeek(this.value)" class="bg-stone-50 border border-stone-200 rounded-md p-1 text-xs font-semibold text-stone-700 outline-none focus:border-emerald-600 max-w-xs truncate">
+                <!-- Options generated dynamically with Week + Theme -->
+            </select>
+        </div>
+    </div>
+    
+    <div id="weekly-matrix-container" class="grid grid-cols-1 gap-2">
+       
+ <!-- Javascript dynamically populates individual daily verses here -->
+    </div>
+</div>
         <div class="bg-white border border-stone-200/80 rounded-2xl p-4 shadow-sm space-y-4">
             <div class="print:hidden">
                 <h3 class="text-xs font-bold uppercase text-stone-400 tracking-wider">Relational Care & Prayer Log</h3>
@@ -449,16 +451,21 @@
         };
 
         function buildWeekSelectorDropdown() {
-            const selector = document.getElementById('week-selector');
-            selector.innerHTML = '';
-            for (let i = 1; i <= 52; i++) {
-                const opt = document.createElement('option');
-                opt.value = i;
-                opt.innerText = i;
-                if (i === currentSelectedWeek) opt.selected = true;
-                selector.appendChild(opt);
-            }
-        }
+    const selector = document.getElementById('week-selector');
+    selector.innerHTML = '';
+    
+    for (let i = 1; i <= 52; i++) {
+        const opt = document.createElement('option');
+        opt.value = i;
+        
+        // Grab the theme name from your master database map
+        const themeName = masterAnnualPlan[i] ? masterAnnualPlan[i].theme : `Kingdom Stewardship`;
+        opt.innerText = `Week ${i}: ${themeName}`;
+        
+        if (i === currentSelectedWeek) opt.selected = true;
+        selector.appendChild(opt);
+    }
+}
 
         function changeActiveWeek(weekNum) {
             currentSelectedWeek = parseInt(weekNum);
@@ -528,35 +535,35 @@
         }
 
         function renderThematicMatrix() {
-            const container = document.getElementById('weekly-matrix-container');
-            const titleSpan = document.getElementById('current-theme-title');
-            container.innerHTML = '';
-            
-            const activeDataset = masterAnnualPlan[currentSelectedWeek];
-            titleSpan.innerText = `Theme: ${activeDataset.theme}`;
-            const currentTranslation = document.getElementById('preferred-translation').value || "59";
+    const container = document.getElementById('weekly-matrix-container');
+    container.innerHTML = '';
+    
+    const activeDataset = masterAnnualPlan[currentSelectedWeek];
+    const currentTranslation = document.getElementById('preferred-translation').value || "59";
 
-            activeDataset.readings.forEach((item, index) => {
-                const bibleUrl = generateBibleUrlExplicit(item.passage, currentTranslation);
-                const clickAction = bibleUrl ? `window.open('${bibleUrl}', '_blank')` : '';
-                const uniqueKey = `${currentSelectedWeek}_${index}`;
-                const isChecked = matrixProgress[uniqueKey] ? 'checked' : '';
+    if (!activeDataset) return;
 
-                container.innerHTML += `
-                    <div class="p-3 bg-[#fcfbf9] border border-stone-200 rounded-xl flex items-center justify-between hover:border-stone-300 transition">
-                        <div class="space-y-0.5 cursor-pointer flex-1 pr-4" onclick="${clickAction}">
-                            <div class="flex items-center gap-2">
-                                <span class="text-[10px] font-mono font-bold uppercase text-stone-400">${item.day}</span>
-                                <span class="text-[10px] font-medium text-stone-500">• ${item.text}</span>
-                            </div>
-                            <p class="text-xs font-serif font-bold text-stone-800 hover:text-emerald-800 transition flex items-center gap-1">
-                                ${item.passage} <span class="text-[10px] font-sans text-stone-400 font-normal print:hidden">↗</span>
-                            </p>
-                        </div>
-                        <input type="checkbox" onchange="toggleMatrixCheckbox('${uniqueKey}', this.checked)" ${isChecked} class="w-4 h-4 accent-emerald-700 rounded focus:ring-0 cursor-pointer">
-                    </div>`;
-            });
-        }
+    activeDataset.readings.forEach((item, index) => {
+        const bibleUrl = generateBibleUrlExplicit(item.passage, currentTranslation);
+        const clickAction = bibleUrl ? `window.open('${bibleUrl}', '_blank')` : '';
+        const uniqueKey = `${currentSelectedWeek}_${index}`;
+        const isChecked = matrixProgress[uniqueKey] ? 'checked' : '';
+
+        container.innerHTML += `
+            <div class="p-3 bg-[#fcfbf9] border border-stone-200 rounded-xl flex items-center justify-between hover:border-stone-300 transition">
+                <div class="space-y-0.5 cursor-pointer flex-1 pr-4" onclick="${clickAction}">
+                    <div class="flex items-center gap-2">
+                        <span class="text-[10px] font-mono font-bold uppercase text-stone-400">${item.day}</span>
+                        <span class="text-[10px] font-medium text-stone-500">• ${item.text}</span>
+                    </div>
+                    <p class="text-xs font-serif font-bold text-stone-800 hover:text-emerald-800 transition flex items-center gap-1">
+                        ${item.passage} <span class="text-[10px] font-sans text-stone-400 font-normal print:hidden">↗</span>
+                    </p>
+                </div>
+                <input type="checkbox" onchange="toggleMatrixCheckbox('${uniqueKey}', this.checked)" ${isChecked} class="w-4 h-4 accent-emerald-700 rounded focus:ring-0 cursor-pointer">
+            </div>`;
+    });
+}
 
         function toggleMatrixCheckbox(key, state) {
             matrixProgress[key] = state;
