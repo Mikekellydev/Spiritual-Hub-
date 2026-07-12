@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scribe: 52-Week Spiritual Hub</title>
+    <title>Spiritual Growth Hub</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         #note-editor:empty:before {
@@ -407,21 +407,374 @@
                 { day: "Sat", text: "Be Sober and Vigilant", passage: "1 Peter 5:8-9" },
                 { day: "Sun", text: "Overcoming Weapons", passage: "2 Corinthians 10:3-6" }
             ]}
+	    // Comprehensive unique themes mapping covering weeks 13 through 52
+        const remainingThemes = {
+            13: { theme: "The Grace of God", readings: [
+                { day: "Mon", text: "Saved by Grace", passage: "Ephesians 2:4-10" },
+                { day: "Tue", text: "Throne of Grace", passage: "Hebrews 4:14-16" },
+                { day: "Wed", text: "Grace Sufficient", passage: "2 Corinthians 12:7-10" },
+                { day: "Thu", text: "Growth in Grace", passage: "2 Peter 3:17-18" },
+                { day: "Fri", text: "Law vs Grace", passage: "Romans 6:11-14" },
+                { day: "Sat", text: "Gift of Justification", passage: "Romans 3:21-26" },
+                { day: "Sun", text: "Pouring Out Blessings", passage: "1 Peter 4:8-11" }
+            ]},
+            14: { theme: "Christian Community", readings: [
+                { day: "Mon", text: "One Body, Many Parts", passage: "1 Corinthians 12:12-20" },
+                { day: "Tue", text: "Stirring Up Love", passage: "Hebrews 10:23-25" },
+                { day: "Wed", text: "Bearing Burdens", passage: "Galatians 6:1-5" },
+                { day: "Thu", text: "Living in Harmony", passage: "Romans 12:9-16" },
+                { day: "Fri", text: "Encouraging One Another", passage: "1 Thessalonians 5:9-11" },
+                { day: "Sat", text: "Unity in the Spirit", passage: "Ephesians 4:1-6" },
+                { day: "Sun", text: "Devoted to Fellowship", passage: "Acts 2:42-47" }
+            ]},
+            15: { theme: "The Sovereignty of God", readings: [
+                { day: "Mon", text: "Declaring the End", passage: "Isaiah 46:8-11" },
+                { day: "Tue", text: "All Things for Good", passage: "Romans 8:28-30" },
+                { day: "Wed", text: "The Lord Reigns", passage: "Psalm 93:1-5" },
+                { day: "Thu", text: "No Purpose Thwarted", passage: "Job 42:1-6" },
+                { day: "Fri", text: "Steps Directed by God", passage: "Proverbs 16:1-4" },
+                { day: "Sat", text: "King of Kings", passage: "1 Timothy 6:13-16" },
+                { day: "Sun", text: "Our God is in Heaven", passage: "Psalm 115:1-3" }
+            ]},
+            16: { theme: "Joy in the Lord", readings: [
+                { day: "Mon", text: "Rejoice Always", passage: "Philippians 4:4-7" },
+                { day: "Tue", text: "Joy of the Lord Strength", passage: "Nehemiah 8:9-12" },
+                { day: "Wed", text: "Fullness of Joy", passage: "Psalm 16:7-11" },
+                { day: "Thu", text: "Weeping Endures for a Night", passage: "Psalm 30:1-5" },
+                { day: "Fri", text: "Joy Inexpressible", passage: "1 Peter 1:6-9" },
+                { day: "Sat", text: "Count it All Joy", passage: "James 1:2-4" },
+                { day: "Sun", text: "Shouting for Joy", passage: "Psalm 98:1-6" }
+            ]},
+            17: { theme: "The Power of the Tongue", readings: [
+                { day: "Mon", text: "Untamable Fire", passage: "James 3:3-12" },
+                { day: "Tue", text: "Words that Heal", passage: "Proverbs 12:17-22" },
+                { day: "Wed", text: "Edifying Speech", passage: "Ephesians 4:29-32" },
+                { day: "Thu", text: "Life and Death Power", passage: "Proverbs 18:20-21" },
+                { day: "Fri", text: "Guarding the Mouth", passage: "Psalm 141:1-4" },
+                { day: "Sat", text: "Gracious Seasoned Words", passage: "Colossians 4:5-6" },
+                { day: "Sun", text: "Meditation of My Heart", passage: "Psalm 19:12-14" }
+            ]},
+            18: { theme: "Humility", readings: [
+                { day: "Mon", text: "Exalting the Humble", passage: "James 4:6-10" },
+                { day: "Tue", text: "Clothe Yourselves", passage: "1 Peter 5:5-7" },
+                { day: "Wed", text: "Do Nothing from Rivalry", passage: "Philippians 2:1-4" },
+                { day: "Thu", text: "Walking Humbly", passage: "Micah 6:6-8" },
+                { day: "Fri", text: "Wisdom Follows Humility", passage: "Proverbs 11:1-3" },
+                { day: "Sat", text: "The Greatest in the Kingdom", passage: "Matthew 18:1-5" },
+                { day: "Sun", text: "Contrite Spirit Comfort", passage: "Isaiah 57:15" }
+            ]},
+            19: { theme: "Generosity and Giving", readings: [
+                { day: "Mon", text: "Cheerful Giver", passage: "2 Corinthians 9:6-11" },
+                { day: "Tue", text: "More Blessed to Give", passage: "Acts 20:32-35" },
+                { day: "Wed", text: "Treasures in Heaven", passage: "Matthew 6:19-24" },
+                { day: "Thu", text: "The Liberal Soul Made Fat", passage: "Proverbs 11:24-26" },
+                { day: "Fri", text: "Rich in Good Works", passage: "1 Timothy 6:17-19" },
+                { day: "Sat", text: "The Widow's Offering", passage: "Mark 12:41-44" },
+                { day: "Sun", text: "Honoring with Firstfruits", passage: "Proverbs 3:9-10" }
+            ]},
+            20: { theme: "Forgiveness", readings: [
+                { day: "Mon", text: "As Christ Forgave You", passage: "Colossians 3:12-14" },
+                { day: "Tue", text: "Seventy Times Seven", passage: "Matthew 18:21-22" },
+                { day: "Wed", text: "East from the West", passage: "Psalm 103:8-12" },
+                { day: "Thu", text: "Forgiving Enemies", passage: "Luke 6:35-38" },
+                { day: "Fri", text: "Confession and Cleaning", passage: "1 John 1:8-10" },
+                { day: "Sat", text: "Be Kind and Tenderhearted", passage: "Ephesians 4:31-32" },
+                { day: "Sun", text: "Blotting Out Transgressions", passage: "Isaiah 43:25-26" }
+            ]},
+            21: { theme: "Patience and Waiting", readings: [
+                { day: "Mon", text: "Renewing Strength", passage: "Isaiah 40:27-31" },
+                { day: "Tue", text: "Patience Produces Character", passage: "Romans 5:1-5" },
+                { day: "Wed", text: "Wait Quietly for Salvation", passage: "Lamentations 3:25-30" },
+                { day: "Thu", text: "Be Patient Until Coming", passage: "James 5:7-11" },
+                { day: "Fri", text: "Rest in the Lord", passage: "Psalm 37:7-11" },
+                { day: "Sat", text: "Better is the End", passage: "Ecclesiastes 7:8-10" },
+                { day: "Sun", text: "The Vision Awaits Its Time", passage: "Habakkuk 2:1-3" }
+            ]},
+            22: { theme: "The Love of Christ", readings: [
+                { day: "Mon", text: "Greater Love Has No One", passage: "John 15:12-14" },
+                { day: "Tue", text: "Inseparable from Love", passage: "Romans 8:35-39" },
+                { day: "Wed", text: "Width, Length, Depth, Height", passage: "Ephesians 3:14-19" },
+                { day: "Thu", text: "While We Were Sinners", passage: "Romans 5:6-8" },
+                { day: "Fri", text: "Lay Down Lives for Others", passage: "1 John 3:16-18" },
+                { day: "Sat", text: "Good Shepherd Lays Down Life", passage: "John 10:11-15" },
+                { day: "Sun", text: "God So Loved the World", passage: "John 3:16-17" }
+            ]},
+            23: { theme: "Hope in Affliction", readings: [
+                { day: "Mon", text: "Light Momentary Affliction", passage: "2 Corinthians 4:16-18" },
+                { day: "Tue", text: "Anchor of the Soul", passage: "Hebrews 6:17-20" },
+                { day: "Wed", text: "Present Sufferings vs Glory", passage: "Romans 8:18-25" },
+                { day: "Thu", text: "Comforts in Tribulation", passage: "2 Corinthians 1:3-7" },
+                { day: "Fri", text: "Tested by Fire", passage: "1 Peter 1:3-7" },
+                { day: "Sat", text: "God Our Refuge", passage: "Psalm 46:1-3" },
+                { day: "Sun", text: "Why Are You Cast Down", passage: "Psalm 42:5-11" }
+            ]},
+            24: { theme: "The Holy Spirit", readings: [
+                { day: "Mon", text: "The Promise of the Helper", passage: "John 14:15-18" },
+                { day: "Tue", text: "Power to Witness", passage: "Acts 1:6-8" },
+                { day: "Wed", text: "Walking by the Spirit", passage: "Galatians 5:16-18" },
+                { day: "Thu", text: "Grieving the Spirit", passage: "Ephesians 4:30-32" },
+                { day: "Fri", text: "Spirit Searches Everything", passage: "1 Corinthians 2:9-13" },
+                { day: "Sat", text: "Intercession with Groanings", passage: "Romans 8:26-27" },
+                { day: "Sun", text: "Rivers of Living Water", passage: "John 7:37-39" }
+            ]},
+            25: { theme: "Spiritual Disciplines", readings: [
+                { day: "Mon", text: "Train Yourself for Godliness", passage: "1 Timothy 4:7-10" },
+                { day: "Tue", text: "Fasting in Secret", passage: "Matthew 6:16-18" },
+                { day: "Wed", text: "Constant Intake of Word", passage: "Joshua 1:8" },
+                { day: "Thu", text: "Solitary Prayer Places", passage: "Mark 1:35-39" },
+                { day: "Fri", text: "Examining Ourselves", passage: "2 Corinthians 13:5-6" },
+                { day: "Sat", text: "Be Zeal Not Lazy", passage: "Romans 12:11-13" },
+                { day: "Sun", text: "Desiring Pure Milk", passage: "1 Peter 2:1-3" }
+            ]},
+            26: { theme: "Contentment", readings: [
+                { day: "Mon", text: "Secret of Contentment", passage: "Philippians 4:10-13" },
+                { day: "Tue", text: "Godliness with Contentment", passage: "1 Timothy 6:6-10" },
+                { day: "Wed", text: "Free from Love of Money", passage: "Hebrews 13:5-6" },
+                { day: "Thu", text: "The Lord is My Shepherd", passage: "Psalm 23:1-3" },
+                { day: "Fri", text: "Better a Little with Fear", passage: "Proverbs 15:16-17" },
+                { day: "Sat", text: "Do Not Worry About Life", passage: "Luke 12:22-26" },
+                { day: "Sun", text: "Satisfied in the Morning", passage: "Psalm 90:14-17" }
+            ]},
+            27: { theme: "Justice and Righteousness", readings: [
+                { day: "Mon", text: "Love Justice, Mercy, Humility", passage: "Micah 6:8" },
+                { day: "Tue", text: "Defending the Fatherless", passage: "Isaiah 1:16-17" },
+                { day: "Wed", text: "True Fasting Choice", passage: "Isaiah 58:6-9" },
+                { day: "Thu", text: "Let Justice Roll Down", passage: "Amos 5:21-24" },
+                { day: "Fri", text: "Religion Pure and Undefiled", passage: "James 1:26-27" },
+                { day: "Sat", text: "Doing Right to All", passage: "Proverbs 21:3" },
+                { day: "Sun", text: "The Lord Loves Righteousness", passage: "Psalm 33:4-5" }
+            ]},
+            28: { theme: "The Fear of the Lord", readings: [
+                { day: "Mon", text: "Beginning of Knowledge", passage: "Proverbs 1:7" },
+                { day: "Tue", text: "To Fear is to Hate Evil", passage: "Proverbs 8:12-14" },
+                { day: "Wed", text: "Confidence and Shelter", passage: "Proverbs 14:26-27" },
+                { day: "Thu", text: "Fear God, Keep Commandments", passage: "Ecclesiastes 12:13-14" },
+                { day: "Fri", text: "Fearing Man is a Snare", passage: "Proverbs 29:25-26" },
+                { day: "Sat", text: "Praise for the Fearing Woman", passage: "Proverbs 31:30-31" },
+                { day: "Sun", text: "Friendship of the Lord", passage: "Psalm 25:12-14" }
+            ]},
+            29: { theme: "Courage and Boldness", readings: [
+                { day: "Mon", text: "Be Strong and Courageous", passage: "Joshua 1:6-9" },
+                { day: "Tue", text: "The Righteous are Bold", passage: "Proverbs 28:1" },
+                { day: "Wed", text: "God Did Not Give Timidity", passage: "2 Timothy 1:6-8" },
+                { day: "Thu", text: "Prayer for Bold Speech", passage: "Acts 4:29-31" },
+                { day: "Fri", text: "Wait for the Lord, Be Strong", passage: "Psalm 27:13-14" },
+                { day: "Sat", text: "If God is For Us", passage: "Romans 8:31-34" },
+                { day: "Sun", text: "Boldness in Day of Judgment", passage: "1 John 4:17-19" }
+            ]},
+            30: { theme: "Obedience", readings: [
+                { day: "Mon", text: "Obedience Better Than Sacrifice", passage: "1 Samuel 15:22-23" },
+                { day: "Tue", text: "If You Love Me, Keep Laws", passage: "John 14:21-24" },
+                { day: "Wed", text: "Doers of the Word, Not Hearers", passage: "James 1:22-25" },
+                { day: "Thu", text: "Obeying God Rather Than Men", passage: "Acts 5:29-32" },
+                { day: "Fri", text: "Blessings on the Obedient", passage: "Deuteronomy 28:1-6" },
+                { day: "Sat", text: "Walking in Truth", passage: "2 John 1:4-6" },
+                { day: "Sun", text: "Captive to Obey Christ", passage: "2 Corinthians 10:4-6" }
+            ]},
+            31: { theme: "Integrity and Uprightness", readings: [
+                { day: "Mon", text: "Walking Securely", passage: "Proverbs 10:9" },
+                { day: "Tue", text: "Integrity Guides the Upright", passage: "Proverbs 11:3-5" },
+                { day: "Wed", text: "Blameless Path Light", passage: "Psalm 15:1-5" },
+                { day: "Thu", text: "A Clean Conscience Always", passage: "Acts 24:14-16" },
+                { day: "Fri", text: "Providing Honorable Things", passage: "2 Corinthians 8:20-21" },
+                { day: "Sat", text: "Show Thyself a Pattern", passage: "Titus 2:6-8" },
+                { day: "Sun", text: "Vindicate Me, O Lord", passage: "Psalm 26:1-3" }
+            ]},
+            32: { theme: "Praise and Thanksgiving", readings: [
+                { day: "Mon", text: "Give Thanks in All Things", passage: "1 Thessalonians 5:16-18" },
+                { day: "Tue", text: "Enter His Gates with Praise", passage: "Psalm 100:1-5" },
+                { day: "Wed", text: "Sacrifice of Praise Always", passage: "Hebrews 13:14-16" },
+                { day: "Thu", text: "Singing Psalms and Hymns", passage: "Colossians 3:16-17" },
+                { day: "Fri", text: "Forget Not His Benefits", passage: "Psalm 103:1-5" },
+                { day: "Sat", text: "Praised at Midnight in Jail", passage: "Acts 16:25-28" },
+                { day: "Sun", text: "Everything That Has Breath", passage: "Psalm 150:1-6" }
+            ]},
+            33: { theme: "The Great Commission", readings: [
+                { day: "Mon", text: "Go and Make Disciples", passage: "Matthew 28:18-20" },
+                { day: "Tue", text: "To the End of the Earth", passage: "Acts 1:8" },
+                { day: "Wed", text: "Not Ashamed of the Gospel", passage: "Romans 1:16-17" },
+                { day: "Thu", text: "Beautiful Are the Feet", passage: "Romans 10:13-15" },
+                { day: "Fri", text: "Light of the World City", passage: "Matthew 5:14-16" },
+                { day: "Sat", text: "Ready to Make Defense", passage: "1 Peter 3:14-16" },
+                { day: "Sun", text: "Proclaim Excel Feats", passage: "1 Peter 2:9-10" }
+            ]},
+            34: { theme: "Spiritual Gifts", readings: [
+                { day: "Mon", text: "Varieties of Gifts Structure", passage: "1 Corinthians 12:4-11" },
+                { day: "Tue", text: "Gifts Differ According to Grace", passage: "Romans 12:4-8" },
+                { day: "Wed", text: "Equipping the Saints Acts", passage: "Ephesians 4:11-13" },
+                { day: "Thu", text: "Good Stewards of Varied Grace", passage: "1 Peter 4:10-11" },
+                { day: "Fri", text: "Earnestly Desire Higher Gifts", passage: "1 Corinthians 12:27-31" },
+                { day: "Sat", text: "Fan into Flame the Gift", passage: "2 Timothy 1:6-7" },
+                { day: "Sun", text: "Building Up the Church", passage: "1 Corinthians 14:12" }
+            ]},
+            35: { theme: "Love for Enemies", readings: [
+                { day: "Mon", text: "Bless Those Who Curse You", passage: "Matthew 5:43-48" },
+                { day: "Tue", text: "If Your Enemy is Hungry", passage: "Romans 12:17-21" },
+                { day: "Wed", text: "Father, Forgive Them Statement", passage: "Luke 23:33-34" },
+                { day: "Thu", text: "Do Good to Hate Groups", passage: "Luke 6:27-31" },
+                { day: "Fri", text: "Not Repaying Evil for Evil", passage: "1 Peter 3:8-9" },
+                { day: "Sat", text: "Do Not Rejoice Fall Enemy", passage: "Proverbs 24:17-18" },
+                { day: "Sun", text: "Overcome Evil with Good", passage: "Romans 12:21" }
+            ]},
+            36: { theme: "The Word of God", readings: [
+                { day: "Mon", text: "Lamp to My Feet Guide", passage: "Psalm 119:105" },
+                { day: "Tue", text: "Sharp Two-Edged Sword", passage: "Hebrews 4:12-13" },
+                { day: "Wed", text: "All Scripture is Breathed", passage: "2 Timothy 3:14-17" },
+                { day: "Thu", text: "Word Stands Forever Clear", passage: "Isaiah 40:8" },
+                { day: "Fri", text: "Hiding the Word in Heart", passage: "Psalm 119:9-11" },
+                { day: "Sat", text: "Pure Word Tested Shield", passage: "Proverbs 30:5-6" },
+                { day: "Sun", text: "Living and Abiding Word", passage: "1 Peter 1:22-25" }
+            ]},
+            37: { theme: "Pure and Clean Living", readings: [
+                { day: "Mon", text: "Flee Youthful Passions", passage: "2 Timothy 2:22" },
+                { day: "Tue", text: "Abstain from Flesh Desires", passage: "1 Peter 2:11-12" },
+                { day: "Wed", text: "Clean Hands, Pure Heart", passage: "Psalm 24:3-5" },
+                { day: "Thu", text: "Body Sanctuary Lord", passage: "1 Corinthians 6:18-20" },
+                { day: "Fri", text: "Let Sexual Sin Not Exist", passage: "Ephesians 5:3-5" },
+                { day: "Sat", text: "Will of God Sanctify", passage: "1 Thessalonians 4:3-5" },
+                { day: "Sun", text: "Blessed Pure in Heart", passage: "Matthew 5:8" }
+            ]},
+            38: { theme: "Godly Wisdom in Trials", readings: [
+                { day: "Mon", text: "Count Trials Pure Joy", passage: "James 1:2-4" },
+                { day: "Tue", text: "Ask for Wisdom in Faith", passage: "James 1:5-8" },
+                { day: "Wed", text: "Blessed Man Who Endures", passage: "James 1:12" },
+                { day: "Thu", text: "Gold Refined in Fire", passage: "1 Peter 1:6-7" },
+                { day: "Fri", text: "Suffering Produces Endurance", passage: "Romans 5:3-5" },
+                { day: "Sat", text: "Not Surprised by Fiery Trial", passage: "1 Peter 4:12-14" },
+                { day: "Sun", text: "God Sustains Righteous Always", passage: "Psalm 55:22" }
+            ]},
+            39: { theme: "Kingdom Priorities", readings: [
+                { day: "Mon", text: "Seek First the Kingdom", passage: "Matthew 6:31-34" },
+                { day: "Tue", text: "Set Minds Above Not Earth", passage: "Colossians 3:1-4" },
+                { day: "Wed", text: "One Thing Necessary Choice", passage: "Luke 10:38-42" },
+                { day: "Thu", text: "Sell All to Buy Pearl", passage: "Matthew 13:44-46" },
+                { day: "Fri", text: "Pressing On to Goal", passage: "Philippians 3:12-14" },
+                { day: "Sat", text: "Amassing Riches vs God", passage: "Luke 12:16-21" },
+                { day: "Sun", text: "Building Eternal Foundations", passage: "1 Timothy 6:17-19" }
+            ]},
+            40: { theme: "Trusting God's Plan", readings: [
+                { day: "Mon", text: "Plans to Prosper Hope", passage: "Jeremiah 29:11-13" },
+                { day: "Tue", text: "Trust in Lord Heart", passage: "Proverbs 3:5-6" },
+                { day: "Wed", text: "Man Proposes, God Disposes", passage: "Proverbs 16:9" },
+                { day: "Thu", text: "My Ways Higher Than Yours", passage: "Isaiah 55:8-9" },
+                { day: "Fri", text: "Lord Will Perfect Plan", passage: "Psalm 138:7-8" },
+                { day: "Sat", text: "Commit Ways to the Lord", passage: "Psalm 37:5-6" },
+                { day: "Sun", text: "Known to God Are Works", passage: "Acts 15:18" }
+            ]},
+            41: { theme: "Faithfulness in Ministry", readings: [
+                { day: "Mon", text: "Steward Found Faithful", passage: "1 Corinthians 4:1-2" },
+                { day: "Tue", text: "Preach Word in Season", passage: "2 Timothy 4:1-5" },
+                { day: "Wed", text: "Not Grow Weary Doing Good", passage: "Galatians 6:9-10" },
+                { day: "Thu", text: "Steady and Immovable Labor", passage: "1 Corinthians 15:58" },
+                { day: "Fri", text: "Do Work Hearty for Lord", passage: "Colossians 3:23-24" },
+                { day: "Sat", text: "Good and Faithful Servant", passage: "Matthew 25:21" },
+                { day: "Sun", text: "Watch Ministry Complete It", passage: "Colossians 4:17" }
+            ]},
+            42: { theme: "Walking in Light", readings: [
+                { day: "Mon", text: "God is Light No Dark", passage: "1 John 1:5-7" },
+                { day: "Tue", text: "Children of Light Pattern", passage: "Ephesians 5:8-11" },
+                { day: "Wed", text: "Light of Life Follower", passage: "John 8:12" },
+                { day: "Thu", text: "Cast Off Deeds Darkness", passage: "Romans 13:12-14" },
+                { day: "Fri", text: "Path of Just Bright Sun", passage: "Proverbs 4:18" },
+                { day: "Sat", text: "Shining in Crooked Age", passage: "Philippians 2:14-16" },
+                { day: "Sun", text: "Awake O Sleeper Light Shine", passage: "Ephesians 5:13-14" }
+            ]},
+            43: { theme: "The Love of Money", readings: [
+                { day: "Mon", text: "Root of All Kinds Evil", passage: "1 Timothy 6:9-10" },
+                { day: "Tue", text: "Cannot Serve God Mammon", passage: "Matthew 6:24" },
+                { day: "Wed", text: "Deceit of Wealth Chokes", passage: "Matthew 13:22" },
+                { day: "Thu", text: "Riches Fly Away Quickly", passage: "Proverbs 23:4-5" },
+                { day: "Fri", text: "Give Me Neither Poverty Wealth", passage: "Proverbs 30:7-9" },
+                { day: "Sat", text: "He Who Loves Money Unsat", passage: "Ecclesiastes 5:10" },
+                { day: "Sun", text: "Life Not Consist Abundance", passage: "Luke 12:15" }
+            ]},
+            44: { theme: "Spiritual Alertness", readings: [
+                { day: "Mon", text: "Be Sober Mind Alert Devil", passage: "1 Peter 5:8-9" },
+                { day: "Tue", text: "Watch Pray Enter Tempt", passage: "Matthew 26:40-41" },
+                { day: "Wed", text: "Keep Awake Hour Unknown", passage: "Matthew 24:42-44" },
+                { day: "Thu", text: "Not Sleep as Others Do", passage: "1 Thessalonians 5:4-6" },
+                { day: "Fri", text: "Remember First Love Warning", passage: "Revelation 2:4-5" },
+                { day: "Sat", text: "Strengthen What Remains", passage: "Revelation 3:2-3" },
+                { day: "Sun", text: "Blessed Servants Awake", passage: "Luke 12:35-37" }
+            ]},
+            45: { theme: "The Peace of God", readings: [
+                { day: "Mon", text: "Peace Passes Understanding", passage: "Philippians 4:6-7" },
+                { day: "Tue", text: "My Peace I Give You", passage: "John 14:27" },
+                { day: "Wed", text: "Kept in Perfect Peace", passage: "Isaiah 26:3-4" },
+                { day: "Thu", text: "Lord of Peace Give Peace", passage: "2 Thessalonians 3:16" },
+                { day: "Fri", text: "Peace Rules in Hearts", passage: "Colossians 3:15" },
+                { day: "Sat", text: "Mind of Spirit Peace", passage: "Romans 8:6" },
+                { day: "Sun", text: "Great Peace Love Your Law", passage: "Psalm 119:165" }
+            ]},
+            46: { theme: "Honoring Authority", readings: [
+                { day: "Mon", text: "Subject to Governing Powers", passage: "Romans 13:1-5" },
+                { day: "Tue", text: "Honor King Governors", passage: "1 Peter 2:13-17" },
+                { day: "Wed", text: "Pray for Kings Leaders", passage: "1 Timothy 2:1-3" },
+                { day: "Thu", text: "Render to Caesar Things", passage: "Matthew 22:17-21" },
+                { day: "Fri", text: "Obey Spiritual Leaders", passage: "Hebrews 13:17" },
+                { day: "Sat", text: "Submit to Elders Humility", passage: "1 Peter 5:5" },
+                { day: "Sun", text: "Remind Them Submissive", passage: "Titus 3:1-2" }
+            ]},
+            47: { theme: "The Return of Christ", readings: [
+                { day: "Mon", text: "Coming on the Clouds", passage: "Revelation 1:7-8" },
+                { day: "Tue", text: "Thief in Night Coming", passage: "1 Thessalonians 5:1-3" },
+                { day: "Wed", text: "Caught Up in Clouds Air", passage: "1 Thessalonians 4:15-18" },
+                { day: "Thu", text: "New Heaven New Earth", passage: "Revelation 21:1-4" },
+                { day: "Fri", text: "Blink of Eye Last Trump", passage: "1 Corinthians 15:51-53" },
+                { day: "Sat", text: "I Am Coming Soon Hold Fast", passage: "Revelation 3:11" },
+                { day: "Sun", text: "Surely Coming Soon Amen", passage: "Revelation 22:20" }
+            ]},
+            48: { theme: "Pure Devotion", readings: [
+                { day: "Mon", text: "Love Lord All Soul Mind", passage: "Matthew 22:37-38" },
+                { day: "Tue", text: "Led Astray Sincere Devote", passage: "2 Corinthians 11:3" },
+                { day: "Wed", text: "Martha Martha Anxious", passage: "Luke 10:38-42" },
+                { day: "Thu", text: "Fear God Keep Command Whole", passage: "Ecclesiastes 12:13" },
+                { day: "Fri", text: "Cleave to What is Good", passage: "Romans 12:9" },
+                { day: "Sat", text: "Undivided Devotion to Lord", passage: "1 Corinthians 7:35" },
+                { day: "Sun", text: "Whom Have I in Heaven But Thee", passage: "Psalm 73:25-26" }
+            ]},
+            49: { theme: "The Fear of Man", readings: [
+                { day: "Mon", text: "Fear of Man Brings Snare", passage: "Proverbs 29:25" },
+                { day: "Tue", text: "Do Not Fear Those Kill Body", passage: "Matthew 10:28" },
+                { day: "Wed", text: "Lord is Helper Not Fear Man", passage: "Hebrews 13:6" },
+                { day: "Thu", text: "Obey God Rather Than Man", passage: "Acts 5:29" },
+                { day: "Fri", text: "Am I Seeking Approval Men", passage: "Galatians 1:10" },
+                { day: "Sat", text: "Lord Side I Will Not Fear", passage: "Psalm 118:6" },
+                { day: "Sun", text: "Fearless Before Adversaries", passage: "Philippians 1:27-28" }
+            ]},
+            50: { theme: "The Covenant of God", readings: [
+                { day: "Mon", text: "Everlasting Covenant Peace", passage: "Ezekiel 37:26-27" },
+                { day: "Tue", text: "New Covenant in My Blood", passage: "Luke 22:20" },
+                { day: "Wed", text: "Mediator of Better Covenant", passage: "Hebrews 8:6-10" },
+                { day: "Thu", text: "Knows Covenant to 1000 Gen", passage: "Deuteronomy 7:9" },
+                { day: "Fri", text: "My Covenant I Will Not Break", passage: "Psalm 89:34" },
+                { day: "Sat", text: "Blood of Eternal Covenant", passage: "Hebrews 13:20-21" },
+                { day: "Sun", text: "Remembers Covenant Forever", passage: "Psalm 111:5" }
+            ]},
+            51: { theme: "Final Perseverance", readings: [
+                { day: "Mon", text: "He Who Endures to End Saved", passage: "Matthew 24:13" },
+                { day: "Tue", text: "Fought Good Fight Kept Faith", passage: "2 Timothy 4:7-8" },
+                { day: "Wed", text: "Run with Endurance Race", passage: "Hebrews 12:1-2" },
+                { day: "Thu", text: "Able to Keep You From Fall", passage: "Jude 1:24-25" },
+                { day: "Fri", text: "Be Faithful Unto Death Crown", passage: "Revelation 2:10" },
+                { day: "Sat", text: "Begun Good Work Perform It", passage: "Philippians 1:6" },
+                { day: "Sun", text: "Stand Firm Hold Traditions", passage: "2 Thessalonians 2:15" }
+            ]},
+            52: { theme: "The Glory of God", readings: [
+                { day: "Mon", text: "Do All to Glory of God", passage: "1 Corinthians 10:31" },
+                { day: "Tue", text: "Heavens Declare His Glory", passage: "Psalm 19:1-4" },
+                { day: "Wed", text: "Earth Filled Knowledge Glory", passage: "Habakkuk 2:14" },
+                { day: "Thu", text: "Changed from Glory to Glory", passage: "2 Corinthians 3:18" },
+                { day: "Fri", text: "To Him Be Glory in Church", passage: "Ephesians 3:20-21" },
+                { day: "Sat", text: "City Has No Need of Sun Glory", passage: "Revelation 21:23" },
+                { day: "Sun", text: "Amen Blessing Glory Wisdom", passage: "Revelation 7:12" }
+            ]}
         };
 
-        // Populate placeholders up to 52 dynamically if items are missing
+        // Merge the populated plan cleanly into the master initialization mapping loop
         for (let w = 13; w <= 52; w++) {
-            masterAnnualPlan[w] = {
-                theme: `Kingdom Stewardship (Cycle ${w - 12})`,
-                readings: [
-                    { day: "Mon", text: "Seeking the Kingdom", passage: "Matthew 6:33-34" },
-                    { day: "Tue", text: "Present Sufferings Glory", passage: "Romans 8:18-21" },
-                    { day: "Wed", text: "Generous Sowing", passage: "2 Corinthians 9:6-8" },
-                    { day: "Thu", text: "Enduring Trials Well", passage: "James 1:12-15" },
-                    { day: "Fri", text: "Loving One Another", passage: "1 John 3:16-18" },
-                    { day: "Sat", text: "Godly Contentment Gain", passage: "1 Timothy 6:6-8" },
-                    { day: "Sun", text: "Strong in Lord Rock", passage: "Psalm 18:1-2" }
-                ]
+            masterAnnualPlan[w] = remainingThemes[w];
+        }
             };
         }
 
