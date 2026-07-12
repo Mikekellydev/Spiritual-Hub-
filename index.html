@@ -18,7 +18,6 @@
             from { opacity: 0; transform: translateY(4px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        /* Drawer transitions */
         .drawer-closed {
             transform: translateY(100%);
         }
@@ -49,7 +48,6 @@
                 <h3 class="text-xs font-bold uppercase text-stone-400 tracking-wider">7-Day Habits Consistency</h3>
                 <span class="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">Weekly Routine</span>
             </div>
-            <!-- 7-Day Matrix Grid -->
             <div class="grid grid-cols-7 gap-2 text-center">
                 <div>
                     <span class="text-[10px] text-stone-400 font-bold uppercase block mb-1">Mon</span>
@@ -81,7 +79,6 @@
                 </div>
             </div>
 
-            <!-- Summary Cards Row Below Tracker -->
             <div class="grid grid-cols-2 gap-3 pt-2">
                 <div class="bg-stone-50 border border-stone-200 p-3 rounded-xl">
                     <span class="text-[10px] font-bold text-stone-400 uppercase tracking-wide block">Current Streak</span>
@@ -169,15 +166,17 @@
 
     </div>
 
-    <!-- ==================== 🗂️ BACKSTAGE SERMON DRAWER (BOTTOM UP LAYER) ==================== -->
-    <div id="sermon-drawer-backdrop" onclick="toggleSermonDrawer(false)" class="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 hidden opacity-0 transition-opacity duration-300"></div>
+    <!-- ==================== 🗂️ BACKSTAGE SERMON DRAWER LAYER ==================== -->
+    <!-- Fix: Lowered backdrop to z-40 so it stays securely underneath the active workspace -->
+    <div id="sermon-drawer-backdrop" onclick="toggleSermonDrawer(false)" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 hidden opacity-0 transition-opacity duration-300"></div>
     
+    <!-- Fix: Left drawer at z-50 to ensure it commands top interaction priority -->
     <div id="sermon-drawer" class="fixed bottom-0 left-0 right-0 max-w-xl mx-auto bg-white border-t border-stone-200 shadow-2xl rounded-t-3xl z-50 transform drawer-closed transition-transform duration-300 flex flex-col h-[85vh]">
         
-        <!-- Drawer Handle Drag Strip bar -->
-        <div onclick="toggleSermonDrawer(false)" class="w-full py-3 flex flex-col items-center cursor-pointer border-b border-stone-100 bg-stone-50 rounded-t-3xl">
-            <div class="w-12 h-1 bg-stone-300 rounded-full mb-1"></div>
-            <span class="text-[10px] font-bold uppercase text-stone-400 tracking-wider">Tap to close Drawer</span>
+        <!-- Fix: Increased height and padding on the handle block to guarantee a perfect mobile touch target -->
+        <div onclick="toggleSermonDrawer(false)" class="w-full pt-4 pb-3 flex flex-col items-center justify-center cursor-pointer border-b border-stone-100 bg-stone-50 rounded-t-3xl hover:bg-stone-100 active:bg-stone-200 transition">
+            <div class="w-12 h-1.5 bg-stone-300 rounded-full mb-1.5"></div>
+            <span class="text-[10px] font-bold uppercase text-stone-500 tracking-widest">✕ Tap to Close Drawer</span>
         </div>
 
         <!-- Scrollable Workspace Inner Content Frame -->
@@ -187,7 +186,7 @@
                 <button onclick="clearCurrentEditor()" class="text-[10px] font-bold text-emerald-800 bg-emerald-50 px-2 py-1 rounded">Clear Working Pad</button>
             </div>
 
-            <!-- Metadata Row (Fixed Responsive Breakpoints) -->
+            <!-- Metadata Row -->
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div class="space-y-1">
                     <label class="text-[10px] font-bold text-stone-500 uppercase tracking-wider block">Service Date</label>
@@ -259,8 +258,8 @@
         </div>
     </div>
 
-    <!-- 📱 PERSISTENT DRAWER UTILITY CONTROL HUB FOOTER STRIP -->
-    <footer class="fixed bottom-0 left-0 right-0 border-t border-stone-200 bg-white/90 backdrop-blur-md py-3.5 px-6 z-40 shadow-lg flex justify-center">
+    <!-- 📱 PERSISTENT CONTROL HUB FOOTER STRIP -->
+    <footer class="fixed bottom-0 left-0 right-0 border-t border-stone-200 bg-white/90 backdrop-blur-md py-3.5 px-6 z-30 shadow-lg flex justify-center">
         <button onclick="toggleSermonDrawer(true)" class="bg-emerald-800 hover:bg-emerald-900 text-white font-bold px-6 py-2 rounded-xl text-xs tracking-widest flex items-center gap-2 transition shadow-md">
             ✍️ OPEN SERMON REFLECTION JOURNAL DRAWER
         </button>
@@ -298,7 +297,6 @@
             renderRelationalCareList();
         };
 
-        // Drawer Control Function
         function toggleSermonDrawer(openState) {
             const drawer = document.getElementById('sermon-drawer');
             const backdrop = document.getElementById('sermon-drawer-backdrop');
@@ -543,4 +541,3 @@
     </script>
 </body>
 </html>
-
