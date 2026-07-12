@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sermon Dashboard & Reading Plan</title>
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
@@ -12,44 +11,21 @@
         .font-serif { font-family: 'Cinzel', Georgia, serif; }
         .font-sans { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; }
         
-        /* Custom Custom Scrollbar */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: #f1f5f9; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
-        /* Print/PDF Layout Optimization Engine */
         @media print {
-            .print\:hidden, button, footer, select, #sermon-drawer, #sermon-drawer-backdrop {
-                display: none !important;
-            }
-            body {
-                background: #ffffff !important;
-                color: #000000 !important;
-                padding: 0 !important;
-            }
-            .max-w-xl { 
-                max-width: 100% !important; 
-                width: 100% !important; 
-            }
-            .bg-white { 
-                page-break-inside: avoid; 
-                break-inside: avoid; 
-                border: 1px solid #e2e8f0 !important;
-                box-shadow: none !important;
-            }
-            textarea {
-                border: none !important;
-                resize: none !important;
-                padding: 0 !important;
-                background: transparent !important;
-            }
+            .print\:hidden, button, footer, select, form { display: none !important; }
+            body { background: #fff !important; color: #000 !important; padding: 0 !important; }
+            .max-w-xl { max-width: 100% !important; width: 100% !important; }
+            .bg-white { page-break-inside: avoid; break-inside: avoid; border: 1px solid #e2e8f0 !important; box-shadow: none !important; }
         }
     </style>
 </head>
 <body class="bg-slate-50 font-sans text-slate-800 min-h-screen antialiased flex flex-col pb-12">
 
-    <!-- Top Navigation Banner -->
     <header class="bg-white border-b border-slate-200 sticky top-0 z-40 print:hidden">
         <div class="max-w-xl mx-auto px-4 h-14 flex items-center justify-between">
             <div class="flex items-center space-x-2">
@@ -57,20 +33,14 @@
                 <span class="font-serif font-bold text-sm tracking-wider text-slate-900">DEI VERBUM</span>
             </div>
             <div class="flex items-center space-x-2">
-                <button onclick="window.print()" class="bg-emerald-50 text-emerald-700 hover:bg-emerald-100 text-xs font-bold px-3 py-1.5 rounded-lg transition-all">
-                    Export PDF
-                </button>
-                <button onclick="resetAllData()" class="text-xs font-medium text-rose-600 hover:bg-rose-50 px-2.5 py-1.5 rounded-md transition-all">
-                    Reset App Data
-                </button>
+                <button onclick="window.print()" class="bg-emerald-50 text-emerald-700 hover:bg-emerald-100 text-xs font-bold px-3 py-1.5 rounded-lg transition-all">Export PDF</button>
+                <button onclick="resetAllData()" class="text-xs font-medium text-rose-600 hover:bg-rose-50 px-2.5 py-1.5 rounded-md transition-all">Reset App Data</button>
             </div>
         </div>
     </header>
 
-    <!-- Main Content Stream Container -->
     <main class="flex-1 max-w-xl w-full mx-auto px-4 py-6 space-y-6">
         
-        <!-- Live Calendar Status Card -->
         <section class="bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-950 text-white rounded-2xl p-5 shadow-sm relative overflow-hidden">
             <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-emerald-500/10 rounded-full blur-xl"></div>
             <p class="text-xs font-semibold tracking-widest text-emerald-400 uppercase font-sans mb-1">Today's Journey</p>
@@ -81,69 +51,78 @@
             </div>
         </section>
 
-        <!-- Scripture Reading Module Matrix -->
+        <div class="grid grid-cols-2 gap-4">
+            <div class="bg-white p-4 rounded-xl border border-slate-200/60 shadow-sm flex flex-col justify-between">
+                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Scripture Completed</span>
+                <div class="flex items-baseline space-x-1 mt-1">
+                    <span id="stat-readings-count" class="text-2xl font-bold text-slate-900">0</span>
+                    <span class="text-xs text-slate-400">chapters</span>
+                </div>
+            </div>
+            <div class="bg-white p-4 rounded-xl border border-slate-200/60 shadow-sm flex flex-col justify-between">
+                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Active Prayer Target</span>
+                <div class="flex items-baseline space-x-1 mt-1">
+                    <span id="stat-prayer-season" class="text-sm font-bold text-emerald-700 truncate max-w-full">General</span>
+                </div>
+            </div>
+        </div>
+
         <section class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/60">
             <div class="flex items-center justify-between mb-4">
                 <div>
                     <h2 class="font-serif text-base font-bold text-slate-900 tracking-wide">Scripture Journey</h2>
-                    <p class="text-xs text-slate-500">52-Week Chronological Plan</p>
+                    <p id="week-theme-title" class="text-xs text-emerald-700 font-medium italic mt-0.5">Loading Theme...</p>
                 </div>
-                <select id="week-selector" onchange="changeWeek(this.value)" class="text-xs font-medium bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 print:hidden">
-                    <!-- Javascript populates weeks dynamically -->
-                </select>
+                <select id="week-selector" onchange="changeWeek(this.value)" class="text-xs font-medium bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-slate-700 focus:outline-none print:hidden">
+                    </select>
             </div>
 
-            <!-- Reading Assignments List -->
             <div id="reading-list" class="space-y-2.5">
-                <!-- Javascript dynamic Injection Injection Point -->
-            </div>
+                </div>
         </section>
 
-        <!-- Spiritual Discipline & Habit Tracker -->
-        <section class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/60">
-            <div class="mb-4">
+        <section class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/60 space-y-4">
+            <div>
                 <h2 class="font-serif text-base font-bold text-slate-900 tracking-wide">Weekly Disciplines</h2>
-                <p class="text-xs text-slate-500">Consistency turns habits into transformations</p>
+                <p class="text-xs text-slate-500">Track habits and amend seasonal prayer alignments</p>
             </div>
             
-            <div class="space-y-3.5">
-                <!-- Habit 1: Prayer -->
-                <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
-                            🙏 Intercessory Prayer
-                        </span>
-                    </div>
-                    <div class="grid grid-cols-7 gap-1.5 text-center">
-                        ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day, idx) => `
-                            <label class="flex flex-col items-center gap-1 cursor-pointer">
-                                <span class="text-[10px] font-medium text-slate-400 uppercase">${day}</span>
-                                <input type="checkbox" id="habit-prayer-${idx}" onchange="toggleHabit('prayer', ${idx})" class="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500/20 border-slate-300">
-                            </label>
+            <div class="grid grid-cols-2 gap-3">
+                <div class="p-3 bg-slate-50 rounded-xl border border-slate-100 text-center">
+                    <span class="text-[10px] font-bold text-slate-500 uppercase block mb-2">🙏 Intercessory</span>
+                    <div class="flex justify-center gap-1">
+                        ['M','T','W','T','F','S','S'].map((day, idx) => `
+                            <input type="checkbox" id="habit-prayer-${idx}" onchange="toggleHabit('prayer', ${idx})" class="w-3.5 h-3.5 rounded text-emerald-600 border-slate-300">
                         `).join('')
                     </div>
                 </div>
-
-                <!-- Habit 2: Memorization -->
-                <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
-                            📜 Scripture Memory
-                        </span>
-                    </div>
-                    <div class="grid grid-cols-7 gap-1.5 text-center">
-                        ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day, idx) => `
-                            <label class="flex flex-col items-center gap-1 cursor-pointer">
-                                <span class="text-[10px] font-medium text-slate-400 uppercase">${day}</span>
-                                <input type="checkbox" id="habit-memory-${idx}" onchange="toggleHabit('memory', ${idx})" class="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500/20 border-slate-300">
-                            </label>
+                <div class="p-3 bg-slate-50 rounded-xl border border-slate-100 text-center">
+                    <span class="text-[10px] font-bold text-slate-500 uppercase block mb-2">📜 Memory Verse</span>
+                    <div class="flex justify-center gap-1">
+                        ['M','T','W','T','F','S','S'].map((day, idx) => `
+                            <input type="checkbox" id="habit-memory-${idx}" onchange="toggleHabit('memory', ${idx})" class="w-3.5 h-3.5 rounded text-emerald-600 border-slate-300">
                         `).join('')
                     </div>
                 </div>
             </div>
+
+            <div class="p-3.5 bg-slate-50/80 rounded-xl border border-slate-200/60 space-y-3">
+                <div class="flex items-center justify-between gap-2">
+                    <select id="prayer-season-select" onchange="updatePrayerSeason(this.value)" class="text-xs font-bold bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-slate-700 focus:outline-none">
+                        <option value="General Intercession">🍂 General Intercession</option>
+                        <option value="Season of Renewal">🌱 Season of Renewal</option>
+                        <option value="A season of Testing">🔥 Season of Testing</option>
+                        <option value="Season of Harvest">🌾 Season of Harvest</option>
+                        <option value="Wilderness Journey">🏜️ Wilderness Journey</option>
+                    </select>
+                    <button onclick="savePrayerNote()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold px-3 py-1.5 rounded-lg transition-all">
+                        Update Note
+                    </button>
+                </div>
+                <textarea id="prayer-focus-notes" rows="3" placeholder="Log strategic spiritual targets, family needs, and seasonal focus items..." class="w-full text-xs bg-white border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"></textarea>
+            </div>
         </section>
 
-        <!-- Sermon Processing Lab Layout -->
         <section class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/60">
             <div class="mb-4">
                 <h2 class="font-serif text-base font-bold text-slate-900 tracking-wide">Exegetical Journal</h2>
@@ -155,125 +134,124 @@
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-1">Speaker / Preacher</label>
-                        <input type="text" id="sermon-speaker" required class="w-full text-xs bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-500/20">
+                        <input type="text" id="sermon-speaker" required class="w-full text-xs bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none">
                     </div>
                     <div>
                         <label class="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-1">Scripture Reference</label>
-                        <input type="text" id="sermon-passage" required placeholder="e.g., Romans 8:1-4" class="w-full text-xs bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-500/20">
+                        <input type="text" id="sermon-passage" required placeholder="e.g., 1 Peter 2:1-5" class="w-full text-xs bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none">
                     </div>
                 </div>
 
                 <div>
                     <label class="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-1">Sermon Title</label>
-                    <input type="text" id="sermon-title" required class="w-full text-xs bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-500/20">
+                    <input type="text" id="sermon-title" required class="w-full text-xs bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none">
                 </div>
 
                 <div>
                     <label class="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-1">Structural & Exegetical Notes</label>
-                    <textarea id="sermon-notes" rows="4" placeholder="Outline structure, historical context, and core truths..." class="w-full text-xs bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"></textarea>
+                    <textarea id="sermon-notes" rows="4" placeholder="Outline structure, historical context, and core truths..." class="w-full text-xs bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none"></textarea>
                 </div>
 
                 <div>
                     <label class="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-1">Personal Transformation / Practical Application</label>
-                    <textarea id="sermon-application" rows="3" placeholder="How does this truth change your tomorrow?" class="w-full text-xs bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"></textarea>
+                    <textarea id="sermon-application" rows="3" placeholder="How does this truth change your tomorrow?" class="w-full text-xs bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none"></textarea>
                 </div>
 
                 <div class="flex space-x-2 justify-end">
-                    <button type="button" id="cancel-edit-btn" onclick="clearSermonForm()" class="hidden text-xs font-semibold text-slate-500 hover:bg-slate-100 px-4 py-2 rounded-lg transition-all">Cancel</button>
-                    <button type="submit" id="submit-sermon-btn" class="bg-slate-900 text-white hover:bg-slate-800 text-xs font-bold px-4 py-2 rounded-lg transition-all">Save Entry</button>
+                    <button type="button" id="cancel-edit-btn" onclick="clearSermonForm()" class="hidden text-xs font-semibold text-slate-500 hover:bg-slate-100 px-4 py-2 rounded-lg">Cancel</button>
+                    <button type="submit" id="submit-sermon-btn" class="bg-slate-900 text-white hover:bg-slate-800 text-xs font-bold px-4 py-2 rounded-lg">Save Entry</button>
                 </div>
             </form>
 
-            <!-- Dynamic Sermon Log Archive Feed -->
             <div id="sermon-archive" class="mt-6 pt-6 border-t border-slate-100 space-y-4">
-                <!-- Javascript Injector -->
-            </div>
+                </div>
         </section>
 
     </main>
 
-    <!-- Global App State Database Script Core -->
     <script>
-        // Core 52-Week Chronological Scripture Mapping Engine Data Store
-        const readingPlan = {
-            1: ["Genesis 1-2", "Genesis 3-5", "Genesis 6-9", "Genesis 10-11"],
-            2: ["Job 1-2", "Job 3-7", "Job 8-11", "Job 12-15"],
-            3: ["Job 16-19", "Job 20-23", "Job 24-28", "Job 29-31"],
-            4: ["Job 32-34", "Job 35-37", "Job 38-39", "Job 40-42"],
-            5: ["Genesis 12-14", "Genesis 15-17", "Genesis 18-20", "Genesis 21-23"],
-            6: ["Genesis 24-25", "Genesis 26-28", "Genesis 29-31", "Genesis 32-35"],
-            7: ["Genesis 36-38", "Genesis 39-40", "Genesis 41-43", "Genesis 44-45"],
-            8: ["Genesis 46-47", "Genesis 48-50", "Exodus 1-3", "Exodus 4-6"],
-            9: ["Exodus 7-9", "Exodus 10-12", "Exodus 13-15", "Exodus 16-18"],
-            10: ["Exodus 19-21", "Exodus 22-24", "Exodus 25-27", "Exodus 28-31"],
-            11: ["Exodus 32-34", "Exodus 35-40", "Leviticus 1-4", "Leviticus 5-7"],
-            12: ["Leviticus 8-10", "Leviticus 11-13", "Leviticus 14-15", "Leviticus 16-18"],
-            13: ["Leviticus 19-21", "Leviticus 22-23", "Leviticus 24-25", "Leviticus 26-27"],
-            14: ["Numbers 1-3", "Numbers 4-6", "Numbers 7-9", "Numbers 10-12"],
-            15: ["Numbers 13-15", "Numbers 16-18", "Numbers 19-21", "Numbers 22-25"],
-            16: ["Numbers 26-27", "Numbers 28-30", "Numbers 31-32", "Numbers 33-36"],
-            17: ["Deuteronomy 1-2", "Deuteronomy 3-4", "Deuteronomy 5-7", "Deuteronomy 8-10"],
-            18: ["Deuteronomy 11-13", "Deuteronomy 14-16", "Deuteronomy 17-20", "Deuteronomy 21-23"],
-            19: ["Deuteronomy 24-27", "Deuteronomy 28-29", "Deuteronomy 30-31", "Deuteronomy 32-34"],
-            20: ["Joshua 1-4", "Joshua 5-8", "Joshua 9-12", "Joshua 13-17"],
-            21: ["Joshua 18-21", "Joshua 22-24", "Judges 1-2", "Judges 3-5"],
-            22: ["Judges 6-7", "Judges 8-10", "Judges 11-12", "Judges 13-16"],
-            23: ["Judges 17-18", "Judges 19-21", "Ruth 1-4", "1 Samuel 1-3"],
-            24: ["1 Samuel 4-8", "1 Samuel 9-12", "1 Samuel 13-14", "1 Samuel 15-17"],
-            25: ["1 Samuel 18-20", "1 Samuel 21-24", "1 Samuel 25-27", "1 Samuel 28-31"],
-            26: ["2 Samuel 1-4", "2 Samuel 5-8", "2 Samuel 9-12", "2 Samuel 13-15"],
-            27: ["2 Samuel 16-18", "2 Samuel 19-21", "2 Samuel 22-24", "1 Kings 1-2"],
-            28: ["1 Kings 3-5", "1 Kings 6-7", "1 Kings 8-9", "1 Kings 10-11"],
-            29: ["Ecclesiastes 1-3", "Ecclesiastes 4-8", "Ecclesiastes 9-12", "Song of Solomon 1-8"],
-            30: ["1 Kings 12-14", "1 Kings 15-17", "1 Kings 18-20", "1 Kings 21-22"],
-            31: ["2 Kings 1-3", "2 Kings 4-5", "2 Kings 6-8", "2 Kings 9-11"],
-            32: ["2 Kings 12-14", "2 Kings 15-17", "Jonah 1-4", "Amos 1-5"],
-            33: ["Amos 6-9", "2 Kings 18-19", "2 Kings 20-21", "Isaiah 1-4"],
-            34: ["Isaiah 5-9", "Isaiah 10-14", "Isaiah 15-20", "Isaiah 21-26"],
-            35: ["Isaiah 27-31", "Isaiah 32-35", "Isaiah 36-38", "Isaiah 39-44"],
-            36: ["Isaiah 45-48", "Isaiah 49-54", "Isaiah 55-59", "Isaiah 60-66"],
-            37: ["2 Kings 22-23", "2 Kings 24-25", "Jeremiah 1-3", "Jeremiah 4-6"],
-            38: ["Jeremiah 7-9", "Jeremiah 10-13", "Jeremiah 14-17", "Jeremiah 18-22"],
-            39: ["Jeremiah 23-25", "Jeremiah 26-29", "Jeremiah 30-31", "Jeremiah 32-34"],
-            40: ["Jeremiah 35-38", "Jeremiah 39-43", "Jeremiah 44-48", "Jeremiah 49-52"],
-            41: ["Lamentations 1-5", "Ezekiel 1-4", "Ezekiel 5-9", "Ezekiel 10-13"],
-            42: ["Ezekiel 14-17", "Ezekiel 18-21", "Ezekiel 22-24", "Ezekiel 25-28"],
-            43: ["Ezekiel 29-32", "Ezekiel 33-36", "Ezekiel 37-40", "Ezekiel 41-44"],
-            44: ["Ezekiel 45-48", "Daniel 1-3", "Daniel 4-6", "Daniel 7-9"],
-            45: ["Daniel 10-12", "Ezra 1-3", "Ezra 4-6", "Haggai 1-2"],
-            46: ["Zechariah 1-7", "Zechariah 8-14", "Esther 1-5", "Esther 6-10"],
-            47: ["Ezra 7-10", "Nehemiah 1-5", "Nehemiah 6-7", "Nehemiah 8-10"],
-            48: ["Nehemiah 11-13", "Malachi 1-4", "Matthew 1-4", "Matthew 5-7"],
-            49: ["Matthew 8-11", "Matthew 12-15", "Matthew 16-19", "Matthew 20-23"],
-            50: ["Matthew 24-25", "Matthew 26", "Matthew 27-28", "Mark 1-3"],
-            51: ["Mark 4-5", "Mark 6-8", "Mark 9-10", "Mark 11-13"],
-            52: ["Mark 14", "Mark 15-16", "Luke 1-2", "Luke 3-4"]
+        // 52-Week Themed Daily Reading Matrix Engine Array Definitions
+        const themedPlan = {
+            1: { theme: "In the Beginning & Foundations", readings: ["Genesis 1", "Genesis 2", "Genesis 3", "Genesis 4", "Genesis 5", "Genesis 6", "Genesis 7"] },
+            2: { theme: "The Abrahamic Covenant Promises", readings: ["Genesis 12", "Genesis 13", "Genesis 15", "Genesis 17", "Genesis 18", "Genesis 21", "Genesis 22"] },
+            3: { theme: "Deliverance and Exodus Signs", readings: ["Exodus 3", "Exodus 4", "Exodus 12", "Exodus 13", "Exodus 14", "Exodus 15", "Exodus 20"] },
+            4: { theme: "The Holiness of the Sovereign Lord", readings: ["Leviticus 16", "Leviticus 19", "Leviticus 26", "Numbers 6", "Numbers 9", "Numbers 14", "Numbers 21"] },
+            5: { theme: "Remembering and Obeying the Commands", readings: ["Deuteronomy 4", "Deuteronomy 5", "Deuteronomy 6", "Deuteronomy 8", "Deuteronomy 11", "Deuteronomy 28", "Deuteronomy 30"] },
+            6: { theme: "Courage and Conquest Landscapes", readings: ["Joshua 1", "Joshua 3", "Joshua 6", "Joshua 23", "Joshua 24", "Judges 2", "Judges 6"] },
+            7: { theme: "Providential Grace and Early Kings", readings: ["Ruth 1", "Ruth 4", "1 Samuel 2", "1 Samuel 3", "1 Samuel 15", "1 Samuel 16", "1 Samuel 17"] },
+            8: { theme: "The Davidic Covenant Foundation", readings: ["2 Samuel 7", "2 Samuel 11", "2 Samuel 12", "2 Samuel 22", "1 Kings 3", "1 Kings 8", "1 Kings 19"] },
+            9: { theme: "The Splendor of God's Word", readings: ["Psalm 1", "Psalm 19", "Psalm 119:1-32", "Psalm 119:33-64", "Psalm 119:65-96", "Psalm 119:97-128", "Psalm 119:129-176"] },
+            10: { theme: "Trust and Security Under His Wings", readings: ["Psalm 23", "Psalm 27", "Psalm 46", "Psalm 62", "Psalm 91", "Psalm 103", "Psalm 139"] },
+            11: { theme: "Seeking Wisdom & Discretion paths", readings: ["Proverbs 1", "Proverbs 3", "Proverbs 4", "Proverbs 8", "Proverbs 16", "Proverbs 31", "Ecclesiastes 3"] },
+            12: { theme: "The Messianic Servant Prophecies", readings: ["Isaiah 6", "Isaiah 9", "Isaiah 11", "Isaiah 40", "Isaiah 53", "Isaiah 55", "Isaiah 61"] },
+            13: { theme: "The New Covenant Proclamations", readings: ["Jeremiah 1", "Jeremiah 29", "Jeremiah 31", "Lamentations 3", "Ezekiel 34", "Ezekiel 36", "Ezekiel 37"] },
+            14: { theme: "Faithfulness in Foreign Empires", readings: ["Daniel 1", "Daniel 3", "Daniel 6", "Daniel 7", "Hosea 6", "Joel 2", "Amos 5"] },
+            15: { theme: "The Sovereign Deliverer of Nations", readings: ["Jonah 1", "Jonah 3", "Jonah 4", "Micah 5", "Habakkuk 3", "Zechariah 9", "Malachi 3"] },
+            16: { theme: "The Coming of the True King", readings: ["Matthew 1", "Matthew 2", "Mark 1", "Luke 1", "Luke 2", "John 1", "John 3"] },
+            17: { theme: "The Sermon on the Mount Architecture", readings: ["Matthew 5", "Matthew 6", "Matthew 7", "Luke 6", "Matthew 11", "Matthew 13", "Luke 15"] },
+            18: { theme: "Signs, Miracles, and Divine Compassion", readings: ["Mark 4", "Mark 9", "Luke 10", "John 4", "John 10", "John 11", "John 14"] },
+            19: { theme: "The Passion, Cross, and Resurrection", readings: ["Matthew 26", "Matthew 27", "Matthew 28", "Mark 15", "Luke 23", "Luke 24", "John 19"] },
+            20: { theme: "The Ascension and Spirit Fire Descent", readings: ["John 20", "John 21", "Acts 1", "Acts 2", "Acts 3", "Acts 4", "Acts 9"] },
+            21: { theme: "The Gospel Boundaries Expanding Outward", readings: ["Acts 10", "Acts 13", "Acts 16", "Acts 17", "Acts 20", "Acts 26", "Acts 28"] },
+            22: { theme: "Righteousness Through Faith Alone", readings: ["Romans 1", "Romans 3", "Romans 4", "Romans 5", "Romans 6", "Romans 7", "Romans 8"] },
+            23: { theme: "The Transforming Community Formations", readings: ["Romans 12", "Romans 13", "1 Corinthians 1", "1 Corinthians 2", "1 Corinthians 13", "1 Corinthians 15", "2 Corinthians 4"] },
+            24: { theme: "New Creation Power Realities", readings: ["2 Corinthians 5", "2 Corinthians 12", "Galatians 2", "Galatians 3", "Galatians 5", "Ephesians 1", "Ephesians 2"] },
+            25: { theme: "Walking Worthy of His High Calling", readings: ["Ephesians 4", "Ephesians 5", "Ephesians 6", "Philippians 1", "Philippians 2", "Philippians 3", "Philippians 4"] },
+            26: { theme: "The Preeminent Christ Over All Powers", readings: ["Colossians 1", "Colossians 3", "1 Thessalonians 4", "2 Thessalonians 2", "1 Timothy 3", "1 Timothy 6", "2 Timothy 1"] },
+            27: { theme: "Enduring Hardship as Soldiers of Truth", readings: ["2 Timothy 2", "2 Timothy 3", "2 Timothy 4", "Titus 2", "Philemon 1", "Hebrews 1", "Hebrews 2"] },
+            28: { theme: "The Great High Priest and Intercessor", readings: ["Hebrews 4", "Hebrews 7", "Hebrews 10", "Hebrews 11", "Hebrews 12", "James 1", "James 2"] },
+            29: { theme: "Living Stones and Holy Exiles", readings: ["James 3", "1 Peter 1", "1 Peter 2", "1 Peter 5", "2 Peter 1", "1 John 1", "1 John 3"] },
+            30: { theme: "Overcoming and Eternal Victory Assured", readings: ["1 John 4", "1 John 5", "Jude 1", "Revelation 1", "Revelation 5", "Revelation 21", "Revelation 22"] },
+            31: { theme: "The Covenant of Faith Re-Examined", readings: ["Genesis 15", "Romans 4", "Galatians 3", "Hebrews 11", "James 2", "Genesis 22", "Romans 5"] },
+            32: { theme: "The Good Shepherd Metaphor Stream", readings: ["Psalm 23", "Ezekiel 34", "John 10", "Hebrews 13", "1.Peter.2", "1.Peter.5", "Revelation 7"] },
+            33: { theme: "The True Light in Cosmic Darkness", readings: ["John 1", "1 John 1", "Isaiah 9", "Matthew 5", "Ephesians 5", "1 Thessalonians 5", "Revelation 22"] },
+            34: { theme: "Divine Sovereignty Over Earthly Kings", readings: ["Daniel 4", "Psalm 2", "Proverbs 21", "Romans 13", "Revelation 19", "Isaiah 40", "Acts 4"] },
+            35: { theme: "The Metaphor of Living Water Refreshes", readings: ["John 4", "John 7", "Isaiah 55", "Jeremiah 2", "Ezekiel 47", "Revelation 21", "Psalm 42"] },
+            36: { theme: "The Suffering Servant Motif Traced", readings: ["Isaiah 52", "Isaiah 53", "Mark 10", "1.Peter.2", "Philippians 2", "Acts 8", "Luke 22"] },
+            37: { theme: "The True Vine & Abiding Life Mechanics", readings: ["John 15", "Galatians 5", "Colossians 2", "Psalm 80", "Isaiah 5", "Romans 11", "1 John 2"] },
+            38: { theme: "The Armor of Light for Spiritual War", readings: ["Ephesians 6", "Romans 13", "1 Thessalonians 5", "2 Corinthians 10", "1 Peter 5", "2 Timothy 4", "Psalm 18"] },
+            39: { theme: "The New Jerusalem Eternal Metropolis", readings: ["Revelation 21", "Revelation 22", "Hebrews 11", "Hebrews 12", "Galatians 4", "Isaiah 60", "Isaiah 65"] },
+            40: { theme: "The Call to Bold Global Witness", readings: ["Acts 1", "Matthew 28", "Mark 16", "Luke 24", "Romans 10", "Isaiah 6", "1 Peter 3"] },
+            41: { theme: "The Law Written Directly on Hearts", readings: ["Jeremiah 31", "Hebrews 8", "Hebrews 10", "Ezekiel 36", "Romans 2", "2 Corinthians 3", "Galatians 4"] },
+            42: { theme: "The Great High Priest Tabernacle Entrance", readings: ["Hebrews 4", "Hebrews 5", "Hebrews 8", "Hebrews 9", "Leviticus 16", "Psalm 110", "Romans 8"] },
+            43: { theme: "The Wisdom from Above and Below", readings: ["James 3", "Proverbs 3", "Proverbs 4", "Job 28", "1 Corinthians 1", "1 Corinthians 2", "Colossians 2"] },
+            44: { theme: "The Metaphor of the Spiritual Harvest", readings: ["Galatians 6", "Matthew 9", "Mark 4", "John 4", "Psalm 126", "Proverbs 11", "Revelation 14"] },
+            45: { theme: "The Body of Christ Functional Mosaic", readings: ["1 Corinthians 12", "Romans 12", "Ephesians 4", "Colossians 3", "1 Peter 4", "Philippians 2", "An-13"] },
+            46: { theme: "Living Under Direct Kingdom Authority", readings: ["Matthew 5", "Matthew 6", "Matthew 7", "Luke 6", "Romans 14", "Colossians 1", "James 4"] },
+            47: { theme: "The Power of the Resurrection Hope", readings: ["1 Corinthians 15", "Philippians 3", "1 Peter 1", "Romans 6", "John 11", "2 Corinthians 4", "1 Thessalonians 4"] },
+            48: { theme: "The Discipline of the Sovereign Father", readings: ["Hebrews 12", "Proverbs 3", "Revelation 3", "Psalm 94", "Job 5", "1 Corinthians 11", "Deuteronomy 8"] },
+            49: { theme: "The Mind Set On Spirit Realms", readings: ["Romans 8", "Colossians 3", "Philippians 4", "1 Peter 1", "Isaiah 26", "Matthew 6", "Psalm 119:97-104"] },
+            50: { theme: "The Legacy of Absolute Unwavering Faith", readings: ["Hebrews 11", "Genesis 12", "Genesis 15", "Exodus 14", "Joshua 6", "Daniel 3", "Daniel 6"] },
+            51: { theme: "The Commandment to Authentic Love", readings: ["1 John 3", "1 John 4", "John 13", "1 Corinthians 13", "Romans 13", "Galatians 5", "Peter-4"] },
+            52: { theme: "The Alpha and Omega Consummation", readings: ["Revelation 1", "Revelation 4", "Revelation 5", "Revelation 19", "Revelation 20", "Revelation 21", "Revelation 22"] }
         };
 
         let appState = {
             currentWeek: 1,
             completedReadings: {},
             habits: { prayer: Array(7).fill(false), memory: Array(7).fill(false) },
+            prayerSeason: "General Intercession",
+            prayerNotes: "",
             sermons: []
         };
 
-        // Initialize Application System
-        window.onload = function() {
-            // Live Localized System Date Engine Execution Injection
-            const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            document.getElementById('live-banner-date').innerText = new Date().toLocaleDateString('en-US', dateOptions);
+        const dayNames = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
-            // LocalStorage Memory Hydration
+        window.onload = function() {
+            document.getElementById('live-banner-date').innerText = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
             if (localStorage.getItem('dei_verbum_state')) {
                 appState = JSON.parse(localStorage.getItem('dei_verbum_state'));
-                // Backwards compatibility safeguard for arrays
                 if (!appState.habits || Array.isArray(appState.habits)) {
                     appState.habits = { prayer: Array(7).fill(false), memory: Array(7).fill(false) };
                 }
+                if (!appState.prayerSeason) appState.prayerSeason = "General Intercession";
+                if (!appState.prayerNotes) appState.prayerNotes = "";
             }
             buildWeekSelector();
             renderWeek();
             renderHabits();
+            renderPrayerCard();
             renderSermons();
             updateGlobalMetrics();
         };
@@ -301,39 +279,44 @@
             renderWeek();
         }
 
-        // Generate scripture links reliably using standard abbreviations
         function getYouVersionUrl(passage) {
-            const clean = passage.replace(/ /g, '').replace(/:/g, '.');
+            let clean = passage.replace(/ /g, '').replace(/:/g, '.');
+            // Specific handling for Peter formatting normalization
+            if(clean.startsWith("1.Peter")) clean = clean.replace("1.Peter", "1PE");
+            if(clean.startsWith("1Peter")) clean = clean.replace("1Peter", "1PE");
             return `https://www.bible.com/bible/111/${clean}.EHV`;
         }
 
         function renderWeek() {
             const listContainer = document.getElementById('reading-list');
             listContainer.innerHTML = '';
-            const assignments = readingPlan[appState.currentWeek] || [];
+            
+            const currentData = themedPlan[appState.currentWeek] || { theme: "Themed Study", readings: [] };
+            document.getElementById('week-theme-title').innerText = `Theme: ${currentData.theme}`;
 
-            assignments.forEach((passage) => {
-                const isChecked = appState.completedReadings[passage] || false;
-                const encodedPassage = encodeURIComponent(passage);
+            currentData.readings.forEach((passage, idx) => {
+                const dayLabel = dayNames[idx] || `Day ${idx + 1}`;
+                const uniqueKey = `W${appState.currentWeek}_D${idx}_${passage}`;
+                const isChecked = appState.completedReadings[uniqueKey] || false;
                 
                 const item = document.createElement('div');
                 item.className = `flex items-center justify-between p-3 rounded-xl border transition-all ${isChecked ? 'bg-slate-50/80 border-slate-200' : 'bg-white border-slate-200/70 shadow-sm'}`;
                 item.innerHTML = `
                     <div class="flex items-center space-x-3">
-                        <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="toggleReading('${passage}')" class="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500/20 border-slate-300 cursor-pointer">
-                        <span class="text-xs font-semibold ${isChecked ? 'line-through text-slate-400' : 'text-slate-700'}">${passage}</span>
+                        <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="toggleReading('${uniqueKey}')" class="w-4 h-4 rounded text-emerald-600 border-slate-300 cursor-pointer">
+                        <div>
+                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">${dayLabel}</span>
+                            <span class="text-xs font-semibold ${isChecked ? 'line-through text-slate-400' : 'text-slate-700'}">${passage}</span>
+                        </div>
                     </div>
-                    <a href="${getYouVersionUrl(passage)}" target="_blank" class="print:hidden text-[11px] font-bold text-emerald-700 hover:text-emerald-800 bg-emerald-50 hover:bg-emerald-100/70 px-2.5 py-1 rounded-md transition-all flex items-center space-x-1">
-                        <span>Read</span>
-                        <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"></path></svg>
-                    </a>
+                    <a href="${getYouVersionUrl(passage)}" target="_blank" class="print:hidden text-[11px] font-bold text-emerald-700 hover:text-emerald-800 bg-emerald-50 hover:bg-emerald-100/70 px-2.5 py-1 rounded-md transition-all">Read</a>
                 `;
                 listContainer.appendChild(item);
             });
         }
 
-        function toggleReading(passage) {
-            appState.completedReadings[passage] = !appState.completedReadings[passage];
+        function toggleReading(uniqueKey) {
+            appState.completedReadings[uniqueKey] = !appState.completedReadings[uniqueKey];
             saveState();
             renderWeek();
         }
@@ -342,9 +325,7 @@
             ['prayer', 'memory'].forEach(type => {
                 for (let i = 0; i < 7; i++) {
                     const el = document.getElementById(`habit-${type}-${i}`);
-                    if (el) {
-                        el.checked = appState.habits[type][i] || false;
-                    }
+                    if (el) el.checked = appState.habits[type][i] || false;
                 }
             });
         }
@@ -354,17 +335,30 @@
             saveState();
         }
 
+        function renderPrayerCard() {
+            document.getElementById('prayer-season-select').value = appState.prayerSeason;
+            document.getElementById('prayer-focus-notes').value = appState.prayerNotes;
+            document.getElementById('stat-prayer-season').innerText = appState.prayerSeason.replace(/[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDC00-\uDFFF]/g, '');
+        }
+
+        function updatePrayerSeason(val) {
+            appState.prayerSeason = val;
+            saveState();
+            renderPrayerCard();
+        }
+
+        function savePrayerNote() {
+            appState.prayerNotes = document.getElementById('prayer-focus-notes').value.trim();
+            saveState();
+            alert("Prayer notes successfully updated.");
+        }
+
         function updateGlobalMetrics() {
-            let totalPossible = 0;
-            Object.keys(readingPlan).forEach(w => totalPossible += readingPlan[w].length);
             let totalDone = Object.values(appState.completedReadings).filter(Boolean).length;
-            let percent = totalPossible > 0 ? Math.round((totalDone / totalPossible) * 100) : 0;
-            
-            document.getElementById('reading-progress-text').innerText = `Plan Progress: ${percent}%`;
+            document.getElementById('stat-readings-count').innerText = totalDone;
             document.getElementById('sermon-count-text').innerText = `${appState.sermons.length} Sermons Logged`;
         }
 
-        // Sermon Processing Engine Logics
         function saveSermon(e) {
             e.preventDefault();
             const id = document.getElementById('sermon-id').value;
@@ -375,19 +369,16 @@
             const application = document.getElementById('sermon-application').value.trim();
 
             if (id) {
-                // Update Existing Document
                 const index = appState.sermons.findIndex(s => s.id === id);
                 if (index !== -1) {
                     appState.sermons[index] = { id, date: appState.sermons[index].date, speaker, passage, title, notes, application };
                 }
             } else {
-                // Insert New Log Entry
-                const newEntry = {
+                appState.sermons.unshift({
                     id: Date.now().toString(),
                     date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }),
                     speaker, passage, title, notes, application
-                };
-                appState.sermons.unshift(newEntry);
+                });
             }
 
             saveState();
@@ -400,7 +391,7 @@
             archive.innerHTML = '';
 
             if (appState.sermons.length === 0) {
-                archive.innerHTML = `<p class="text-xs text-center text-slate-400 py-4 italic">No journal entry sessions stored yet.</p>`;
+                archive.innerHTML = `<p class="text-xs text-center text-slate-400 py-4 italic">No journal entries stored yet.</p>`;
                 return;
             }
 
@@ -411,17 +402,16 @@
                     <div class="flex items-start justify-between mb-2">
                         <div>
                             <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">${sermon.date} • ${sermon.speaker}</span>
-                            <!-- Repaired Missing Opening Bracket Syntax Bug Successfully Here -->
                             <h4 class="font-serif text-sm font-bold text-slate-900 tracking-wide mt-0.5">${sermon.title}</h4>
                             <p class="text-[11px] font-medium text-emerald-700 mt-0.5">${sermon.passage}</p>
                         </div>
-                        <div class="flex space-x-1 opacity-0 group-hover:opacity-100 print:hidden transition-all">
-                            <button onclick="editSermon('${sermon.id}')" class="text-[11px] font-medium text-slate-600 hover:bg-white border border-transparent hover:border-slate-200 px-2 py-1 rounded-md">Edit</button>
+                        <div class="flex space-x-1 opacity-0 group-hover:opacity-100 transition-all print:hidden">
+                            <button onclick="editSermon('${sermon.id}')" class="text-[11px] font-medium text-slate-600 hover:bg-white border px-2 py-1 rounded-md">Edit</button>
                             <button onclick="deleteSermon('${sermon.id}')" class="text-[11px] font-medium text-rose-600 hover:bg-rose-50 px-2 py-1 rounded-md">Delete</button>
                         </div>
                     </div>
-                    ${sermon.notes ? `<div class="mt-2 text-xs text-slate-600 whitespace-pre-wrap bg-white p-2.5 rounded-lg border border-slate-200/60"><strong class="text-[10px] uppercase text-slate-400 block mb-1">Notes</strong>${sermon.notes}</div>` : ''}
-                    ${sermon.application ? `<div class="mt-2 text-xs text-slate-600 whitespace-pre-wrap bg-emerald-50/50 p-2.5 rounded-lg border border-emerald-100"><strong class="text-[10px] uppercase text-emerald-600/80 block mb-1">Application Journey</strong>${sermon.application}</div>` : ''}
+                    ${sermon.notes ? `<div class="mt-2 text-xs text-slate-600 bg-white p-2.5 rounded-lg border border-slate-200/60"><strong class="text-[10px] uppercase text-slate-400 block mb-1">Notes</strong>${sermon.notes}</div>` : ''}
+                    ${sermon.application ? `<div class="mt-2 text-xs text-slate-600 bg-emerald-50/50 p-2.5 rounded-lg border border-emerald-100"><strong class="text-[10px] uppercase text-emerald-600/80 block mb-1">Application Journey</strong>${sermon.application}</div>` : ''}
                 `;
                 archive.appendChild(item);
             });
@@ -451,7 +441,7 @@
         }
 
         function deleteSermon(id) {
-            if (confirm("Delete this journal entry profile permanently?")) {
+            if (confirm("Delete this entry permanently?")) {
                 appState.sermons = appState.sermons.filter(s => s.id !== id);
                 saveState();
                 renderSermons();
@@ -459,20 +449,9 @@
         }
 
         function resetAllData() {
-            if (confirm("Are you sure you want to completely wipe all local storage metrics? This cannot be undone.")) {
+            if (confirm("Reset application data storage?")) {
                 localStorage.removeItem('dei_verbum_state');
-                appState = {
-                    currentWeek: 1,
-                    completedReadings: {},
-                    habits: { prayer: Array(7).fill(false), memory: Array(7).fill(false) },
-                    sermons: []
-                };
-                buildWeekSelector();
-                renderWeek();
-                renderHabits();
-                renderSermons();
-                updateGlobalMetrics();
-                clearSermonForm();
+                location.reload();
             }
         }
     </script>
