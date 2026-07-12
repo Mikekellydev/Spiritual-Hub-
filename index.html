@@ -92,14 +92,14 @@
                     <span class="text-[10px] text-stone-400 font-bold uppercase block mb-1">Tue</span>
                     <button id="habit-tue" onclick="toggleHabitDay('Tue')" class="w-8 h-8 mx-auto text-xs font-bold border border-stone-200 rounded-full text-stone-600 hover:border-emerald-600 transition">T</button>
                 </div>
-                <div>
-                    <span class="text-[10px] text-stone-400 font-bold uppercase block mb-1">Wed</span>
-                    <button id="habit-wed" onclick="toggleHabitDay('Wed')" class="w-8 h-8 mx-auto text-xs font-bold border border-stone-200 rounded-full text-stone-600 hover:border-emerald-600 transition">W</button>
-                </div>
-                <div>
-                    <span class="text-[10px] text-stone-400 font-bold uppercase block mb-1">Thu</span>
-                    <button id="habit-thu" onclick="toggleHabitDay('Thu')" class="w-8 h-8 mx-auto text-xs font-bold border border-stone-200 rounded-full text-stone-600 hover:border-emerald-600 transition">T</button>
-                </div>
+                <div class="text-center">
+    <span class="text-[10px] text-stone-400 font-bold uppercase block mb-1">Wed</span>
+    <button id="habit-wed" onclick="toggleHabitDay('Wed')" class="w-8 h-8 rounded-full bg-stone-100 border border-stone-200 text-stone-500 font-bold text-xs flex items-center justify-center mx-auto">W</button>
+</div>
+<div class="text-center">
+    <span class="text-[10px] text-stone-400 font-bold uppercase block mb-1">Thu</span>
+    <button id="habit-thu" onclick="toggleHabitDay('Thu')" class="w-8 h-8 rounded-full bg-stone-100 border border-stone-200 text-stone-500 font-bold text-xs flex items-center justify-center mx-auto">Th</button>
+</div>
                 <div>
                     <span class="text-[10px] text-stone-400 font-bold uppercase block mb-1">Fri</span>
                     <button id="habit-fri" onclick="toggleHabitDay('Fri')" class="w-8 h-8 mx-auto text-xs font-bold border border-stone-200 rounded-full text-stone-600 hover:border-emerald-600 transition">F</button>
@@ -289,125 +289,127 @@
         </button>
     </footer>
 
-    <script>
-        let sermonVault = JSON.parse(localStorage.getItem('scribe_sermon_vault')) || [];
-        let careVault = JSON.parse(localStorage.getItem('scribe_care_vault')) || [];
-        let matrixProgress = JSON.parse(localStorage.getItem('scribe_matrix_progress')) || {};
-        let habitState = JSON.parse(localStorage.getItem('scribe_habit_state')) || { Mon: false, Tue: false, Wed: false, Thu: false, Fri: false, Sat: false, Sun: false, streak: 0, target: 0 };
-        let photoAttachmentsBuffer = [];
+	<script>
+        // Global State Registers
+        let sermonVault = [];
+        let careVault = [];
+        let matrixProgress = {};
+        let habitState = { Mon: false, Tue: false, Wed: false, Thu: false, Fri: false, Sat: false, Sun: false, target: 0, streak: 0 };
         let currentSelectedWeek = 1;
 
-        // Structured comprehensive 52-week themed database dictionary
+        // Core Static 52-Week Master Data Array Structure
         const masterAnnualPlan = {
-            1: { theme: "Wisdom Literature", readings: [
-                { day: "Mon", text: "Foundation of Wisdom", passage: "Proverbs 4:20-27" },
-                { day: "Tue", text: "Asking for Discernment", passage: "James 1:2-8" },
-                { day: "Wed", text: "Two Kinds of Wisdom", passage: "James 3:13-18" },
-                { day: "Thu", text: "Building on the Rock", passage: "Matthew 7:24-27" },
-                { day: "Fri", text: "Wisdom Over Wealth", passage: "Proverbs 3:13-18" },
-                { day: "Sat", text: "Walking Circumspectly", passage: "Ephesians 5:15-21" },
-                { day: "Sun", text: "Hidden Treasures of Knowledge", passage: "Colossians 2:1-7" }
+            1: { theme: "Foundations of Faith", readings: [
+                { day: "Mon", text: "The Character of God", passage: "Psalm 103:1-5" },
+                { day: "Tue", text: "The Authority of Scripture", passage: "2 Timothy 3:14-17" },
+                { day: "Wed", text: "The Deity of Christ", passage: "John 1:1-4" },
+                { day: "Thu", text: "Justification by Faith", passage: "Romans 3:21-26" },
+                { day: "Fri", text: "The Work of the Spirit", passage: "John 16:7-11" },
+                { day: "Sat", text: "The Call to Holiness", passage: "1 Peter 1:13-16" },
+                { day: "Sun", text: "The Eternal Hope", passage: "Revelation 21:1-4" }
             ]},
-            2: { theme: "The Character of God", readings: [
-                { day: "Mon", text: "God is Holy", passage: "Isaiah 6:1-5" },
-                { day: "Tue", text: "God is Love", passage: "1 John 4:7-12" },
-                { day: "Wed", text: "God is Faithful", passage: "Lamentations 3:22-26" },
-                { day: "Thu", text: "God is Unchanging", passage: "Malachi 3:6-7" },
-                { day: "Fri", text: "God is Merciful", passage: "Psalm 103:8-14" },
-                { day: "Sat", text: "God is Just", passage: "Deuteronomy 32:3-4" },
-                { day: "Sun", text: "God is Omnipotent", passage: "Psalm 139:1-6" }
+            2: { theme: "Identity in Christ", readings: [
+                { day: "Mon", text: "New Creation Status", passage: "2 Corinthians 5:16-18" },
+                { day: "Tue", text: "Adopted as Children", passage: "Galatians 4:4-7" },
+                { day: "Wed", text: "Chosen and Blameless", passage: "Ephesians 1:3-6" },
+                { day: "Thu", text: "Temple of Holy Spirit", passage: "1 Corinthians 6:19-20" },
+                { day: "Fri", text: "Dead to Sin, Alive in God", passage: "Romans 6:11-14" },
+                { day: "Sat", text: "Citizens of Heaven", passage: "Philippians 3:20-21" },
+                { day: "Sun", text: "God's Workmanship Masterpiece", passage: "Ephesians 2:8-10" }
             ]},
-            3: { theme: "Identity in Christ", readings: [
-                { day: "Mon", text: "New Creation", passage: "2 Corinthians 5:16-21" },
-                { day: "Tue", text: "Chosen & Adopted", passage: "Ephesians 1:3-8" },
-                { day: "Wed", text: "Friend of God", passage: "John 15:12-17" },
-                { day: "Thu", text: "Temple of the Spirit", passage: "1 Corinthians 6:19-20" },
-                { day: "Fri", text: "Citizen of Heaven", passage: "Philippians 3:17-21" },
-                { day: "Sat", text: "Masterpiece of Grace", passage: "Ephesians 2:8-10" },
-                { day: "Sun", text: "Free from Condemnation", passage: "Romans 8:1-4" }
+            3: { theme: "The Power of Prayer", readings: [
+                { day: "Mon", text: "The Pattern of Prayer", passage: "Matthew 6:9-13" },
+                { day: "Tue", text: "Persistent Prayer Asking", passage: "Luke 11:5-10" },
+                { day: "Wed", text: "Praying in the Spirit", passage: "Jude 1:20-21" },
+                { day: "Thu", text: "Intercession for Leadership", passage: "1 Timothy 2:1-4" },
+                { day: "Fri", text: "Confidence in Drawing Near", passage: "Hebrews 4:14-16" },
+                { day: "Sat", text: "The Prayer of Faith Works", passage: "James 5:13-16" },
+                { day: "Sun", text: "Anxious for Nothing Peace", passage: "Philippians 4:6-7" }
             ]},
-            4: { theme: "The Power of Prayer", readings: [
-                { day: "Mon", text: "The Model Prayer", passage: "Matthew 6:9-13" },
-                { day: "Tue", text: "Pray Without Ceasing", passage: "1 Thessalonians 5:16-18" },
-                { day: "Wed", text: "Confidence in Prayer", passage: "1 John 5:14-15" },
-                { day: "Thu", text: "Praying in Faith", passage: "Mark 11:22-25" },
-                { day: "Fri", text: "The Persistent Widow", passage: "Luke 18:1-8" },
-                { day: "Sat", text: "Anxious for Nothing", passage: "Philippians 4:6-7" },
-                { day: "Sun", text: "The Interceding Spirit", passage: "Romans 8:26-27" }
+            4: { theme: "Spiritual Warfare", readings: [
+                { day: "Mon", text: "The Reality of Battle", passage: "Ephesians 6:10-13" },
+                { day: "Tue", text: "The Defensive Armor Plates", passage: "Ephesians 6:14-17" },
+                { day: "Wed", text: "The Offensive Sword Weapon", passage: "Ephesians 6:18-20" },
+                { day: "Thu", text: "Weapons of Our Warfare Focus", passage: "2 Corinthians 10:3-5" },
+                { day: "Fri", text: "Resisting the Devil Alertness", passage: "1 Peter 5:8-9" },
+                { day: "Sat", text: "Submission and Flight Principle", passage: "James 4:7-10" },
+                { day: "Sun", text: "The Overcoming Victory Song", passage: "1 John 5:4-5" }
             ]},
-            5: { theme: "Walking in Faith", readings: [
-                { day: "Mon", text: "Definition of Faith", passage: "Hebrews 11:1-3" },
-                { day: "Tue", text: "Trusting Completely", passage: "Proverbs 3:5-6" },
-                { day: "Wed", text: "Shield of Faith", passage: "Ephesians 6:10-16" },
-                { day: "Thu", text: "Faith and Works", passage: "James 2:14-18" },
-                { day: "Fri", text: "Moving Mountains", passage: "Matthew 17:14-20" },
-                { day: "Sat", text: "Faithful in Little", passage: "Luke 16:10-12" },
-                { day: "Sun", text: "Living by Faith", passage: "Galatians 2:20" }
+            5: { theme: "The Fruit of Love", readings: [
+                { day: "Mon", text: "The Definition of Love", passage: "1 Corinthians 13:1-3" },
+                { day: "Tue", text: "The Character of Love", passage: "1 Corinthians 13:4-7" },
+                { day: "Wed", text: "The Permanence of Love", passage: "1 Corinthians 13:8-13" },
+                { day: "Thu", text: "The Commandment of Love", passage: "John 15:12-17" },
+                { day: "Fri", text: "Love in Action Real", passage: "1 John 3:16-18" },
+                { day: "Sat", text: "The Origin of Love Source", passage: "1 John 4:7-11" },
+                { day: "Sun", text: "Perfect Love Casts Fear", passage: "1 John 4:16-19" }
             ]},
-            6: { theme: "The Fruit of the Spirit", readings: [
-                { day: "Mon", text: "Love and Joy", passage: "Galatians 5:22-26" },
-                { day: "Tue", text: "Walk in Love", passage: "Ephesians 5:1-5" },
-                { day: "Wed", text: "Peace and Patience", passage: "Colossians 3:12-15" },
-                { day: "Thu", text: "Kindness and Goodness", passage: "Titus 3:3-7" },
-                { day: "Fri", text: "Faithfulness", passage: "Psalm 37:3-7" },
-                { day: "Sat", text: "Gentleness and Self-Control", passage: "2 Peter 1:5-9" },
-                { day: "Sun", text: "Keeping in Step", passage: "Romans 12:9-18" }
+            6: { theme: "The Fruit of Joy & Peace", readings: [
+                { day: "Mon", text: "Joy in the Lord Always", passage: "Philippians 4:4-5" },
+                { day: "Tue", text: "Joy Inexpressible and Filled", passage: "1 Peter 1:8-9" },
+                { day: "Wed", text: "The Joy of the Lord Strength", passage: "Nehemiah 8:10" },
+                { day: "Thu", text: "Peace Left with Followers", passage: "John 14:25-27" },
+                { day: "Fri", text: "The Peace That Guards Hearts", passage: "Philippians 4:6-7" },
+                { day: "Sat", text: "Mind Stayed on God Peace", passage: "Isaiah 26:3-4" },
+                { day: "Sun", text: "Peace with God Justification", passage: "Romans 5:1-2" }
             ]},
-            7: { theme: "Overcoming Fear", readings: [
-                { day: "Mon", text: "God Is My Light", passage: "Psalm 27:1-6" },
-                { day: "Tue", text: "Do Not Be Dismayed", passage: "Isaiah 41:8-13" },
-                { day: "Wed", text: "Power, Love, Self-Control", passage: "2 Timothy 1:3-8" },
-                { day: "Thu", text: "Peace I Leave You", passage: "John 14:25-29" },
-                { day: "Fri", text: "The Lord Holds My Hand", passage: "Psalm 46:1-7" },
-                { day: "Sat", text: "Perfect Love Casts Out Fear", passage: "1 John 4:16-19" },
-                { day: "Sun", text: "Casting Your Care", passage: "1 Peter 5:6-11" }
+            7: { theme: "Patience and Kindness", readings: [
+                { day: "Mon", text: "Patience in Affliction", passage: "Romans 12:12" },
+                { day: "Tue", text: "Better a Patient Spirit", passage: "Ecclesiastes 7:8" },
+                { day: "Wed", text: "Patience Until His Coming", passage: "James 5:7-8" },
+                { day: "Thu", text: "Kindness Clothes for Saints", passage: "Colossians 3:12" },
+                { day: "Fri", text: "God's Kindness Leads Repent", passage: "Romans 2:4" },
+                { day: "Sat", text: "Kind and Tenderhearted Walk", passage: "Ephesians 4:32" },
+                { day: "Sun", text: "Love is Patient and Kind", passage: "1 Corinthians 13:4" }
             ]},
-            8: { theme: "Guard Your Heart", readings: [
-                { day: "Mon", text: "Springs of Life", passage: "Proverbs 4:20-24" },
-                { day: "Tue", text: "Pure Hearts", passage: "Matthew 5:3-8" },
-                { day: "Wed", text: "Renewed From Within", passage: "Psalm 51:10-13" },
-                { day: "Thu", text: "Testing the Mind", passage: "Jeremiah 17:7-10" },
-                { day: "Fri", text: "Whatever is Pure", passage: "Philippians 4:8-9" },
-                { day: "Sat", text: "Good Soil Hearts", passage: "Luke 8:11-15" },
-                { day: "Sun", text: "Blameless Holies", passage: "1 Thessalonians 3:11-13" }
+            8: { theme: "Goodness and Faithfulness", readings: [
+                { day: "Mon", text: "The Goodness of the Lord", passage: "Psalm 27:13" },
+                { day: "Tue", text: "Trust and Do Good Pattern", passage: "Psalm 37:3" },
+                { day: "Wed", text: "Rich in Good Works Command", passage: "1 Timothy 6:18" },
+                { day: "Thu", text: "Great is Your Faithfulness", passage: "Lamentations 3:22-24" },
+                { day: "Fri", text: "Faithful in Little Things", passage: "Luke 16:10" },
+                { day: "Sat", text: "God is Faithful Temptation", passage: "1 Corinthians 10:13" },
+                { day: "Sun", text: "Crown of Life Faithfulness", passage: "Revelation 2:10" }
             ]},
-            9: { theme: "The Call to Worship", readings: [
-                { day: "Mon", text: "A Holy Invitation", passage: "Psalm 95:1-7" },
-                { day: "Tue", text: "Spirit and Truth", passage: "John 4:21-24" },
-                { day: "Wed", text: "Glory Due His Name", passage: "Psalm 29:1-4" },
-                { day: "Thu", text: "Living Sacrifices", passage: "Romans 12:1-2" },
-                { day: "Fri", text: "Throne Room Praise", passage: "Revelation 4:8-11" },
-                { day: "Sat", text: "Sacrifice of Praise", passage: "Hebrews 13:12-16" },
-                { day: "Sun", text: "Bless the Lord", passage: "Psalm 103:1-5" }
+            9: { theme: "Gentleness & Self-Control", readings: [
+                { day: "Mon", text: "A Gentle Answer Turns Wrath", passage: "Proverbs 15:1" },
+                { day: "Tue", text: "Walk Worthy in Gentleness", passage: "Ephesians 4:1-2" },
+                { day: "Wed", text: "Reason for Hope in Gentleness", passage: "1 Peter 3:15" },
+                { day: "Thu", text: "City Broken Down No Walls", passage: "Proverbs 25:28" },
+                { day: "Fri", text: "Sober-Minded and Watchful", passage: "1 Peter 4:7" },
+                { day: "Sat", text: "Training to Live Self-Controlled", passage: "Titus 2:11-12" },
+                { day: "Sun", text: "Spirit of Power Love Discipline", passage: "2 Timothy 1:7" }
             ]},
-            10: { theme: "Servant Leadership", readings: [
-                { day: "Mon", text: "Not to Be Served", passage: "Matthew 20:25-28" },
-                { day: "Tue", text: "Washing Feet", passage: "John 13:12-17" },
-                { day: "Wed", text: "Mind of Christ", passage: "Philippians 2:3-8" },
-                { day: "Thu", text: "Shepherding Content", passage: "1 Peter 5:1-4" },
-                { day: "Fri", text: "Least of All", passage: "Mark 9:33-37" },
-                { day: "Sat", text: "Fit for Service", passage: "2 Timothy 2:20-24" },
-                { day: "Sun", text: "Leading With Integrity", passage: "Psalm 78:70-72" }
+            10: { theme: "The Mindset of Stewardship", readings: [
+                { day: "Mon", text: "The Earth is the Lord's Ownership", passage: "Psalm 24:1-2" },
+                { day: "Tue", text: "Stewards of God's Mysteries", passage: "1 Corinthians 4:1-2" },
+                { day: "Wed", text: "Using Talents Productively", passage: "Matthew 25:14-19" },
+                { day: "Thu", text: "Accountability Matrix Check", passage: "Matthew 25:20-23" },
+                { day: "Fri", text: "Good Stewards of Varied Grace", passage: "1 Peter 4:10" },
+                { day: "Sat", text: "Honoring God with Firstfruits", passage: "Proverbs 3:9-10" },
+                { day: "Sun", text: "Where Wealth Tracker Lies Heart", passage: "Matthew 6:19-21" }
             ]},
-            11: { theme: "Renewing the Mind", readings: [
-                { day: "Mon", text: "Transformed Thoughts", passage: "Romans 12:1-2" },
-                { day: "Tue", text: "Set Your Mind Above", passage: "Colossians 3:1-4" },
-                { day: "Wed", text: "Take Thoughts Captive", passage: "2 Corinthians 10:3-5" },
-                { day: "Thu", text: "Think on These Things", passage: "Philippians 4:8-9" },
-                { day: "Fri", text: "Spiritually Minded Life", passage: "Romans 8:5-8" },
-                { day: "Sat", text: "Perfect Peace Mind", passage: "Isaiah 26:3-4" },
-                { day: "Sun", text: "Renewed in the Spirit", passage: "Ephesians 4:20-24" }
+            11: { theme: "Evangelism & Mission", readings: [
+                { day: "Mon", text: "The Great Commission Mandate", passage: "Matthew 28:18-20" },
+                { day: "Tue", text: "Witnesses to End of Earth", passage: "Acts 1:8" },
+                { day: "Wed", text: "Not Ashamed of the Gospel", passage: "Romans 1:16" },
+                { day: "Thu", text: "Beautiful Feet Proclamation", passage: "Romans 10:13-15" },
+                { day: "Fri", text: "Light of the World City", passage: "Matthew 5:14-16" },
+                { day: "Sat", text: "Ready to Make Defense Hope", passage: "1 Peter 3:15" },
+                { day: "Sun", text: "Proclaim Excel Feats Called", passage: "1 Peter 2:9" }
             ]},
-            12: { theme: "Spiritual Warfare", readings: [
-                { day: "Mon", text: "The Whole Armor", passage: "Ephesians 6:10-13" },
-                { day: "Tue", text: "Belt of Truth", passage: "Ephesians 6:14" },
-                { day: "Wed", text: "Shield and Shoes", passage: "Ephesians 6:15-16" },
-                { day: "Thu", text: "Helmet and Sword", passage: "Ephesians 6:17-18" },
-                { day: "Fri", text: "Resist the Devil", passage: "James 4:7-10" },
-                { day: "Sat", text: "Be Sober and Vigilant", passage: "1 Peter 5:8-9" },
-                { day: "Sun", text: "Overcoming Weapons", passage: "2 Corinthians 10:3-6" }
+            12: { theme: "Suffering & Perseverance", readings: [
+                { day: "Mon", text: "Testing of Faith Endurance", passage: "James 1:2-4" },
+                { day: "Tue", text: "Suffering Produces Character", passage: "Romans 5:3-5" },
+                { day: "Wed", text: "Light Momentary Affliction", passage: "2 Corinthians 4:16-18" },
+                { day: "Thu", text: "Share in Christ's Sufferings", passage: "1 Peter 4:12-14" },
+                { day: "Fri", text: "The God of All Comfort Near", passage: "2 Corinthians 1:3-4" },
+                { day: "Sat", text: "Fought the Good Fight Done", passage: "2 Timothy 4:7-8" },
+                { day: "Sun", text: "No More Tears or Sorrow", passage: "Revelation 21:3-4" }
             ]}
-	    // Comprehensive unique themes mapping covering weeks 13 through 52
+        };
+
+        // Fully Populated Dynamic Extension Matrix for Weeks 13 through 52
         const remainingThemes = {
             13: { theme: "The Grace of God", readings: [
                 { day: "Mon", text: "Saved by Grace", passage: "Ephesians 2:4-10" },
@@ -689,7 +691,7 @@
                 { day: "Sun", text: "Life Not Consist Abundance", passage: "Luke 12:15" }
             ]},
             44: { theme: "Spiritual Alertness", readings: [
-                { day: "Mon", text: "Be Sober Mind Alert Devil", passage: "1 Peter 5:8-9" },
+                { day: "Mon", text: "Be Sober Mind Alert Devil", passage: "1 Guide 5:8-9" },
                 { day: "Tue", text: "Watch Pray Enter Tempt", passage: "Matthew 26:40-41" },
                 { day: "Wed", text: "Keep Awake Hour Unknown", passage: "Matthew 24:42-44" },
                 { day: "Thu", text: "Not Sleep as Others Do", passage: "1 Thessalonians 5:4-6" },
@@ -771,389 +773,185 @@
             ]}
         };
 
-        // Merge the populated plan cleanly into the master initialization mapping loop
+        // Merge runtime configurations
         for (let w = 13; w <= 52; w++) {
             masterAnnualPlan[w] = remainingThemes[w];
         }
-            };
-        }
 
-        const bookUrlMapping = {
-            'gen': 'GEN', 'genesis': 'GEN', 'ex': 'EXO', 'exodus': 'EXO', 'lev': 'LEV', 'leviticus': 'LEV', 'num': 'NUM', 'numbers': 'NUM', 'deut': 'DEU', 'deuteronomy': 'DEU',
-            'josh': 'JSH', 'joshua': 'JSH', 'judg': 'JDG', 'judges': 'JDG', 'ruth': 'RUT', '1sam': '1SA', '2sam': '2SA', '1kings': '1KI', '2kings': '2KI', '1chron': '1CH',
-            '2chron': '2CH', 'ezra': 'EZR', 'neh': 'NEH', 'nehemiah': 'NEH', 'est': 'EST', 'esther': 'EST', 'job': 'JOB', 'ps': 'PSA', 'psalm': 'PSA', 'psalms': 'PSA',
-            'prov': 'PRO', 'proverbs': 'PRO', 'eccl': 'ECC', 'ecclesiastes': 'ECC', 'song': 'SNG', 'isa': 'ISA', 'isaiah': 'ISA', 'jer': 'JER', 'jeremiah': 'JER', 'lam': 'LAM',
-            'lamentations': 'LAM', 'ezek': 'EZK', 'dan': 'DAN', 'daniel': 'DAN', 'hos': 'HOS', 'joel': 'JOL', 'amos': 'AMO', 'obad': 'OBA', 'jonah': 'JNH', 'mic': 'MIC',
-            'nah': 'NAM', 'hab': 'HAB', 'zeph': 'ZEP', 'hag': 'HAG', 'zech': 'ZEC', 'mal': 'MAL', 'matt': 'MAT', 'matthew': 'MAT', 'mark': 'MRK', 'luke': 'LUK', 'john': 'JHN',
-            'acts': 'ACT', 'rom': 'ROM', 'romans': 'ROM', '1cor': '1CO', '2cor': '2CO', 'gal': 'GAL', 'eph': 'EPH', 'ephesians': 'EPH', 'phil': 'PHP', 'philippians': 'PHP',
-            'col': 'COL', 'colossians': 'COL', '1thess': '1TH', '2thess': '2TH', '1tim': '1TI', '2tim': '2TI', 'titus': 'TIT', 'philem': 'PHM', 'heb': 'HEB', 'hebrews': 'HEB',
-            'james': 'JMS', '1pet': '1PE', '1peter': '1PE', '2pet': '2PE', '1jhn': '1JH', '1john': '1JH', '2jhn': '2JH', '3jhn': '3JH', 'jude': 'JUD', 'rev': 'REV', 'revelation': 'REV'
-        };
-
+        // Initialization Routine Engine
         window.onload = function() {
-            // 📅 Live dynamic date calculation
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            document.getElementById('live-banner-date').innerText = new Date().toLocaleDateString('en-US', options);
+            // Update Visual Dynamic Display Timestamp Banner
+            const banner = document.getElementById('live-banner-date');
+            if (banner) {
+                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                banner.innerText = new Date().toLocaleDateString('en-US', options);
+            }
 
-            document.getElementById('note-date').value = new Date().toISOString().split('T')[0];
+            // Read Local Configuration Data States
+            if (localStorage.getItem('scribe_sermon_vault')) {
+                sermonVault = JSON.parse(localStorage.getItem('scribe_sermon_vault'));
+            }
+            if (localStorage.getItem('scribe_care_vault')) {
+                careVault = JSON.parse(localStorage.getItem('scribe_care_vault'));
+            }
+            if (localStorage.getItem('scribe_matrix_progress')) {
+                matrixProgress = JSON.parse(localStorage.getItem('scribe_matrix_progress'));
+            }
+            if (localStorage.getItem('scribe_habit_state')) {
+                habitState = JSON.parse(localStorage.getItem('scribe_habit_state'));
+            }
+
             buildWeekSelectorDropdown();
-            renderHabitsTrackerDisplay();
             renderThematicMatrix();
-            renderRelationalCareList();
             renderNotesArchiveList();
+            renderRelationalCareList();
+            renderHabitsTrackerDisplay();
         };
 
+        // Dropdown Builders
         function buildWeekSelectorDropdown() {
-    const selector = document.getElementById('week-selector');
-    selector.innerHTML = '';
-    
-    for (let i = 1; i <= 52; i++) {
-        const opt = document.createElement('option');
-        opt.value = i;
-        
-        // Grab the theme name from your master database map
-        const themeName = masterAnnualPlan[i] ? masterAnnualPlan[i].theme : `Kingdom Stewardship`;
-        opt.innerText = `Week ${i}: ${themeName}`;
-        
-        if (i === currentSelectedWeek) opt.selected = true;
-        selector.appendChild(opt);
-    }
-}
-
-        function changeActiveWeek(weekNum) {
-            currentSelectedWeek = parseInt(weekNum);
-            renderThematicMatrix();
-        }
-
-        function toggleHabitDay(day) {
-            habitState[day] = !habitState[day];
+            const selector = document.getElementById('week-selector');
+            if (!selector) return;
+            selector.innerHTML = '';
             
-            // Recalculate rolling percentage
-            let checkedCount = 0;
-            const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-            days.forEach(d => { if (habitState[d]) checkedCount++; });
-            habitState.target = Math.round((checkedCount / 7) * 100);
-
-            // Compute sequential current streak
-            let continuousStreak = 0;
-            for (let i = 0; i < days.length; i++) {
-                if (habitState[days[i]]) continuousStreak++;
-                else break;
+            for (let i = 1; i <= 52; i++) {
+                const opt = document.createElement('option');
+                opt.value = i;
+                const themeName = masterAnnualPlan[i]?.theme || "Kingdom Devotional";
+                opt.innerText = `Week ${i}: ${themeName}`;
+                if (i === currentSelectedWeek) opt.selected = true;
+                selector.appendChild(opt);
             }
-            habitState.streak = continuousStreak;
-
-            localStorage.setItem('scribe_habit_state', JSON.stringify(habitState));
-            renderHabitsTrackerDisplay();
         }
 
-        function renderHabitsTrackerDisplay() {
-            const days = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
-            days.forEach(d => {
-                const key = d.charAt(0).toUpperCase() + d.slice(1);
-                const button = document.getElementById(`habit-${d}`);
-                if (habitState[key]) {
-                    button.className = "w-8 h-8 mx-auto text-xs font-bold border rounded-full bg-emerald-800 text-white border-emerald-800 transition shadow-sm";
-                } else {
-                    button.className = "w-8 h-8 mx-auto text-xs font-bold border border-stone-200 rounded-full text-stone-600 hover:border-emerald-600 transition";
-                }
-            });
-
-            document.getElementById('streak-counter-value').innerText = habitState.streak;
-            document.getElementById('target-percentage-value').innerText = `${habitState.target}%`;
-        }
-
-        function generateBibleUrlExplicit(rawCitation, transId) {
-            const cleanStr = rawCitation.trim().replace(/\s+/g, ' ');
-            const regex = /^([1-3]\s)?[A-Za-z]+/g;
-            const match = cleanStr.match(regex);
-            if (!match) return null;
-            const bookNameRaw = match[0].toLowerCase().replace(/\s/g, '');
-            const targetBookCode = bookUrlMapping[bookNameRaw];
-            if (!targetBookCode) return null;
-            const remnant = cleanStr.substring(match[0].length).trim();
-            const numericalParts = remnant.split(':');
-            if (numericalParts.length === 0) return null;
-            const chapter = parseInt(numericalParts[0]);
-            let finalSelection = `${targetBookCode}.${chapter}`;
-            if (numericalParts[1]) {
-                const rangeParts = numericalParts[1].split('-');
-                const startVerse = parseInt(rangeParts[0]);
-                finalSelection += `.${startVerse}`;
-                if (rangeParts[1]) {
-                    const endVerse = parseInt(rangeParts[1]);
-                    finalSelection += `-${endVerse}`;
-                }
-            }
-            return `https://www.bible.com/bible/${transId}/${finalSelection}`;
-        }
-
-        function renderThematicMatrix() {
-    const container = document.getElementById('weekly-matrix-container');
-    container.innerHTML = '';
-    
-    const activeDataset = masterAnnualPlan[currentSelectedWeek];
-    const currentTranslation = document.getElementById('preferred-translation').value || "59";
-
-    if (!activeDataset) return;
-
-    activeDataset.readings.forEach((item, index) => {
-        const bibleUrl = generateBibleUrlExplicit(item.passage, currentTranslation);
-        const clickAction = bibleUrl ? `window.open('${bibleUrl}', '_blank')` : '';
-        const uniqueKey = `${currentSelectedWeek}_${index}`;
-        const isChecked = matrixProgress[uniqueKey] ? 'checked' : '';
-
-        container.innerHTML += `
-            <div class="p-3 bg-[#fcfbf9] border border-stone-200 rounded-xl flex items-center justify-between hover:border-stone-300 transition">
-                <div class="space-y-0.5 cursor-pointer flex-1 pr-4" onclick="${clickAction}">
-                    <div class="flex items-center gap-2">
-                        <span class="text-[10px] font-mono font-bold uppercase text-stone-400">${item.day}</span>
-                        <span class="text-[10px] font-medium text-stone-500">• ${item.text}</span>
-                    </div>
-                    <p class="text-xs font-serif font-bold text-stone-800 hover:text-emerald-800 transition flex items-center gap-1">
-                        ${item.passage} <span class="text-[10px] font-sans text-stone-400 font-normal print:hidden">↗</span>
-                    </p>
-                </div>
-                <input type="checkbox" onchange="toggleMatrixCheckbox('${uniqueKey}', this.checked)" ${isChecked} class="w-4 h-4 accent-emerald-700 rounded focus:ring-0 cursor-pointer">
-            </div>`;
-    });
-}
-
-        function toggleMatrixCheckbox(key, state) {
-            matrixProgress[key] = state;
-            localStorage.setItem('scribe_matrix_progress', JSON.stringify(matrixProgress));
-        }
-
-        function autoUpdateLinksOnTranslationChange() {
+        function changeActiveWeek(selectedVal) {
+            currentSelectedWeek = parseInt(selectedVal) || 1;
             renderThematicMatrix();
-            parseAnchorScripture();
         }
 
-        function parseAnchorScripture() {
-            const val = document.getElementById('note-anchor').value.trim();
-            const trans = document.getElementById('preferred-translation').value;
-            const targetSpan = document.getElementById('anchor-link-preview');
-            if(!val) { targetSpan.innerHTML = ''; return; }
-            const generatedUrl = generateBibleUrlExplicit(val, trans);
-            if(generatedUrl) {
-                targetSpan.innerHTML = `<a href="${generatedUrl}" target="_blank" class="text-emerald-700 font-bold underline">Preview Passage ↗</a>`;
-            } else {
-                targetSpan.innerHTML = `<span class="text-rose-600 font-medium">Unresolved Context</span>`;
-            }
+        // Bible Text Routing Hyperlink Helpers
+        function generateBibleUrlExplicit(passageStr, translationCode) {
+            if (!passageStr) return "";
+            const cleanPassage = encodeURIComponent(passageStr.trim());
+            return `https://www.bible.com/bible/${translationCode}/${cleanPassage}`;
         }
 
-        function submitRelationalCareRecord() {
-            const name = document.getElementById('care-name').value.trim();
-            const season = document.getElementById('care-season').value;
-            const request = document.getElementById('care-request').value.trim();
-            if(!name || !request) { alert("Please input both target name and details."); return; }
+        // Module 2 Matrix Processing
+        function renderThematicMatrix() {
+            const container = document.getElementById('weekly-matrix-container');
+            if (!container) return;
+            container.innerHTML = '';
 
-            const entry = { id: Date.now().toString(), name, season, request };
-            careVault.unshift(entry);
-            localStorage.setItem('scribe_care_vault', JSON.stringify(careVault));
+            const activeDataset = masterAnnualPlan[currentSelectedWeek];
+            const currentTranslation = document.getElementById('preferred-translation')?.value || "59";
 
-            document.getElementById('care-name').value = '';
-            document.getElementById('care-request').value = '';
-            renderRelationalCareList();
-        }
+            if (!activeDataset) return;
 
-        function renderRelationalCareList() {
-            const list = document.getElementById('care-dynamic-list');
-            list.innerHTML = '';
-            if(careVault.length === 0) {
-                list.innerHTML = `<p class="text-[11px] text-stone-400 italic py-2 text-center">No active care targets logged.</p>`;
-                return;
-            }
-            careVault.forEach(item => {
-                const formattedText = item.request.replace(/\n/g, '<br>');
-                list.innerHTML += `
-                    <div class="bg-stone-50 border border-stone-200 p-3 rounded-xl space-y-2 animate-fade-in">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <h4 class="text-xs font-bold text-stone-800">${item.name}</h4>
-                                <span class="text-[10px] bg-stone-200/70 text-stone-600 font-semibold px-2 py-0.5 rounded-full inline-block mt-0.5">${item.season}</span>
+            activeDataset.readings.forEach((item, index) => {
+                const bibleUrl = generateBibleUrlExplicit(item.passage, currentTranslation);
+                const clickAction = bibleUrl ? `window.open('${bibleUrl}', '_blank')` : '';
+                const uniqueKey = `${currentSelectedWeek}_${index}`;
+                const isChecked = matrixProgress[uniqueKey] ? 'checked' : '';
+
+                container.innerHTML += `
+                    <div class="p-3 bg-[#fcfbf9] border border-stone-200 rounded-xl flex items-center justify-between hover:border-stone-300 transition">
+                        <div class="space-y-0.5 cursor-pointer flex-1 pr-4" onclick="${clickAction}">
+                            <div class="flex items-center gap-2">
+                                <span class="text-[10px] font-mono font-bold uppercase text-stone-400">${item.day}</span>
+                                <span class="text-[10px] font-medium text-stone-500">• ${item.text}</span>
                             </div>
-                            <div class="flex gap-2 print:hidden">
-                                <button onclick="toggleInlineUpdateField('${item.id}')" class="text-[11px] font-bold text-emerald-700 hover:underline">Update</button>
-                                <button onclick="removeRelationalCareItem('${item.id}')" class="text-stone-300 hover:text-rose-600 text-xs font-bold px-1 transition">✕</button>
-                            </div>
+                            <p class="text-xs font-serif font-bold text-stone-800 hover:text-emerald-800 transition flex items-center gap-1">
+                                ${item.passage} <span class="text-[10px] font-sans text-stone-400 font-normal print:hidden">↗</span>
+                            </p>
                         </div>
-                        <p class="text-xs text-stone-600 leading-relaxed italic">"${formattedText}"</p>
-                        
-                        <div id="inline-update-box-${item.id}" class="hidden pt-2 border-t border-stone-200/60 space-y-2 print:hidden">
-                            <textarea id="update-text-field-${item.id}" rows="2" class="w-full bg-white border border-stone-200 p-2 rounded-xl text-xs font-medium focus:outline-none focus:ring-1 focus:ring-emerald-700 shadow-inner" placeholder="Append details, milestones, or updates..."></textarea>
-                            <div class="flex justify-end gap-1.5">
-                                <button onclick="toggleInlineUpdateField('${item.id}')" class="text-[10px] text-stone-500 font-bold px-2 py-1 hover:bg-stone-100 rounded">Cancel</button>
-                                <button onclick="saveInlineCareUpdate('${item.id}')" class="text-[10px] bg-emerald-700 text-white font-bold px-2.5 py-1 hover:bg-emerald-800 rounded shadow-sm transition">Append Update</button>
-                            </div>
-                        </div>
+                        <input type="checkbox" onchange="toggleMatrixCheckbox('${uniqueKey}', this.checked)" ${isChecked} class="w-4 h-4 accent-emerald-700 rounded focus:ring-0 cursor-pointer">
                     </div>`;
             });
         }
 
-        function toggleInlineUpdateField(id) {
-            const box = document.getElementById(`inline-update-box-${id}`);
-            if(box) box.classList.toggle('hidden');
+        function toggleMatrixCheckbox(key, isChecked) {
+            matrixProgress[key] = isChecked;
+            localStorage.setItem('scribe_matrix_progress', JSON.stringify(matrixProgress));
         }
 
-        function saveInlineCareUpdate(id) {
-            const textarea = document.getElementById(`update-text-field-${id}`);
-            const updateText = textarea.value.trim();
-            if(!updateText) { alert("Please input update text."); return; }
-            const idx = careVault.findIndex(i => i.id === id);
-            if(idx > -1) {
-                careVault[idx].request += `\n\n[Update]: ${updateText}`;
-                localStorage.setItem('scribe_care_vault', JSON.stringify(careVault));
-                renderRelationalCareList();
-            }
+        // Module 3 Sermon Ledger Logic
+        function triggerSermonPhotoUpload() {
+            document.getElementById('sermon-photo-input').click();
         }
 
-        function removeRelationalCareItem(id) {
-            if(confirm("Permanently archive this prayer item?")) {
-                careVault = careVault.filter(i => i.id !== id);
-                localStorage.setItem('scribe_care_vault', JSON.stringify(careVault));
-                renderRelationalCareList();
-            }
-        }
+        function saveSermonVaultItem() {
+            const category = document.getElementById('sermon-category').value;
+            const title = document.getElementById('sermon-title').value.trim();
+            const scripture = document.getElementById('sermon-scripture').value.trim();
+            const content = document.getElementById('note-editor').innerHTML;
+            const fileInput = document.getElementById('sermon-photo-input');
 
-        function toggleSermonDrawer(openState) {
-            const drawer = document.getElementById('sermon-drawer');
-            const backdrop = document.getElementById('sermon-drawer-backdrop');
-            if (openState) {
-                document.body.classList.add('overflow-hidden');
-                backdrop.classList.remove('hidden');
-                setTimeout(() => {
-                    backdrop.classList.add('opacity-100');
-                    drawer.classList.remove('translate-y-full');
-                    drawer.classList.add('translate-y-0');
-                }, 10);
-            } else {
-                document.body.classList.remove('overflow-hidden');
-                backdrop.classList.remove('opacity-100');
-                drawer.classList.remove('translate-y-0');
-                drawer.classList.add('translate-y-full');
-                setTimeout(() => { backdrop.classList.add('hidden'); }, 300);
-            }
-        }
+            if (!title) { alert("Please input a study/sermon title."); return; }
 
-        function format(command) {
-            document.execCommand(command, false, null);
-        }
-
-        function insertInlineTodoCheckbox() {
-            const checkboxHtml = `<input type="checkbox" class="w-3.5 h-3.5 mx-1 text-emerald-700 accent-emerald-700 rounded border-stone-300 focus:ring-0"> `;
-            document.execCommand('insertHTML', false, checkboxHtml);
-        }
-
-        function handleImageAttachment(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const grid = document.getElementById('attachments-preview-grid');
-                    grid.classList.remove('hidden');
-                    const imgId = Date.now().toString();
-                    photoAttachmentsBuffer.push(e.target.result);
-                    
-                    grid.innerHTML += `
-                        <div id="attached-${imgId}" class="relative bg-stone-100 border border-stone-200 rounded-xl overflow-hidden aspect-square shadow-sm">
-                            <img src="${e.target.result}" class="w-full h-full object-cover">
-                            <button onclick="removeAttachedPhoto('${imgId}', '${e.target.result}')" class="absolute top-1 right-1 bg-black/60 text-white rounded-full w-4 h-4 text-[10px] flex items-center justify-center">×</button>
-                        </div>`;
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        function removeAttachedPhoto(elementId, base64Data) {
-            const el = document.getElementById(`attached-${elementId}`);
-            if (el) el.remove();
-            photoAttachmentsBuffer = photoAttachmentsBuffer.filter(img => img !== base64Data);
-            if (photoAttachmentsBuffer.length === 0) {
-                document.getElementById('attachments-preview-grid').classList.add('hidden');
-            }
-        }
-
-        function autoHyperlinkCanvasText() {
-            let editorHtml = document.getElementById('note-editor').innerHTML;
-            const trans = document.getElementById('preferred-translation').value;
-            
-            // Regex match structures matching: Book Chapter:Verse-Range
-            const expression = /\b(?:Gen|Genesis|Ex|Exodus|Lev|Leviticus|Num|Numbers|Deut|Deuteronomy|Josh|Joshua|Judg|Judges|Ruth|1Sam|2Sam|1Kings|2Kings|1Chron|2Chron|Ezra|Neh|Nehemiah|Est|Esther|Job|Ps|Psalm|Psalms|Prov|Proverbs|Eccl|Ecclesiastes|Song|Isa|Isaiah|Jer|Jeremiah|Lam|Lamentations|Ezek|Dan|Daniel|Hos|Joel|Amos|Obad|Jonah|Mic|Nah|Hab|Zeph|Hag|Zech|Mal|Matt|Matthew|Mark|Luke|John|Acts|Rom|Romans|1Cor|2Cor|Gal|Eph|Ephesians|Phil|Philippians|Col|Colossians|1Thess|2Thess|1Tim|2Tim|Titus|Philem|Heb|Hebrews|James|1Pet|1Peter|2Pet|1Jhn|1John|2John|Jude|Rev|Revelation)\s\d+:\d+(?:-\d+)?\b/gi;
-            
-            editorHtml = editorHtml.replace(expression, function(match) {
-                const url = generateBibleUrlExplicit(match, trans);
-                return url ? `<a href="${url}" target="_blank" class="text-emerald-800 font-bold underline decoration-dotted">${match}</a>` : match;
-            });
-
-            // Handle semantic knowledge tags matching [[Concept]] or [[Name]]
-            editorHtml = editorHtml.replace(/\[\[(.*?)\]\]/g, `<span class="bg-emerald-50 text-emerald-800 font-semibold px-1.5 py-0.5 rounded border border-emerald-200/50">#$1</span>`);
-
-            document.getElementById('note-editor').innerHTML = editorHtml;
-        }
-
-        function saveActiveSermonNote() {
-            const titleInput = document.getElementById('note-title').value.trim();
-            const dateInput = document.getElementById('note-date').value;
-            const editor = document.getElementById('note-editor');
-            if (!titleInput) { alert("Please supply a sermon title or series header."); return; }
-
-            const payload = {
-                id: Date.now().toString(),
-                date: dateInput,
-                speaker: document.getElementById('note-speaker').value.trim(),
-                title: titleInput,
-                anchorScripture: document.getElementById('note-anchor').value.trim(),
-                translation: document.getElementById('preferred-translation').value,
-                content: editor.innerHTML,
-                photos: [...photoAttachmentsBuffer]
+            const newEntry = {
+                id: 'sermon_' + Date.now(),
+                date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+                category, title, anchorScripture: scripture, content, photos: []
             };
 
-            const index = sermonVault.findIndex(item => item.date === payload.date && item.title === payload.title);
-            if (index > -1) sermonVault[index] = payload;
-            else sermonVault.unshift(payload);
-
-            localStorage.setItem('scribe_sermon_vault', JSON.stringify(sermonVault));
-            clearCurrentEditor();
-            renderNotesArchiveList();
-            toggleSermonDrawer(false);
-            alert("Sermon entry compiled successfully.");
+            if (fileInput.files && fileInput.files.length > 0) {
+                let loadedCount = 0;
+                Array.from(fileInput.files).forEach(file => {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        newEntry.photos.push(e.target.result);
+                        loadedCount++;
+                        if (loadedCount === fileInput.files.length) {
+                            commitSermonEntry(newEntry);
+                        }
+                    };
+                    reader.readAsDataURL(file);
+                });
+            } else {
+                commitSermonEntry(newEntry);
+            }
         }
 
-        function clearCurrentEditor() {
-            document.getElementById('note-title').value = '';
-            document.getElementById('note-speaker').value = '';
-            document.getElementById('note-anchor').value = '';
+        function commitSermonEntry(entry) {
+            sermonVault.unshift(entry);
+            localStorage.setItem('scribe_sermon_vault', JSON.stringify(sermonVault));
+            
+            // Clean inputs
+            document.getElementById('sermon-title').value = '';
+            document.getElementById('sermon-scripture').value = '';
             document.getElementById('note-editor').innerHTML = '';
-            document.getElementById('anchor-link-preview').innerHTML = '';
-            document.getElementById('attachments-preview-grid').innerHTML = '';
-            document.getElementById('attachments-preview-grid').classList.add('hidden');
-            document.getElementById('note-date').value = new Date().toISOString().split('T')[0];
-            photoAttachmentsBuffer = [];
+            document.getElementById('sermon-photo-input').value = '';
+
+            renderNotesArchiveList();
         }
 
         function renderNotesArchiveList() {
-            const container = document.getElementById('history-vault-container');
-            container.innerHTML = '';
+            const list = document.getElementById('sermon-archive-list');
+            if (!list) return;
+            list.innerHTML = '';
+
             if (sermonVault.length === 0) {
-                container.innerHTML = `<p class="text-xs text-stone-400 italic text-center py-4 bg-white border border-stone-200 rounded-2xl">Vault index is empty.</p>`;
+                list.innerHTML = `<p class="text-xs text-stone-400 italic text-center py-4">No logged study records inside archive index.</p>`;
                 return;
             }
 
             sermonVault.forEach(item => {
                 let photosMarkup = '';
-                if(item.photos && item.photos.length > 0) {
-                    photosMarkup = `<div class="grid grid-cols-4 gap-1.5 pt-2">` + 
-                        item.photos.map(p => `<img src="${p}" class="w-full aspect-square object-cover rounded-xl border border-stone-200">`).join('') + 
-                        `</div>`;
+                if (item.photos && item.photos.length > 0) {
+                    photosMarkup = `<div class="grid grid-cols-3 gap-1.5 mt-2 print:grid-cols-3">`;
+                    item.photos.forEach(p => {
+                        photosMarkup += `<img src="${p}" class="rounded-lg max-h-24 w-full object-cover border border-stone-200 shadow-sm">`;
+                    });
+                    photosMarkup += `</div>`;
                 }
 
-                container.innerHTML += `
-                    <div class="bg-white border border-stone-200/80 rounded-2xl p-4 shadow-sm space-y-2 animate-fade-in relative group">
-                        <div class="flex justify-between items-start">
+                list.innerHTML += `
+                    <div class="group bg-[#fcfbf9] border border-stone-200/80 p-3.5 rounded-xl space-y-1.5 hover:border-stone-300 transition animate-fade-in break-inside-avoid">
+                        <div class="flex items-start justify-between gap-4">
                             <div>
-                                <span class="text-[10px] font-mono font-bold uppercase text-stone-400 block">${item.date} • Preacher: ${item.speaker || 'Unassigned'}</span>
+                                <span class="text-[9px] font-mono font-bold uppercase text-stone-400 bg-stone-100 px-1.5 py-0.5 rounded">${item.date} • ${item.category || 'Unassigned'}</span>
                                 <h4 class="font-serif font-bold text-stone-900 text-sm mt-0.5">${item.title}</h4>
-                                ${item.anchorScripture ? `<span class="text-[11px] font-bold text-emerald-800 bg-emerald-50/70 px-2 py-0.5 rounded-md inline-block mt-1">${item.anchorScripture}</span>` : ''}
+                                ${item.anchorScripture ? `<span class=\"text-[11px] font-bold text-emerald-800 bg-emerald-50/70 px-2 py-0.5 rounded-md inline-block mt-1\">${item.anchorScripture}</span>` : ''}
                             </div>
                             <button onclick="removeSermonItem('${item.id}')" class="text-stone-300 hover:text-rose-600 font-bold text-xs opacity-0 group-hover:opacity-100 transition print:hidden">✕</button>
                         </div>
@@ -1171,12 +969,177 @@
             }
         }
 
+        // Module 4 Relational Care Ledger Engine
+        function addRelationalCareItem() {
+            const inputField = document.getElementById('care-input-name');
+            const txtArea = document.getElementById('care-input-request');
+            const urgency = document.getElementById('care-urgency-tier').value;
+
+            const name = inputField.value.trim();
+            const request = txtArea.value.trim();
+
+            if (!name || !request) { alert("Please input both member name and specific prayer need."); return; }
+
+            const careItem = {
+                id: 'care_' + Date.now(),
+                date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+                name, request, urgency, updates: []
+            };
+
+            careVault.unshift(careItem);
+            localStorage.setItem('scribe_care_vault', JSON.stringify(careVault));
+
+            inputField.value = '';
+            txtArea.value = '';
+            renderRelationalCareList();
+        }
+
+        function renderRelationalCareList() {
+            const container = document.getElementById('relational-care-container');
+            if (!container) return;
+            container.innerHTML = '';
+
+            if (careVault.length === 0) {
+                container.innerHTML = `<p class="text-xs text-stone-400 italic text-center py-4">No active prayer notifications or support cases logged.</p>`;
+                return;
+            }
+
+            careVault.forEach(item => {
+                let updatesMarkup = '';
+                if (item.updates && item.updates.length > 0) {
+                    updatesMarkup = `<div class="mt-2 pl-2 border-l-2 border-emerald-600/30 space-y-1">`;
+                    item.updates.forEach(u => {
+                        updatesMarkup += `<p class="text-[11px] text-stone-600 leading-relaxed"><b class="text-stone-500 text-[10px] uppercase font-mono">${u.date}:</b> ${u.text}</p>`;
+                    });
+                    updatesMarkup += `</div>`;
+                }
+
+                let urgencyColor = "text-stone-400 bg-stone-100";
+                if (item.urgency === "CRITICAL") urgencyColor = "text-rose-700 bg-rose-50 border border-rose-100";
+                if (item.urgency === "ONGOING") urgencyColor = "text-amber-700 bg-amber-50 border border-amber-100";
+
+                container.innerHTML += `
+                    <div class="p-3.5 bg-[#fcfbf9] border border-stone-200/80 rounded-xl space-y-2 animate-fade-in break-inside-avoid shadow-sm hover:border-stone-300 transition">
+                        <div class="flex items-start justify-between gap-2">
+                            <div>
+                                <span class="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded uppercase tracking-wider ${urgencyColor}">${item.urgency}</span>
+                                <h4 class="font-serif font-bold text-stone-900 text-sm mt-1">${item.name}</h4>
+                            </div>
+                            <div class="flex items-center gap-2 print:hidden">
+                                <button onclick="toggleInlineUpdateField('${item.id}')" class="text-[10px] text-emerald-700 hover:text-emerald-900 font-bold px-1.5 py-0.5 hover:bg-emerald-50 rounded transition">Update</button>
+                                <button onclick="removeRelationalCareItem('${item.id}')" class="text-stone-300 hover:text-rose-600 text-xs font-bold px-1 transition">✕</button>
+                            </div>
+                        </div>
+                        <p class="text-xs text-stone-600 leading-relaxed italic">"${item.request}"</p>
+                        ${updatesMarkup}
+                        
+                        <div id="inline-update-box-${item.id}" class="hidden pt-2 border-t border-stone-200/60 space-y-2">
+                            <textarea id="update-text-field-${item.id}" rows="2" class="w-full bg-white border border-stone-200 p-2 rounded-xl text-xs font-medium focus:outline-none focus:ring-1 focus:ring-emerald-700 shadow-inner" placeholder="Add progress details or answered notes..."></textarea>
+                            <div class="flex justify-end gap-1.5">
+                                <button onclick="toggleInlineUpdateField('${item.id}')" class="text-[10px] text-stone-500 font-bold px-2 py-1 hover:bg-stone-100 rounded">Cancel</button>
+                                <button onclick="saveInlineCareUpdate('${item.id}')" class="text-[10px] bg-emerald-700 text-white font-bold px-2.5 py-1 hover:bg-emerald-800 rounded shadow-sm transition">Append Update</button>
+                            </div>
+                        </div>
+                    </div>`;
+            });
+        }
+
+        function toggleInlineUpdateField(id) {
+            const box = document.getElementById(`inline-update-box-${id}`);
+            if(box) box.classList.toggle('hidden');
+        }
+
+        function saveInlineCareUpdate(id) {
+            const txt = document.getElementById(`update-text-field-${id}`).value.trim();
+            if(!txt) return;
+
+            careVault = careVault.map(item => {
+                if(item.id === id) {
+                    if(!item.updates) item.updates = [];
+                    item.updates.push({
+                        date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+                        text: txt
+                    });
+                }
+                return item;
+            });
+
+            localStorage.setItem('scribe_care_vault', JSON.stringify(careVault));
+            renderRelationalCareList();
+        }
+
+        function removeRelationalCareItem(id) {
+            if(confirm("Purge this care register from the active tracking deck?")) {
+                careVault = careVault.filter(c => c.id !== id);
+                localStorage.setItem('scribe_care_vault', JSON.stringify(careVault));
+                renderRelationalCareList();
+            }
+        }
+
+        // Module 5 7-Day Consistency Tracker Engine
+        function toggleHabitDay(day) {
+            habitState[day] = !habitState[day];
+            const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+            
+            // 1. Compute rolling target completion
+            let checkedCount = days.filter(d => habitState[d]).length;
+            habitState.target = Math.round((checkedCount / 7) * 100);
+            
+            // 2. Compute rolling maximum continuous day streak
+            let maxStreak = 0;
+            let currentStreak = 0;
+            for (let i = 0; i < days.length; i++) {
+                if (habitState[days[i]]) {
+                    currentStreak++;
+                    if (currentStreak > maxStreak) maxStreak = currentStreak;
+                } else {
+                    currentStreak = 0;
+                }
+            }
+            habitState.streak = maxStreak;
+            
+            localStorage.setItem('scribe_habit_state', JSON.stringify(habitState));
+            renderHabitsTrackerDisplay();
+        }
+
+        function renderHabitsTrackerDisplay() {
+            const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+            days.forEach(d => {
+                const btn = document.getElementById(`habit-${d.toLowerCase()}`);
+                if (!btn) return;
+                
+                if (habitState[d]) {
+                    btn.className = "w-8 h-8 rounded-full bg-emerald-700 text-white font-bold text-xs shadow-sm transition flex items-center justify-center scale-105";
+                } else {
+                    btn.className = "w-8 h-8 rounded-full bg-stone-100 border border-stone-200 text-stone-500 font-bold text-xs hover:border-stone-300 hover:bg-stone-50 transition flex items-center justify-center";
+                }
+            });
+
+            const targetVal = document.getElementById('habit-completion-target');
+            const streakVal = document.getElementById('habit-streak-counter');
+            
+            if (targetVal) targetVal.innerText = `${habitState.target || 0}%`;
+            if (streakVal) streakVal.innerText = `${habitState.streak || 0} Days`;
+        }
+
+        // Global Reset Debug Utility
         function resetAllAppData() {
             if (confirm("Clear local cache registers? All custom data variables will reset.")) {
                 localStorage.clear();
-                location.reload();
+                sermonVault = [];
+                careVault = [];
+                matrixProgress = {};
+                habitState = { Mon: false, Tue: false, Wed: false, Thu: false, Fri: false, Sat: false, Sun: false, target: 0, streak: 0 };
+                currentSelectedWeek = 1;
+                
+                buildWeekSelectorDropdown();
+                renderThematicMatrix();
+                renderNotesArchiveList();
+                renderRelationalCareList();
+                renderHabitsTrackerDisplay();
             }
         }
     </script>
+   
 </body>
 </html>
