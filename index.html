@@ -773,15 +773,20 @@
         };
 
         window.onload = function() {
-            document.getElementById('note-date').value = new Date().toISOString().split('T')[0];
-            calculateCurrentCalendarWeek();
-            populateWeekSelectorDropdown();
-            renderHabitsTrackerDisplay();
-            highlightCurrentDayButton();
-            renderNotesArchiveList();
-            renderRelationalCareList();
-            renderThematicMatrix();
-        };
+    // 📅 DYNAMICALLY SET THE LIVE BANNER TO TODAY'S DATE
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    document.getElementById('live-banner-date').innerText = new Date().toLocaleDateString('en-US', options);
+
+    document.getElementById('note-date').value = new Date().toISOString().split('T')[0];
+    calculateCurrentCalendarWeek();
+    populateWeekSelectorDropdown();
+    renderHabitsTrackerDisplay();
+    highlightCurrentDayButton();
+    renderNotesArchiveList();
+    renderRelationalCareList();
+    renderThematicMatrix();
+};
+
 
         function calculateCurrentCalendarWeek() {
             const now = new Date();
