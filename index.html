@@ -187,7 +187,6 @@
             calculateCurrentCalendarWeek();
             populateWeekSelectorDropdown();
             renderHabitsTrackerDisplay();
-            highlightCurrentDayButton();
             renderNotesArchiveList();
             renderRelationalCareList();
             renderThematicMatrix();
@@ -209,7 +208,6 @@
             }
         }
 
-        // --- DATABASE RENDERING & PROCESSING ENGINE CONTROLS ---
         function calculateCurrentCalendarWeek() {
             populateWeekSelectorDropdown();
         }
@@ -220,17 +218,30 @@
             selector.innerHTML = `<option value="28" selected>Wk 28 - Discipleship Cost</option>`;
         }
 
+        // RENDER HABITS AND HIGHLIGHT TODAY
         function renderHabitsTrackerDisplay() {
             const container = document.getElementById('habit-tracker-container');
             if(!container) return;
+            
             const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
             const state = JSON.parse(localStorage.getItem("scribe_habit_state") || "{}");
             
-            container.innerHTML = days.map((day, idx) => {
+            // Get today's 3-letter abbreviation (e.g., "Sun")
+            const todayIndex = new Date().getDay(); // 0 is Sunday, 1 is Monday...
+            const daysMap = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            const todayAbbr = daysMap[todayIndex];
+
+            container.innerHTML = days.map((day) => {
                 const checked = state[day] ? 'checked' : '';
+                // If this box matches today, apply special border and background colors
+                const isToday = (day === todayAbbr) 
+                    ? 'bg-emerald-50/80 border-emerald-300 ring-2 ring-emerald-600/10' 
+                    : 'bg-slate-50 border-slate-100';
+                const todayTextClass = (day === todayAbbr) ? 'text-emerald-700 font-extrabold' : 'text-slate-400 font-bold';
+
                 return `
-                    <div class="flex flex-col items-center p-2 bg-slate-50 rounded-xl border border-slate-100">
-                        <span class="text-[10px] font-bold text-slate-400 uppercase mb-1">${day}</span>
+                    <div class="flex flex-col items-center p-2 rounded-xl border transition-all ${isToday}">
+                        <span class="text-[10px] uppercase mb-1 ${todayTextClass}">${day}</span>
                         <input type="checkbox" ${checked} onclick="toggleHabit('${day}')" class="w-5 h-5 accent-emerald-600 rounded border-slate-300">
                     </div>
                 `;
@@ -243,8 +254,6 @@
             localStorage.setItem("scribe_habit_state", JSON.stringify(state));
             renderHabitsTrackerDisplay();
         }
-
-        function highlightCurrentDayButton() {}
 
         function renderThematicMatrix() {
             const list = document.getElementById('thematic-matrix-list');
