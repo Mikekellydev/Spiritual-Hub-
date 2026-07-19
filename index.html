@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Spiritual Growth Hub</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
@@ -25,6 +26,7 @@
 </head>
 <body class="bg-[#F8FAFC] font-sans text-slate-800 min-h-screen flex flex-col pb-28 select-none">
 
+    <!-- Sticky Header Navigation Area -->
     <header class="bg-white/80 backdrop-blur-md border-b border-slate-100 sticky top-0 z-40 px-4 print:hidden">
         <div class="max-w-md mx-auto h-16 flex items-center justify-between">
             <div>
@@ -42,8 +44,10 @@
         </div>
     </header>
 
+    <!-- App Stream Container Layout -->
     <main class="flex-1 max-w-md w-full mx-auto px-4 py-5 space-y-4">
         
+        <!-- Live Calendar Dashboard Header Banner Card -->
         <section class="bg-gradient-to-br from-[#112A1D] via-[#1E3E2F] to-[#0A1A12] text-white rounded-2xl p-5 shadow-sm relative overflow-hidden">
             <div class="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none"></div>
             <span class="bg-emerald-400/20 text-emerald-300 text-[9px] font-bold tracking-widest uppercase px-2 py-0.5 rounded-md inline-block mb-1.5">
@@ -56,6 +60,7 @@
             </div>
         </section>
 
+        <!-- Premium Dual-Card Summary Metrics Matrix Row -->
         <div class="grid grid-cols-2 gap-3.5">
             <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between space-y-2">
                 <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Days In A Row</span>
@@ -73,31 +78,38 @@
             </div>
         </div>
 
+        <!-- 7-Day Matrix Habits Consistency Component Section -->
         <section class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 space-y-3.5">
             <div class="flex justify-between items-center">
                 <h3 class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">7-Day Habits Consistency</h3>
                 <span class="bg-slate-50 text-slate-500 border border-slate-100 text-[10px] font-bold px-2 py-0.5 rounded-md">Weekly Routine</span>
             </div>
             <div class="grid grid-cols-7 gap-1.5 text-center" id="habits-checkbox-container">
-                </div>
+                <!-- Data layout block -->
+            </div>
         </section>
 
+        <!-- Core Scripture Tracker Track Module Component System -->
         <section class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 space-y-3.5">
             <div class="flex items-start justify-between space-x-2">
-                <div class="space-y-0.5">
-                    <h3 id="week-theme-display" class="text-xs font-bold text-slate-900 uppercase tracking-wide leading-tight">Theme: Loading...</h3>
+                <div class="space-y-0.5 max-w-[60%]">
+                    <h3 id="week-theme-display" class="text-xs font-bold text-slate-900 uppercase tracking-wide leading-tight break-words">Theme: Loading...</h3>
                     <p class="text-[11px] font-medium text-slate-400">52 Thematic Reading Tracks</p>
                 </div>
                 <div class="flex items-center space-x-1 shrink-0">
-                    <select id="week-selector" onchange="changeWeek(this.value)" class="text-[11px] font-bold bg-slate-50 border border-slate-200 rounded-lg px-2 py-1 text-slate-700 focus:outline-none cursor-pointer">
-                        </select>
+                    <select id="week-selector" onchange="changeWeek(this.value)" class="text-[11px] font-bold bg-slate-50 border border-slate-200 rounded-lg px-2 py-1 text-slate-700 focus:outline-none cursor-pointer max-w-[160px]">
+                        <!-- Populated dynamically via script logic matrix -->
+                    </select>
                 </div>
             </div>
             
+            <!-- Target Days Container Block Stream -->
             <div id="reading-list" class="space-y-2">
-                </div>
+                <!-- Days items inject inside layout grid -->
+            </div>
         </section>
 
+        <!-- Relational Prayer Engine Engine -->
         <section class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 space-y-4">
             <div>
                 <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wide">Relational Prayer Engine</h3>
@@ -108,7 +120,7 @@
                 <div class="grid grid-cols-2 gap-2.5">
                     <div>
                         <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Target Name</label>
-                        <input type="text" id="prayer-name" class="w-full text-xs bg-white border border-slate-200 rounded-lg p-2 focus:border-emerald-600 focus:outline-none transition-all">
+                        <input type="text" id="prayer-name" required placeholder="Hansen Family" class="w-full text-xs bg-white border border-slate-200 rounded-lg p-2 focus:border-emerald-600 focus:outline-none transition-all">
                     </div>
                     <div>
                         <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Current Season</label>
@@ -123,7 +135,7 @@
                 </div>
                 <div>
                     <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Prayer Needs / Request</label>
-                    <textarea id="prayer-request" required rows="2" class="w-full text-xs bg-white border border-slate-200 rounded-lg p-2 focus:border-emerald-600 focus:outline-none transition-all resize-none"></textarea>
+                    <textarea id="prayer-request" required rows="2" placeholder="Kids recovering from being sick..." class="w-full text-xs bg-white border border-slate-200 rounded-lg p-2 focus:border-emerald-600 focus:outline-none transition-all resize-none"></textarea>
                 </div>
                 <div class="flex justify-end">
                     <button type="submit" class="bg-emerald-700 hover:bg-emerald-800 text-white text-[11px] font-bold px-3.5 py-1.5 rounded-lg shadow-sm transition-all">
@@ -133,25 +145,31 @@
             </form>
 
             <div id="prayer-requests-vault" class="space-y-2">
-                </div>
+                <!-- Data injections populate cleanly here -->
+            </div>
         </section>
 
+        <!-- Sermon & Journal Vault Logs Feed Module Layout -->
         <section class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 space-y-3.5">
             <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wide">Sermon & Journal Vault</h3>
             <div id="sermon-archive" class="space-y-2.5">
-                </div>
+                <!-- Sermon rows maps inside here -->
+            </div>
         </section>
 
     </main>
 
+    <!-- Global Persistent Sticky Drawer Action Tray Layout -->
     <div class="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-md border-t border-slate-200 p-3.5 print:hidden z-40 flex justify-center">
         <button onclick="toggleDrawer(true)" class="max-w-md w-full bg-[#112A1D] text-white hover:bg-slate-900 text-xs font-bold py-3 px-4 rounded-xl shadow-md transition-all flex items-center justify-center space-x-2 tracking-wide">
             <span>✍️ Open Sermon Reflection Journal Drawer</span>
         </button>
     </div>
 
+    <!-- Slide Up Form System Drawer Window Interface Module Overlay Container Layout -->
     <div id="sermon-drawer-backdrop" onclick="toggleDrawer(false)" class="fixed inset-0 bg-black/50 hidden z-50 print:hidden transition-opacity duration-300"></div>
     
+    <!-- Actual Input Window Container Segment Card Drawer Layer Frame UI Component -->
     <div id="sermon-drawer" class="fixed bottom-0 left-0 right-0 bg-white rounded-t-[2rem] shadow-2xl z-50 max-w-md mx-auto border-t border-slate-100 print:hidden drawer-hidden h-[82vh] flex flex-col">
         <div class="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50 rounded-t-[2rem] shrink-0">
             <div>
@@ -196,13 +214,13 @@
         </form>
     </div>
 
+    <!-- Core Runtime Application Script Engine Framework Controller -->
     <script>
         const themesRegistry = {
             1: { theme: "In the Beginning & Foundations", readings: ["Genesis 1", "Genesis 2", "Genesis 3", "Genesis 4", "Genesis 5", "Genesis 6", "Genesis 7"] },
             28: { theme: "Discipleship Cost", readings: ["Matthew 16:24-26", "Luke 9:23-25", "Luke 14:25-27", "Matthew 10:37-39", "Philippians 3:7-9", "Galatians 2:20", "Romans 12:1-2"] }
         };
         
-        // Auto-hydrate undefined tracks systematically
         for(let i=1; i<=52; i++) {
             if(!themesRegistry[i]) {
                 themesRegistry[i] = { theme: `Thematic Strategy Track ${i}`, readings: [`Psalm ${i}`, `Proverbs ${i}`, `Isaiah ${i}`, `Romans ${i}`, `John ${i}`, `Ephesians ${i}`, `James ${i}`] };
@@ -217,7 +235,6 @@
             sermons: []
         };
 
-        // Monday-Sunday sequence places Sunday at the end index
         const dayNames = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
 
         window.onload = function() {
@@ -287,6 +304,12 @@
             
             const currentData = themesRegistry[appState.currentWeek];
             document.getElementById('week-theme-display').innerText = `THEME: ${currentData.theme.toUpperCase()}`;
+            
+            // Explicitly sync the dropdown selector UI value with engine appState
+            const selectDropdown = document.getElementById('week-selector');
+            if(selectDropdown) {
+                selectDropdown.value = appState.currentWeek;
+            }
 
             currentData.readings.forEach((passage, idx) => {
                 const day = dayNames[idx] || "DAY";
