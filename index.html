@@ -218,20 +218,8 @@
         // Days array customized so that Sunday holds position 0
         const dayNames = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 
-        // Thematic layout mapping with Sunday as Day 1
+        // Registry containing explicit weekly themes exclusively for 28 and 30
         const themesRegistry = {
-            1: { 
-                theme: "In the Beginning & Foundations", 
-                readings: [
-                    { day: "SUN", passage: "Genesis 1", subTheme: "The Architecture of Creation" },
-                    { day: "MON", passage: "Genesis 2", subTheme: "The Blueprint of Humanity" },
-                    { day: "TUE", passage: "Genesis 3", subTheme: "The Breach of Trust" },
-                    { day: "WED", passage: "Genesis 4", subTheme: "The First Separation" },
-                    { day: "THU", passage: "Genesis 5", subTheme: "The Lineage of Endurance" },
-                    { day: "FRI", passage: "Genesis 6", subTheme: "The Weight of Corruption" },
-                    { day: "SAT", passage: "Genesis 7", subTheme: "The Covenant Refuges" }
-                ] 
-            },
             28: { 
                 theme: "Discipleship Cost", 
                 readings: [
@@ -258,19 +246,19 @@
             }
         };
         
-        // Safety Fallback Generator mapping correctly to a Sunday-first model
+        // Safety Fallback Generator mapping to standard tracks without placeholder themes
         for(let i=1; i<=52; i++) {
             if(!themesRegistry[i]) {
                 themesRegistry[i] = { 
-                    theme: `Thematic Strategy Track ${i}`, 
+                    theme: "", 
                     readings: [
-                        { day: "SUN", passage: `James ${i}`, subTheme: "Active Execution of Faith" },
-                        { day: "MON", passage: `Psalm ${i}`, subTheme: "Foundational Strategic Alignment" },
-                        { day: "TUE", passage: `Proverbs ${i}`, subTheme: "Wisdom Applications" },
-                        { day: "WED", passage: `Isaiah ${i}`, subTheme: "Prophetic Insight Blocks" },
-                        { day: "THU", passage: `Romans ${i}`, subTheme: "Doctrinal Solidification" },
-                        { day: "FRI", passage: `John ${i}`, subTheme: "Revelatory Truth" },
-                        { day: "SAT", passage: `Ephesians ${i}`, subTheme: "Church & Armor Frameworks" }
+                        { day: "SUN", passage: `James ${i}`, subTheme: "Thematic Pathways" },
+                        { day: "MON", passage: `Psalm ${i}`, subTheme: "Thematic Pathways" },
+                        { day: "TUE", passage: `Proverbs ${i}`, subTheme: "Thematic Pathways" },
+                        { day: "WED", passage: `Isaiah ${i}`, subTheme: "Thematic Pathways" },
+                        { day: "THU", passage: `Romans ${i}`, subTheme: "Thematic Pathways" },
+                        { day: "FRI", passage: `John ${i}`, subTheme: "Thematic Pathways" },
+                        { day: "SAT", passage: `Ephesians ${i}`, subTheme: "Thematic Pathways" }
                     ] 
                 };
             }
@@ -317,7 +305,8 @@
             for(let i=1; i<=52; i++) {
                 const opt = document.createElement('option');
                 opt.value = i;
-                opt.innerText = `Wk ${i} - ${themesRegistry[i].theme.substring(0,18)}${themesRegistry[i].theme.length > 18 ? '...':''}`;
+                const titleText = themesRegistry[i].theme ? ` - ${themesRegistry[i].theme}` : '';
+                opt.innerText = `Wk ${i}${titleText.substring(0,18)}${titleText.length > 18 ? '...' : ''}`;
                 if(i === appState.currentWeek) opt.selected = true;
                 selector.appendChild(opt);
             }
@@ -354,7 +343,13 @@
             container.innerHTML = '';
             
             const currentData = themesRegistry[appState.currentWeek];
-            document.getElementById('week-theme-display').innerText = `THEME: ${currentData.theme.toUpperCase()}`;
+            
+            // Conditionally layout header text depending on if a theme context exists
+            if (currentData.theme) {
+                document.getElementById('week-theme-display').innerText = `THEME: ${currentData.theme.toUpperCase()}`;
+            } else {
+                document.getElementById('week-theme-display').innerText = `THEMATIC STRATEGY TRACK ${appState.currentWeek}`;
+            }
             
             const selectDropdown = document.getElementById('week-selector');
             if(selectDropdown) {
