@@ -53,14 +53,14 @@
             <span class="bg-emerald-400/20 text-emerald-300 text-[9px] font-bold tracking-widest uppercase px-2 py-0.5 rounded-md inline-block mb-1.5">
                 Today's Journey
             </span>
-            <h2 id="live-banner-date" class="text-xl font-bold tracking-tight">Sunday, July 12, 2026</h2>
+            <h2 id="live-banner-date" class="text-xl font-bold tracking-tight">Sunday, July 19, 2026</h2>
             <div class="mt-4 pt-3.5 border-t border-white/10 flex items-center justify-between text-[11px] font-medium text-emerald-200/80">
                 <span id="reading-progress-text">Plan Progress: 0%</span>
                 <span id="sermon-count-text">0 Sermons Logged</span>
             </div>
         </section>
 
-        <!-- Premium Dual-Card Summary Metrics Matrix Row -->
+        <!-- Summary Metrics Matrix Row -->
         <div class="grid grid-cols-2 gap-3.5">
             <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between space-y-2">
                 <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Days In A Row</span>
@@ -89,7 +89,7 @@
             </div>
         </section>
 
-        <!-- Core Scripture Tracker Track Module Component System -->
+        <!-- Core Scripture Tracker with Weekly & Sub-Themes -->
         <section class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 space-y-3.5">
             <div class="flex items-start justify-between space-x-2">
                 <div class="space-y-0.5 max-w-[60%]">
@@ -98,18 +98,18 @@
                 </div>
                 <div class="flex items-center space-x-1 shrink-0">
                     <select id="week-selector" onchange="changeWeek(this.value)" class="text-[11px] font-bold bg-slate-50 border border-slate-200 rounded-lg px-2 py-1 text-slate-700 focus:outline-none cursor-pointer max-w-[160px]">
-                        <!-- Populated dynamically via script logic matrix -->
+                        <!-- Populated dynamically via script -->
                     </select>
                 </div>
             </div>
             
             <!-- Target Days Container Block Stream -->
             <div id="reading-list" class="space-y-2">
-                <!-- Days items inject inside layout grid -->
+                <!-- Days items inject here inside cleanly styled blocks -->
             </div>
         </section>
 
-        <!-- Relational Prayer Engine Engine -->
+        <!-- Relational Prayer Engine -->
         <section class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 space-y-4">
             <div>
                 <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wide">Relational Prayer Engine</h3>
@@ -166,10 +166,9 @@
         </button>
     </div>
 
-    <!-- Slide Up Form System Drawer Window Interface Module Overlay Container Layout -->
+    <!-- Slide Up Form Drawer Layer Frame UI Component -->
     <div id="sermon-drawer-backdrop" onclick="toggleDrawer(false)" class="fixed inset-0 bg-black/50 hidden z-50 print:hidden transition-opacity duration-300"></div>
     
-    <!-- Actual Input Window Container Segment Card Drawer Layer Frame UI Component -->
     <div id="sermon-drawer" class="fixed bottom-0 left-0 right-0 bg-white rounded-t-[2rem] shadow-2xl z-50 max-w-md mx-auto border-t border-slate-100 print:hidden drawer-hidden h-[82vh] flex flex-col">
         <div class="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50 rounded-t-[2rem] shrink-0">
             <div>
@@ -214,21 +213,68 @@
         </form>
     </div>
 
-    <!-- Core Runtime Application Script Engine Framework Controller -->
+    <!-- Core Runtime Application Script Engine -->
     <script>
+        // Updated Object Structure supporting Weekly Themes and clear Daily Sub-Themes
         const themesRegistry = {
-            1: { theme: "In the Beginning & Foundations", readings: ["Genesis 1", "Genesis 2", "Genesis 3", "Genesis 4", "Genesis 5", "Genesis 6", "Genesis 7"] },
-            28: { theme: "Discipleship Cost", readings: ["Matthew 16:24-26", "Luke 9:23-25", "Luke 14:25-27", "Matthew 10:37-39", "Philippians 3:7-9", "Galatians 2:20", "Romans 12:1-2"] }
+            1: { 
+                theme: "In the Beginning & Foundations", 
+                readings: [
+                    { day: "MON", passage: "Genesis 1", subTheme: "The Architecture of Creation" },
+                    { day: "TUE", passage: "Genesis 2", subTheme: "The Blueprint of Humanity" },
+                    { day: "WED", passage: "Genesis 3", subTheme: "The Breach of Trust" },
+                    { day: "THU", passage: "Genesis 4", subTheme: "The First Separation" },
+                    { day: "FRI", passage: "Genesis 5", subTheme: "The Lineage of Endurance" },
+                    { day: "SAT", passage: "Genesis 6", subTheme: "The Weight of Corruption" },
+                    { day: "SUN", passage: "Genesis 7", subTheme: "The Covenant Refuges" }
+                ] 
+            },
+            28: { 
+                theme: "Discipleship Cost", 
+                readings: [
+                    { day: "MON", passage: "Matthew 16:24-26", subTheme: "Denying Self & Taking the Cross" },
+                    { day: "TUE", passage: "Luke 9:23-25", subTheme: "Daily Execution of Will" },
+                    { day: "WED", passage: "Luke 14:25-27", subTheme: "Supreme Relational Allegiance" },
+                    { day: "THU", passage: "Matthew 10:37-39", subTheme: "Losing Life to Find It" },
+                    { day: "FRI", passage: "Philippians 3:7-9", subTheme: "Counting All Loss as Gain" },
+                    { day: "SAT", passage: "Galatians 2:20", subTheme: "The Crucified Life" },
+                    { day: "SUN", passage: "Romans 12:1-2", subTheme: "Living Sacrifice Blueprint" }
+                ] 
+            },
+            30: {
+                theme: "The Armor & The Walk",
+                readings: [
+                    { day: "MON", passage: "Psalm 30", subTheme: "Joy in the Morning Restoration" },
+                    { day: "TUE", passage: "Proverbs 30", subTheme: "The Purity of God's Word" },
+                    { day: "WED", passage: "Isaiah 30", subTheme: "In Quietness and Trust" },
+                    { day: "THU", passage: "Ephesians 6:10-13", subTheme: "The Standing Orders" },
+                    { day: "FRI", passage: "Ephesians 6:14-15", subTheme: "Truth & Righteousness Anchors" },
+                    { day: "SAT", passage: "Ephesians 6:16-17", subTheme: "Shield, Helmet & Sword Defenses" },
+                    { day: "SUN", passage: "Ephesians 6:18-20", subTheme: "Continuous Alert Prayer Matrix" }
+                ]
+            }
         };
         
+        // Safety Fallback Generator for other weeks
         for(let i=1; i<=52; i++) {
             if(!themesRegistry[i]) {
-                themesRegistry[i] = { theme: `Thematic Strategy Track ${i}`, readings: [`Psalm ${i}`, `Proverbs ${i}`, `Isaiah ${i}`, `Romans ${i}`, `John ${i}`, `Ephesians ${i}`, `James ${i}`] };
+                themesRegistry[i] = { 
+                    theme: `Thematic Strategy Track ${i}`, 
+                    readings: [
+                        { day: "MON", passage: `Psalm ${i}`, subTheme: "Foundational Strategic Alignment" },
+                        { day: "TUE", passage: `Proverbs ${i}`, subTheme: "Wisdom Applications" },
+                        { day: "WED", passage: `Isaiah ${i}`, subTheme: "Prophetic Insight Blocks" },
+                        { day: "THU", passage: `Romans ${i}`, subTheme: "Doctrinal Solidification" },
+                        { day: "FRI", passage: `John ${i}`, subTheme: "Revelatory Truth" },
+                        { day: "SAT", passage: `Ephesians ${i}`, subTheme: "Church & Armor Frameworks" },
+                        { day: "SUN", passage: `James ${i}`, subTheme: "Active Execution of Faith" }
+                    ] 
+                };
             }
         }
 
         let appState = {
-            currentWeek: 28,
+            currentWeek: 30, // Updated start default to Week 30 based on user's snapshot
             completedReadings: {},
             habits: Array(7).fill(false),
             prayers: [],
@@ -244,8 +290,7 @@
                 const parsed = JSON.parse(localStorage.getItem('spiritual_hub_state'));
                 if (parsed) {
                     appState = parsed;
-                    // Safely fall back to 28 ONLY if currentWeek is missing from saved storage state
-                    if (!appState.currentWeek) appState.currentWeek = 28;
+                    if (!appState.currentWeek) appState.currentWeek = 30;
                 }
                 if (!Array.isArray(appState.habits) || appState.habits.length !== 7) appState.habits = Array(7).fill(false);
                 if (!Array.isArray(appState.prayers)) appState.prayers = [];
@@ -310,14 +355,13 @@
             const currentData = themesRegistry[appState.currentWeek];
             document.getElementById('week-theme-display').innerText = `THEME: ${currentData.theme.toUpperCase()}`;
             
-            // Explicitly sync the dropdown selector UI value with engine appState
             const selectDropdown = document.getElementById('week-selector');
             if(selectDropdown) {
                 selectDropdown.value = appState.currentWeek;
             }
 
-            currentData.readings.forEach((passage, idx) => {
-                const day = dayNames[idx] || "DAY";
+            currentData.readings.forEach((readingObj, idx) => {
+                const day = readingObj.day;
                 const uniqueKey = `W${appState.currentWeek}_D${idx}`;
                 const isChecked = appState.completedReadings[uniqueKey] || false;
 
@@ -327,11 +371,12 @@
                     <div class="flex items-center space-x-3 pr-2 min-w-0">
                         <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="toggleReading('${uniqueKey}')" class="w-4 h-4 rounded text-emerald-600 border-slate-300 cursor-pointer shrink-0 transition-all">
                         <div class="min-w-0">
-                            <span class="text-[9px] font-bold text-slate-400 tracking-wider block uppercase">${day} • Thematic Pathways</span>
-                            <span class="text-xs font-bold text-slate-800 block truncate ${isChecked ? 'line-through text-slate-400' : ''}">${passage}</span>
+                            <!-- Injected Daily Custom Sub Theme dynamically here -->
+                            <span class="text-[9px] font-bold text-emerald-700/90 tracking-wide block uppercase truncate">${day} • ${readingObj.subTheme}</span>
+                            <span class="text-xs font-bold text-slate-800 block truncate ${isChecked ? 'line-through text-slate-400' : ''}">${readingObj.passage}</span>
                         </div>
                     </div>
-                    <a href="https://www.bible.com/bible/111/${passage.replace(/ /g, '')}.EHV" target="_blank" class="print:hidden text-[10px] font-bold text-emerald-700 bg-white hover:bg-slate-50 border border-slate-200 shadow-sm px-2.5 py-1 rounded-md shrink-0 transition-all">Read</a>
+                    <a href="https://www.bible.com/bible/111/${readingObj.passage.replace(/ /g, '')}.EHV" target="_blank" class="print:hidden text-[10px] font-bold text-emerald-700 bg-white hover:bg-slate-50 border border-slate-200 shadow-sm px-2.5 py-1 rounded-md shrink-0 transition-all">Read</a>
                 `;
                 container.appendChild(item);
             });
