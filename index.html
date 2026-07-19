@@ -215,51 +215,77 @@
 
     <!-- Core Runtime Application Script Engine -->
     <script>
-        // Days array customized so that Sunday holds position 0
         const dayNames = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 
-        // Registry containing explicit weekly themes exclusively for 28 and 30
-        const themesRegistry = {
-            28: { 
-                theme: "Discipleship Cost", 
-                readings: [
-                    { day: "SUN", passage: "Romans 12:1-2", subTheme: "Living Sacrifice Blueprint" },
-                    { day: "MON", passage: "Matthew 16:24-26", subTheme: "Denying Self & Taking the Cross" },
-                    { day: "TUE", passage: "Luke 9:23-25", subTheme: "Daily Execution of Will" },
-                    { day: "WED", passage: "Luke 14:25-27", subTheme: "Supreme Relational Allegiance" },
-                    { day: "THU", passage: "Matthew 10:37-39", subTheme: "Losing Life to Find It" },
-                    { day: "FRI", passage: "Philippians 3:7-9", subTheme: "Counting All Loss as Gain" },
-                    { day: "SAT", passage: "Galatians 2:20", subTheme: "The Crucified Life" }
-                ] 
-            },
-            30: {
-                theme: "The Armor & The Walk",
-                readings: [
-                    { day: "SUN", passage: "Ephesians 6:18-20", subTheme: "Continuous Alert Prayer Matrix" },
-                    { day: "MON", passage: "Psalm 30", subTheme: "Joy in the Morning Restoration" },
-                    { day: "TUE", passage: "Proverbs 30", subTheme: "The Purity of God's Word" },
-                    { day: "WED", passage: "Isaiah 30", subTheme: "In Quietness and Trust" },
-                    { day: "THU", passage: "Ephesians 6:10-13", subTheme: "The Standing Orders" },
-                    { day: "FRI", passage: "Ephesians 6:14-15", subTheme: "Truth & Righteousness Anchors" },
-                    { day: "SAT", passage: "Ephesians 6:16-17", subTheme: "Shield, Helmet & Sword Defenses" }
-                ]
-            }
+        // Curated mapping of themes across all 52 weeks
+        const baselineThemes = {
+            1: "Foundations of Faith", 2: "The Nature of Grace", 3: "Walking in Truth",
+            4: "The Power of Prayer", 5: "Identity in Christ", 6: "Renewing the Mind",
+            7: "Living Sacrifices", 8: "Fruit of the Spirit", 9: "The Call to Love",
+            10: "Guarding the Heart", 11: "The Joy of Worship", 12: "Steadfast Endurance",
+            13: "Unwavering Hope", 14: "The Kingdom of God", 15: "Servant Leadership",
+            16: "Humility and Rest", 17: "The Power of Tongue", 18: "Wisdom from Above",
+            19: "Faith Over Fear", 20: "Generous Stewardship", 21: "Light of the World",
+            22: "The Great Commandment", 23: "Seeking Righteousness", 24: "Abiding in Christ",
+            25: "The Ministry of Peace", 26: "The Living Word", 27: "Deepening Devotion",
+            28: "Discipleship Cost", // Preserved exact theme
+            29: "Sovereignty and Trust",
+            30: "The Armor & The Walk", // Preserved exact theme
+            31: "Overcoming Temptation", 32: "Grace in Brokenness", 33: "The Fellowship of Saints",
+            34: "Purity of Purpose", 35: "Boldness in Witness", 36: "The Path of Justice",
+            37: "Mercy and Compassion", 38: "The Contented Soul", 39: "Anchored in Trials",
+            40: "The Wisdom of Scripture", 41: "Honoring Relationships", 42: "The Work of Ministry",
+            43: "Patience and Timing", 44: "Living Intentionally", 45: "Strength in Weakness",
+            46: "A Culture of Honor", 47: "The Promise of Rest", 48: "Faithful to the End",
+            49: "The Spirit of Truth", 50: "Watchful and Ready", 51: "The Eternal Victory",
+            52: "Alpha and Omega"
         };
+
+        const themesRegistry = {};
         
-        // Safety Fallback Generator mapping to standard tracks without placeholder themes
-        for(let i=1; i<=52; i++) {
-            if(!themesRegistry[i]) {
-                themesRegistry[i] = { 
-                    theme: "", 
+        // Populate all 52 weeks cleanly using the Sunday-First design pattern
+        for(let i = 1; i <= 52; i++) {
+            // Check for explicit hardcoded structures for weeks 28 and 30 first
+            if (i === 28) {
+                themesRegistry[28] = { 
+                    theme: "Discipleship Cost", 
                     readings: [
-                        { day: "SUN", passage: `James ${i}`, subTheme: "Thematic Pathways" },
-                        { day: "MON", passage: `Psalm ${i}`, subTheme: "Thematic Pathways" },
-                        { day: "TUE", passage: `Proverbs ${i}`, subTheme: "Thematic Pathways" },
-                        { day: "WED", passage: `Isaiah ${i}`, subTheme: "Thematic Pathways" },
-                        { day: "THU", passage: `Romans ${i}`, subTheme: "Thematic Pathways" },
-                        { day: "FRI", passage: `John ${i}`, subTheme: "Thematic Pathways" },
-                        { day: "SAT", passage: `Ephesians ${i}`, subTheme: "Thematic Pathways" }
+                        { day: "SUN", passage: "Romans 12:1-2", subTheme: "Living Sacrifice Blueprint" },
+                        { day: "MON", passage: "Matthew 16:24-26", subTheme: "Denying Self & Taking the Cross" },
+                        { day: "TUE", passage: "Luke 9:23-25", subTheme: "Daily Execution of Will" },
+                        { day: "WED", passage: "Luke 14:25-27", subTheme: "Supreme Relational Allegiance" },
+                        { day: "THU", passage: "Matthew 10:37-39", subTheme: "Losing Life to Find It" },
+                        { day: "FRI", passage: "Philippians 3:7-9", subTheme: "Counting All Loss as Gain" },
+                        { day: "SAT", passage: "Galatians 2:20", subTheme: "The Crucified Life" }
                     ] 
+                };
+            } else if (i === 30) {
+                themesRegistry[30] = {
+                    theme: "The Armor & The Walk",
+                    readings: [
+                        { day: "SUN", passage: "Ephesians 6:18-20", subTheme: "Continuous Alert Prayer Matrix" },
+                        { day: "MON", passage: "Psalm 30", subTheme: "Joy in the Morning Restoration" },
+                        { day: "TUE", passage: "Proverbs 30", subTheme: "The Purity of God's Word" },
+                        { day: "WED", passage: "Isaiah 30", subTheme: "In Quietness and Trust" },
+                        { day: "THU", passage: "Ephesians 6:10-13", subTheme: "The Standing Orders" },
+                        { day: "FRI", passage: "Ephesians 6:14-15", subTheme: "Truth & Righteousness Anchors" },
+                        { day: "SAT", passage: "Ephesians 6:16-17", subTheme: "Shield, Helmet & Sword Defenses" }
+                    ]
+                };
+            } else {
+                // Generate reading blocks cleanly matching the baseline theme text
+                const currentTheme = baselineThemes[i];
+                themesRegistry[i] = {
+                    theme: currentTheme,
+                    readings: [
+                        { day: "SUN", passage: `James ${i}`, subTheme: "Active Execution of Faith" },
+                        { day: "MON", passage: `Psalm ${i}`, subTheme: "Foundational Strategic Alignment" },
+                        { day: "TUE", passage: `Proverbs ${i}`, subTheme: "Wisdom Applications" },
+                        { day: "WED", passage: `Isaiah ${i}`, subTheme: "Prophetic Insight Blocks" },
+                        { day: "THU", passage: `Romans ${i}`, subTheme: "Doctrinal Solidification" },
+                        { day: "FRI", passage: `John ${i}`, subTheme: "Revelatory Truth" },
+                        { day: "SAT", passage: `Ephesians ${i}`, subTheme: "Church & Armor Frameworks" }
+                    ]
                 };
             }
         }
@@ -305,7 +331,7 @@
             for(let i=1; i<=52; i++) {
                 const opt = document.createElement('option');
                 opt.value = i;
-                const titleText = themesRegistry[i].theme ? ` - ${themesRegistry[i].theme}` : '';
+                const titleText = ` - ${themesRegistry[i].theme}`;
                 opt.innerText = `Wk ${i}${titleText.substring(0,18)}${titleText.length > 18 ? '...' : ''}`;
                 if(i === appState.currentWeek) opt.selected = true;
                 selector.appendChild(opt);
@@ -343,13 +369,7 @@
             container.innerHTML = '';
             
             const currentData = themesRegistry[appState.currentWeek];
-            
-            // Conditionally layout header text depending on if a theme context exists
-            if (currentData.theme) {
-                document.getElementById('week-theme-display').innerText = `THEME: ${currentData.theme.toUpperCase()}`;
-            } else {
-                document.getElementById('week-theme-display').innerText = `THEMATIC STRATEGY TRACK ${appState.currentWeek}`;
-            }
+            document.getElementById('week-theme-display').innerText = `THEME: ${currentData.theme.toUpperCase()}`;
             
             const selectDropdown = document.getElementById('week-selector');
             if(selectDropdown) {
