@@ -7,7 +7,7 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght=600;700&family=Plus+Jakarta+Sans:wght=400;500;600;700&display=swap');
         
         .font-serif { font-family: 'Cinzel', Georgia, serif; }
         .font-sans { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; }
@@ -242,11 +242,16 @@
 
             if (localStorage.getItem('spiritual_hub_state')) {
                 const parsed = JSON.parse(localStorage.getItem('spiritual_hub_state'));
-                if (parsed) appState = parsed;
+                if (parsed) {
+                    appState = parsed;
+                    // Safely fall back to 28 ONLY if currentWeek is missing from saved storage state
+                    if (!appState.currentWeek) appState.currentWeek = 28;
+                }
                 if (!Array.isArray(appState.habits) || appState.habits.length !== 7) appState.habits = Array(7).fill(false);
                 if (!Array.isArray(appState.prayers)) appState.prayers = [];
                 if (!Array.isArray(appState.sermons)) appState.sermons = [];
             }
+            
             buildWeekSelector();
             renderHabitsGrid();
             renderWeek();
