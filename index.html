@@ -78,7 +78,7 @@
             </div>
         </div>
 
-        <!-- 7-Day Matrix Habits Consistency Component Section -->
+        <!-- 7-Day Matrix Habits Consistency Component Section (Sunday First) -->
         <section class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 space-y-3.5">
             <div class="flex justify-between items-center">
                 <h3 class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">7-Day Habits Consistency</h3>
@@ -89,7 +89,7 @@
             </div>
         </section>
 
-        <!-- Core Scripture Tracker with Weekly & Sub-Themes -->
+        <!-- Core Scripture Tracker -->
         <section class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 space-y-3.5">
             <div class="flex items-start justify-between space-x-2">
                 <div class="space-y-0.5 max-w-[60%]">
@@ -166,7 +166,7 @@
         </button>
     </div>
 
-    <!-- Slide Up Form Drawer Layer Frame UI Component -->
+    <!-- Slide Up Form Drawer Overlay Container Layout -->
     <div id="sermon-drawer-backdrop" onclick="toggleDrawer(false)" class="fixed inset-0 bg-black/50 hidden z-50 print:hidden transition-opacity duration-300"></div>
     
     <div id="sermon-drawer" class="fixed bottom-0 left-0 right-0 bg-white rounded-t-[2rem] shadow-2xl z-50 max-w-md mx-auto border-t border-slate-100 print:hidden drawer-hidden h-[82vh] flex flex-col">
@@ -215,73 +215,74 @@
 
     <!-- Core Runtime Application Script Engine -->
     <script>
-        // Updated Object Structure supporting Weekly Themes and clear Daily Sub-Themes
+        // Days array customized so that Sunday holds position 0
+        const dayNames = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+
+        // Thematic layout mapping with Sunday as Day 1
         const themesRegistry = {
             1: { 
                 theme: "In the Beginning & Foundations", 
                 readings: [
-                    { day: "MON", passage: "Genesis 1", subTheme: "The Architecture of Creation" },
-                    { day: "TUE", passage: "Genesis 2", subTheme: "The Blueprint of Humanity" },
-                    { day: "WED", passage: "Genesis 3", subTheme: "The Breach of Trust" },
-                    { day: "THU", passage: "Genesis 4", subTheme: "The First Separation" },
-                    { day: "FRI", passage: "Genesis 5", subTheme: "The Lineage of Endurance" },
-                    { day: "SAT", passage: "Genesis 6", subTheme: "The Weight of Corruption" },
-                    { day: "SUN", passage: "Genesis 7", subTheme: "The Covenant Refuges" }
+                    { day: "SUN", passage: "Genesis 1", subTheme: "The Architecture of Creation" },
+                    { day: "MON", passage: "Genesis 2", subTheme: "The Blueprint of Humanity" },
+                    { day: "TUE", passage: "Genesis 3", subTheme: "The Breach of Trust" },
+                    { day: "WED", passage: "Genesis 4", subTheme: "The First Separation" },
+                    { day: "THU", passage: "Genesis 5", subTheme: "The Lineage of Endurance" },
+                    { day: "FRI", passage: "Genesis 6", subTheme: "The Weight of Corruption" },
+                    { day: "SAT", passage: "Genesis 7", subTheme: "The Covenant Refuges" }
                 ] 
             },
             28: { 
                 theme: "Discipleship Cost", 
                 readings: [
+                    { day: "SUN", passage: "Romans 12:1-2", subTheme: "Living Sacrifice Blueprint" },
                     { day: "MON", passage: "Matthew 16:24-26", subTheme: "Denying Self & Taking the Cross" },
                     { day: "TUE", passage: "Luke 9:23-25", subTheme: "Daily Execution of Will" },
                     { day: "WED", passage: "Luke 14:25-27", subTheme: "Supreme Relational Allegiance" },
                     { day: "THU", passage: "Matthew 10:37-39", subTheme: "Losing Life to Find It" },
                     { day: "FRI", passage: "Philippians 3:7-9", subTheme: "Counting All Loss as Gain" },
-                    { day: "SAT", passage: "Galatians 2:20", subTheme: "The Crucified Life" },
-                    { day: "SUN", passage: "Romans 12:1-2", subTheme: "Living Sacrifice Blueprint" }
+                    { day: "SAT", passage: "Galatians 2:20", subTheme: "The Crucified Life" }
                 ] 
             },
             30: {
                 theme: "The Armor & The Walk",
                 readings: [
+                    { day: "SUN", passage: "Ephesians 6:18-20", subTheme: "Continuous Alert Prayer Matrix" },
                     { day: "MON", passage: "Psalm 30", subTheme: "Joy in the Morning Restoration" },
                     { day: "TUE", passage: "Proverbs 30", subTheme: "The Purity of God's Word" },
                     { day: "WED", passage: "Isaiah 30", subTheme: "In Quietness and Trust" },
                     { day: "THU", passage: "Ephesians 6:10-13", subTheme: "The Standing Orders" },
                     { day: "FRI", passage: "Ephesians 6:14-15", subTheme: "Truth & Righteousness Anchors" },
-                    { day: "SAT", passage: "Ephesians 6:16-17", subTheme: "Shield, Helmet & Sword Defenses" },
-                    { day: "SUN", passage: "Ephesians 6:18-20", subTheme: "Continuous Alert Prayer Matrix" }
+                    { day: "SAT", passage: "Ephesians 6:16-17", subTheme: "Shield, Helmet & Sword Defenses" }
                 ]
             }
         };
         
-        // Safety Fallback Generator for other weeks
+        // Safety Fallback Generator mapping correctly to a Sunday-first model
         for(let i=1; i<=52; i++) {
             if(!themesRegistry[i]) {
                 themesRegistry[i] = { 
                     theme: `Thematic Strategy Track ${i}`, 
                     readings: [
+                        { day: "SUN", passage: `James ${i}`, subTheme: "Active Execution of Faith" },
                         { day: "MON", passage: `Psalm ${i}`, subTheme: "Foundational Strategic Alignment" },
                         { day: "TUE", passage: `Proverbs ${i}`, subTheme: "Wisdom Applications" },
                         { day: "WED", passage: `Isaiah ${i}`, subTheme: "Prophetic Insight Blocks" },
                         { day: "THU", passage: `Romans ${i}`, subTheme: "Doctrinal Solidification" },
                         { day: "FRI", passage: `John ${i}`, subTheme: "Revelatory Truth" },
-                        { day: "SAT", passage: `Ephesians ${i}`, subTheme: "Church & Armor Frameworks" },
-                        { day: "SUN", passage: `James ${i}`, subTheme: "Active Execution of Faith" }
+                        { day: "SAT", passage: `Ephesians ${i}`, subTheme: "Church & Armor Frameworks" }
                     ] 
                 };
             }
         }
 
         let appState = {
-            currentWeek: 30, // Updated start default to Week 30 based on user's snapshot
+            currentWeek: 30, 
             completedReadings: {},
             habits: Array(7).fill(false),
             prayers: [],
             sermons: []
         };
-
-        const dayNames = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
 
         window.onload = function() {
             document.getElementById('live-banner-date').innerText = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
@@ -371,7 +372,6 @@
                     <div class="flex items-center space-x-3 pr-2 min-w-0">
                         <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="toggleReading('${uniqueKey}')" class="w-4 h-4 rounded text-emerald-600 border-slate-300 cursor-pointer shrink-0 transition-all">
                         <div class="min-w-0">
-                            <!-- Injected Daily Custom Sub Theme dynamically here -->
                             <span class="text-[9px] font-bold text-emerald-700/90 tracking-wide block uppercase truncate">${day} • ${readingObj.subTheme}</span>
                             <span class="text-xs font-bold text-slate-800 block truncate ${isChecked ? 'line-through text-slate-400' : ''}">${readingObj.passage}</span>
                         </div>
