@@ -89,7 +89,7 @@
             </div>
         </section>
 
-        <!-- Core Scripture Tracker -->
+        <!-- Core Scripture Tracker & Dynamic Media Hub -->
         <section class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 space-y-3.5">
             <div class="flex items-start justify-between space-x-2">
                 <div class="space-y-0.5 max-w-[60%]">
@@ -101,6 +101,23 @@
                         <!-- Populated dynamically via script -->
                     </select>
                 </div>
+            </div>
+
+            <!-- Integrated Video / Audio Companion Player Frame -->
+            <div id="media-player-container" class="w-full aspect-video bg-slate-900 rounded-xl overflow-hidden border border-slate-200 relative flex flex-col justify-center items-center group shadow-inner">
+                <!-- Simulated media overlay context. Replace iframe source with your stream platform or hosting engine -->
+                <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10 flex flex-col justify-end p-3 text-white pointer-events-none">
+                    <span id="video-tag" class="text-[9px] font-bold tracking-widest text-emerald-400 uppercase bg-black/40 px-2 py-0.5 rounded self-start mb-1">Weekly Anchor Podcast</span>
+                    <p id="video-title" class="text-xs font-bold truncate">Loading Media Asset...</p>
+                </div>
+                <div class="text-center z-10 space-y-2 pointer-events-auto">
+                    <div class="w-12 h-12 rounded-full bg-emerald-600 group-hover:bg-emerald-500 text-white flex items-center justify-center text-lg font-bold shadow-md cursor-pointer mx-auto transition-all transform hover:scale-105">
+                        ▶
+                    </div>
+                    <span class="text-[10px] font-bold text-slate-400 block tracking-wide">Stream Broadcast Studio Production</span>
+                </div>
+                <!-- Developer Note: Un-comment this block when inserting actual embed elements -->
+                <!-- <iframe id="media-iframe" class="w-full h-full absolute inset-0 hidden" src="" frameborder="0" allowfullscreen></iframe> -->
             </div>
             
             <!-- Target Days Container Block Stream -->
@@ -217,7 +234,6 @@
     <script>
         const dayNames = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 
-        // Curated mapping of themes across all 52 weeks
         const baselineThemes = {
             1: "Foundations of Faith", 2: "The Nature of Grace", 3: "Walking in Truth",
             4: "The Power of Prayer", 5: "Identity in Christ", 6: "Renewing the Mind",
@@ -228,9 +244,7 @@
             19: "Faith Over Fear", 20: "Generous Stewardship", 21: "Light of the World",
             22: "The Great Commandment", 23: "Seeking Righteousness", 24: "Abiding in Christ",
             25: "The Ministry of Peace", 26: "The Living Word", 27: "Deepening Devotion",
-            28: "Discipleship Cost", // Preserved exact theme
-            29: "Sovereignty and Trust",
-            30: "The Armor & The Walk", // Preserved exact theme
+            28: "Discipleship Cost", 29: "Sovereignty and Trust", 30: "The Armor & The Walk", 
             31: "Overcoming Temptation", 32: "Grace in Brokenness", 33: "The Fellowship of Saints",
             34: "Purity of Purpose", 35: "Boldness in Witness", 36: "The Path of Justice",
             37: "Mercy and Compassion", 38: "The Contented Soul", 39: "Anchored in Trials",
@@ -243,9 +257,7 @@
 
         const themesRegistry = {};
         
-        // Populate all 52 weeks cleanly using the Sunday-First design pattern
         for(let i = 1; i <= 52; i++) {
-            // Check for explicit hardcoded structures for weeks 28 and 30 first
             if (i === 28) {
                 themesRegistry[28] = { 
                     theme: "Discipleship Cost", 
@@ -273,7 +285,6 @@
                     ]
                 };
             } else {
-                // Generate reading blocks cleanly matching the baseline theme text
                 const currentTheme = baselineThemes[i];
                 themesRegistry[i] = {
                     theme: currentTheme,
@@ -305,11 +316,19 @@
                 const parsed = JSON.parse(localStorage.getItem('spiritual_hub_state'));
                 if (parsed) {
                     appState = parsed;
-                    if (!appState.currentWeek) appState.currentWeek = 30;
                 }
                 if (!Array.isArray(appState.habits) || appState.habits.length !== 7) appState.habits = Array(7).fill(false);
                 if (!Array.isArray(appState.prayers)) appState.prayers = [];
                 if (!Array.isArray(appState.sermons)) appState.sermons = [];
+            }
+            
+            // Strategic URL Deep Linking Parameters Parser Engine
+            const urlParams = new URLSearchParams(window.location.search);
+            const queryWeek = parseInt(urlParams.get('week'));
+            if(queryWeek && queryWeek >= 1 && queryWeek <= 52) {
+                appState.currentWeek = queryWeek;
+            } else if (!appState.currentWeek) {
+                appState.currentWeek = 30;
             }
             
             buildWeekSelector();
@@ -370,6 +389,9 @@
             
             const currentData = themesRegistry[appState.currentWeek];
             document.getElementById('week-theme-display').innerText = `THEME: ${currentData.theme.toUpperCase()}`;
+            
+            // Update media asset title display string dynamically
+            document.getElementById('video-title').innerText = `Episode ${appState.currentWeek}: Unpacking ${currentData.theme}`;
             
             const selectDropdown = document.getElementById('week-selector');
             if(selectDropdown) {
